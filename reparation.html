@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reparationstjänster - TechZon Kalmar</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- KOPIERA IN HEADER HÄR (ändra .active klassen) -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">TechZon Kalmar</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html" class="active">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container">
+                <h1>Våra Reparationstjänster</h1>
+            </div>
+        </section>
+
+        <section id="iphone" class="content-section hidden">
+            <div class="container">
+                <h2>iPhone Reparation</h2>
+                <p>Vi hanterar alla typer av iPhone-problem, från spruckna skärmar och batteribyten till komplexa mjukvarufel och vattenskador. Vi använder högkvalitativa reservdelar för att säkerställa att din iPhone fungerar som ny.</p>
+                <ul>
+                    <li>Skärmbyte (Original & tredjepartsalternativ)</li>
+                    <li>Batteribyte med kapacitetsgaranti</li>
+                    <li>Reparation av laddport</li>
+                    <li>Kamerafel (fram och bak)</li>
+                    <li>Mjukvaruåterställning och felsökning</li>
+                    <li>Rengöring av högtalare och mikrofon</li>
+                </ul>
+                <div style="text-align:center; margin-top:30px;">
+                    <a href="#contact-form-section" class="cta-button">Boka iPhone-reparation</a> <!-- Länka till kontaktformulär på sidan eller kontakt.html -->
+                </div>
+            </div>
+        </section>
+
+        <section id="macbook" class="content-section hidden" style="background-color: var(--light-grey);">
+            <div class="container">
+                <h2>MacBook Reparation</h2>
+                <p>Din MacBook är i trygga händer. Vi erbjuder professionell service för alla MacBook-modeller (Air, Pro). Felsökning, reparation och uppgraderingar.</p>
+                <ul>
+                    <li>Byte av tangentbord och trackpad</li>
+                    <li>Skärmreparation eller byte</li>
+                    <li>Batteribyte</li>
+                    <li>SSD-uppgraderingar för mer lagring och snabbhet</li>
+                    <li>Rengöring från vätskespill</li>
+                    <li>Reparation av logikkort (moderkort)</li>
+                </ul>
+                 <div style="text-align:center; margin-top:30px;">
+                    <a href="#contact-form-section" class="cta-button">Boka MacBook-reparation</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="ipad" class="content-section hidden">
+            <div class="container">
+                <h2>iPad Reparation</h2>
+                <p>Oavsett om det är en sprucken skärm, ett dåligt batteri eller andra problem, kan vi hjälpa till att få din iPad i toppskick igen.</p>
+                <ul>
+                    <li>Skärmbyte</li>
+                    <li>Batteribyte</li>
+                    <li>Reparation av laddningsproblem</li>
+                    <li>Byte av hemknapp/Touch ID</li>
+                </ul>
+                 <div style="text-align:center; margin-top:30px;">
+                    <a href="#contact-form-section" class="cta-button">Boka iPad-reparation</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Du kan lägga till en kontaktsektion här eller länka till en separat kontaktsida -->
+        <section id="contact-form-section" class="content-section hidden" style="background-color: var(--light-grey);">
+            <div class="container">
+                <h2>Boka Din Reparation</h2>
+                <p class="contact-intro">Fyll i formuläret nedan för att boka en tid eller få ett prisförslag. Vi återkommer så snart som möjligt.</p>
+                <form action="#" method="POST" class="contact-form">
+                    <input type="text" name="name" placeholder="Ditt Namn" required>
+                    <input type="email" name="email" placeholder="Din E-post" required>
+                    <input type="tel" name="phone" placeholder="Ditt Telefonnummer">
+                    <select name="device_type" required>
+                        <option value="" disabled selected>Välj Enhetstyp</option>
+                        <option value="iphone">iPhone</option>
+                        <option value="macbook">MacBook</option>
+                        <option value="ipad">iPad</option>
+                        <option value="other">Annan Apple-enhet</option>
+                    </select>
+                    <textarea name="message" placeholder="Beskriv problemet eller din fråga" rows="5" required></textarea>
+                    <button type="submit" class="cta-button">Skicka Förfrågan</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- KOPIERA IN FOOTER HÄR -->
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+            <p>DinGatuadress 123, Kalmar | 0480-XXXXXX | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
