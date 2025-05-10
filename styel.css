@@ -1,0 +1,325 @@
+:root {
+    --primary-color: #0071e3; /* Apple's blue */
+    --secondary-color: #1d1d1f; /* Apple's dark grey/black */
+    --light-grey: #f5f5f7; /* Apple's light grey */
+    --text-color: #1d1d1f;
+    --background-color: #ffffff;
+    --container-width: 1100px;
+    --border-radius: 8px;
+    --font-family: 'Manrope', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    width: 90%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari */
+    padding: 20px 0;
+    border-bottom: 1px solid #e0e0e0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: var(--primary-color);
+}
+
+main {
+    padding-top: 80px; /* Adjust based on header height */
+}
+
+#hero {
+    background-color: var(--light-grey); /* Light background for hero */
+    color: var(--text-color);
+    padding: 100px 0 80px; /* More top padding */
+    text-align: center;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#hero h1 {
+    font-size: 3em; /* Larger heading */
+    margin-bottom: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+#hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1em;
+}
+
+.cta-button:hover {
+    background-color: #005bb5; /* Darker blue on hover */
+    transform: translateY(-2px);
+}
+
+.cta-button.secondary {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+.cta-button.secondary:hover {
+    background-color: #333;
+}
+
+
+.content-section {
+    padding: 60px 0;
+    opacity: 0; /* For fade-in animation */
+    transform: translateY(20px); /* For fade-in animation */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.content-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.content-section h2 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.grid-item {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item img {
+    max-width: 80px; /* Smaller icons */
+    margin-bottom: 15px;
+    border-radius: 4px; /* Slight radius for images */
+}
+.product-item img {
+    max-width: 120px;
+}
+
+.grid-item h3 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+.product-item h4 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+.grid-item p {
+    font-size: 0.95em;
+    color: #555;
+    font-weight: 300;
+}
+
+.dark-section {
+    background-color: var(--secondary-color);
+    color: var(--light-grey);
+}
+
+.dark-section h2 {
+    color: #fff;
+}
+
+.dark-section .feature-item p {
+    color: #ccc; /* Lighter text for readability on dark bg */
+}
+.dark-section .feature-item h3 {
+    color: #fff;
+}
+
+
+.feature-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    text-align: center;
+}
+
+.feature-item {
+    flex: 1;
+    max-width: 300px;
+}
+
+.feature-item h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#contact {
+    background-color: var(--light-grey);
+}
+
+#contact p {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+#contact strong {
+    font-weight: 600;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 30px auto 0;
+    display: grid;
+    gap: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-family: var(--font-family);
+    font-size: 1em;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form button {
+    width: auto;
+    justify-self: center; /* Center button */
+}
+
+
+footer {
+    background-color: var(--secondary-color);
+    color: #aaa;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+    }
+    .logo {
+        margin-bottom: 15px;
+    }
+    nav ul {
+        justify-content: center;
+        flex-wrap: wrap; /* Allow nav items to wrap */
+    }
+    nav ul li {
+        margin: 5px 10px; /* Adjust spacing for wrapped items */
+    }
+
+    main {
+        padding-top: 120px; /* Adjust for taller header */
+    }
+
+    #hero h1 {
+        font-size: 2.2em;
+    }
+    #hero p {
+        font-size: 1em;
+    }
+    .content-section h2 {
+        font-size: 2em;
+    }
+    .feature-list {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature-item {
+        margin-bottom: 20px;
+    }
+}
