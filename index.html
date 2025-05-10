@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalmar Premium Reparation - Experter på Apple</title>
+    <title>TechZon Kalmar - Premium Apple Reparation & Produkter</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- KOPIERA IN HEADER HÄR -->
     <header>
         <div class="container">
-            <div class="logo">Kalmar Premium Reparation</div>
+            <a href="index.html" class="logo">TechZon Kalmar</a>
             <nav>
                 <ul>
-                    <li><a href="#services">Tjänster</a></li>
-                    <li><a href="#products">Produkter</a></li>
-                    <li><a href="#about">Om Oss</a></li>
-                    <li><a href="#contact">Kontakt</a></li>
+                    <li><a href="index.html" class="active">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
                 </ul>
             </nav>
         </div>
@@ -25,102 +26,79 @@
     <main>
         <section id="hero">
             <div class="container">
-                <h1>Expertreparationer med Premiumkänsla i Kalmar</h1>
-                <p>Vi återställer dina Apple-enheter till nyskick och erbjuder noggrant utvalda delar och begagnade produkter.</p>
-                <a href="#contact" class="cta-button">Boka Reparation</a>
+                <h1>Expert Reparationer.<br>Premium Känsla.</h1>
+                <p>Din destination i Kalmar för Apple-reparationer, kvalitetsdelar och noggrant utvalda begagnade enheter. Alltid med trygghet och garanti.</p>
+                <a href="reparation.html" class="cta-button">Boka Reparation Nu</a>
             </div>
         </section>
 
-        <section id="services" class="content-section">
+        <section id="intro-services" class="content-section hidden">
             <div class="container">
-                <h2>Våra Tjänster</h2>
+                <h2>Våra Populäraste Tjänster</h2>
                 <div class="grid">
                     <div class="grid-item">
-                        <img src="C:\Users\hosse\Desktop\TechZon\bilder\testbild.png" alt="iPhone Reparation">
+                        <img src="images/iphone_icon.png" alt="iPhone Reparation" class="service-icon"> <!-- Byt till din bild -->
                         <h3>iPhone Reparation</h3>
-                        <p>Skärmbyten, batteribyte, mjukvaruproblem och mer. Snabb och pålitlig service.</p>
+                        <p>Skärmbyten, batterier, mjukvara. Vi återställer din iPhone snabbt och säkert.</p>
+                        <a href="reparation.html#iphone" class="learn-more-button">Läs Mer</a>
                     </div>
                     <div class="grid-item">
-                        <img src="C:\Users\hosse\Desktop\TechZon\bilder\testbild.png" alt="MacBook Reparation">
+                        <img src="images/macbook_icon.png" alt="MacBook Reparation" class="service-icon"> <!-- Byt till din bild -->
                         <h3>MacBook Reparation</h3>
-                        <p>Tangentbordsfel, vätskeskador, uppgraderingar och felsökning.</p>
+                        <p>Tangentbord, vätskeskador, uppgraderingar. Expertis för din Mac.</p>
+                        <a href="reparation.html#macbook" class="learn-more-button">Läs Mer</a>
                     </div>
                     <div class="grid-item">
-                        <img src="C:\Users\hosse\Desktop\TechZon\bilder\testbild.png" alt="iPad Reparation">
+                        <img src="images/ipad_icon.png" alt="iPad Reparation" class="service-icon"> <!-- Byt till din bild -->
                         <h3>iPad Reparation</h3>
-                        <p>Allt från spruckna skärmar till batteriproblem. Vi fixar din iPad.</p>
+                        <p>Sprucken skärm eller trögt batteri? Vi ger din iPad nytt liv.</p>
+                        <a href="reparation.html#ipad" class="learn-more-button">Läs Mer</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="products" class="content-section">
+        <section id="why-us" class="content-section hidden dark-section">
             <div class="container">
-                <h2>Delar & Begagnat</h2>
-                <p>Utforska vårt sortiment av kvalitetskontrollerade reservdelar och begagnade Apple-produkter till förmånliga priser. Alltid med garanti.</p>
-                <div class="grid">
-                    <div class="grid-item product-item">
-                        <img src="hC:\Users\hosse\Desktop\TechZon\bilder\testbild.pngl" alt="Reservdel">
-                        <h4>Originalreservdelar</h4>
-                        <p>För optimal prestanda.</p>
-                    </div>
-                    <div class="grid-item product-item">
-                        <img src="C:\Users\hosse\Desktop\TechZon\bilder\testbild.png" alt="Begagnad iPhone">
-                        <h4>Begagnad iPhone</h4>
-                        <p>Noggrant testad & återställd.</p>
-                    </div>
-                    <div class="grid-item product-item">
-                        <img src="C:\Users\hosse\Desktop\TechZon\bilder\testbild.pngr" alt="Tillbehör">
-                        <h4>Premium Tillbehör</h4>
-                        <p>Skydd och laddare.</p>
-                    </div>
-                </div>
-                 <a href="#contact" class="cta-button secondary">Se Sortiment</a>
-            </div>
-        </section>
-
-        <section id="why-us" class="content-section dark-section">
-            <div class="container">
-                <h2>Varför Välja Oss?</h2>
+                <h2>Varför Välja TechZon?</h2>
                 <div class="feature-list">
                     <div class="feature-item">
+                        <!-- <i class="icon-quality"></i> Ikon här om du har -->
                         <h3>Premium Kvalitet</h3>
-                        <p>Vi använder endast de bästa delarna och metoderna för reparationer som håller.</p>
+                        <p>Vi använder endast de bästa reservdelarna och beprövade reparationsmetoder för resultat som håller.</p>
                     </div>
                     <div class="feature-item">
+                        <!-- <i class="icon-security"></i> -->
                         <h3>Trygghet & Garanti</h3>
-                        <p>Alla reparationer och produkter kommer med garanti för din sinnesro.</p>
+                        <p>Alla våra reparationer och sålda produkter kommer med en solid garanti för din sinnesro.</p>
                     </div>
                     <div class="feature-item">
-                        <h3>Expertis</h3>
-                        <p>Certifierade tekniker med djup kunskap om Apples ekosystem.</p>
+                        <!-- <i class="icon-expertise"></i> -->
+                        <h3>Certifierad Expertis</h3>
+                        <p>Våra tekniker är experter på Apples ekosystem och hanterar din enhet med största omsorg.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="content-section">
+         <section id="contact-preview" class="content-section hidden">
             <div class="container">
                 <h2>Kontakta Oss</h2>
-                <p>Besök vår butik i Kalmar eller kontakta oss för tidsbokning och frågor.</p>
-                <p><strong>Adress:</strong> DinGatuadress 123, Kalmar</p>
-                <p><strong>Telefon:</strong> 0480-XXXXXX</p>
-                <p><strong>E-post:</strong> info@kalmarpremiumrepair.se</p>
-                <!-- Enkel kontaktformulär placeholder -->
-                <form action="#" method="POST" class="contact-form">
-                    <input type="text" name="name" placeholder="Ditt Namn" required>
-                    <input type="email" name="email" placeholder="Din E-post" required>
-                    <textarea name="message" placeholder="Ditt Meddelande" rows="4" required></textarea>
-                    <button type="submit" class="cta-button">Skicka Meddelande</button>
-                </form>
+                <p class="contact-intro">Har du frågor eller vill boka en tid? Tveka inte att höra av dig eller besök vår butik i Kalmar.</p>
+                <p style="text-align:center; margin-bottom: 30px;"><strong>Adress:</strong> DinGatuadress 123, Kalmar | <strong>Telefon:</strong> 0480-XXXXXX | <strong>E-post:</strong> info@techzonkalmar.se</p>
+                <div style="text-align:center;">
+                     <a href="kontakt.html" class="cta-button secondary">Fullständig Kontaktinfo & Karta</a> <!-- Om du skapar kontakt.html -->
+                </div>
             </div>
         </section>
+
     </main>
 
+    <!-- KOPIERA IN FOOTER HÄR -->
     <footer>
         <div class="container">
-            <p>© 2024 Kalmar Premium Reparation. Alla rättigheter förbehållna.</p>
-            <p>Design inspirerad av Apple & Mentech.</p>
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+            <p>DinGatuadress 123, Kalmar | 0480-XXXXXX | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
         </div>
     </footer>
 
