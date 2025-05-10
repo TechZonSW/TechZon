@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Begagnade Produkter - TechZon Kalmar</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- KOPIERA IN HEADER HÄR (ändra .active klassen) -->
+     <header>
+        <div class="container">
+            <a href="index.html" class="logo">TechZon Kalmar</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html" class="active">Begagnat</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container">
+                <h1>Kvalitetskontrollerat Begagnat</h1>
+            </div>
+        </section>
+
+        <section id="used-products-overview" class="content-section hidden">
+            <div class="container">
+                <h2>Fynda Begagnade Apple-enheter med Garanti</h2>
+                <p>Letar du efter en prisvärd iPhone, MacBook eller iPad? Utforska vårt sortiment av noggrant testade och återställda begagnade Apple-produkter. Alla enheter säljs med garanti för din trygghet.</p>
+                <div class="grid">
+                    <div class="grid-item product-item">
+                        <img src="images/beg_iphone_placeholder.png" alt="Begagnad iPhone"> <!-- Byt bild -->
+                        <h4>Begagnade iPhones</h4>
+                        <p>Från nyare modeller till äldre klassiker. Alla fullt funktionella och med garanti.</p>
+                        <p><strong>Pris från: XXXX kr</strong></p>
+                        <a href="#" class="learn-more-button">Se Aktuellt Lager</a>
+                    </div>
+                    <div class="grid-item product-item">
+                        <img src="images/beg_macbook_placeholder.png" alt="Begagnad MacBook"> <!-- Byt bild -->
+                        <h4>Begagnade MacBooks</h4>
+                        <p>MacBook Air och Pro i olika konfigurationer. Perfekt för studier eller arbete.</p>
+                        <p><strong>Pris från: YYYY kr</strong></p>
+                        <a href="#" class="learn-more-button">Se Aktuellt Lager</a>
+                    </div>
+                    <div class="grid-item product-item">
+                        <img src="images/beg_ipad_placeholder.png" alt="Begagnad iPad"> <!-- Byt bild -->
+                        <h4>Begagnade iPads</h4>
+                        <p>Hitta en iPad för underhållning, kreativitet eller jobb till ett bättre pris.</p>
+                        <p><strong>Pris från: ZZZZ kr</strong></p>
+                        <a href="#" class="learn-more-button">Se Aktuellt Lager</a>
+                    </div>
+                </div>
+                <p style="text-align:center; margin-top:40px;">Vårt lager av begagnade produkter varierar. Besök butiken eller kontakta oss för aktuell information!</p>
+            </div>
+        </section>
+         <section id="trade-in" class="content-section hidden" style="background-color: var(--light-grey);">
+            <div class="container">
+                <h2>Byt In Din Gamla Enhet</h2>
+                <p>Har du en gammal Apple-enhet som samlar damm? Byt in den hos oss och få rabatt på en reparation, en nyare begagnad enhet eller tillbehör. Bra för både plånboken och miljön!</p>
+                <div style="text-align:center; margin-top:30px;">
+                    <a href="#contact-form-section" class="cta-button secondary">Kontakta Oss För Värdering</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- KOPIERA IN FOOTER HÄR -->
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+            <p>DinGatuadress 123, Kalmar | 0480-XXXXXX | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
