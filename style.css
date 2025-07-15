@@ -1,15 +1,18 @@
 :root {
-    --primary-color: #0071e3; /* Apple's blue */
+    --primary-color: #0071e3; /* Apple's classic blue */
     --secondary-color: #1d1d1f; /* Apple's dark grey/black */
-    --light-grey: #f5f5f7; /* Apple's light grey */
+    /* NY: Ljus bakgrundsfärg för sektioner */
+    --section-bg-light: #f5f5f7; 
     --text-color: #1d1d1f;
+    --text-color-light: #f5f5f7;
+    --text-color-secondary: #6e6e73;
     --background-color: #ffffff;
     --container-width: 1100px;
-    --border-radius: 12px; /* Slightly larger for premium feel */
-    --font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --shadow-soft: 0 4px 6px rgba(0,0,0,0.05);
-    --shadow-medium: 0 10px 20px rgba(0,0,0,0.07);
-    --shadow-hard: 0 15px 30px rgba(0,0,0,0.1);
+    --border-radius: 18px; /* Mjukare, mer modern radie */
+    --font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* MODIFIERAD: Mjukare och mer subtila skuggor */
+    --shadow-soft: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-medium: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 * {
@@ -20,7 +23,7 @@
 
 body {
     font-family: var(--font-family);
-    line-height: 1.7; /* Increased for better readability */
+    line-height: 1.65; /* Justerad för optimal läsbarhet */
     color: var(--text-color);
     background-color: var(--background-color);
     -webkit-font-smoothing: antialiased;
@@ -34,24 +37,24 @@ body {
     padding: 0 20px;
 }
 
+/* NY: Mindre container för centrerat innehåll */
+.small-container {
+    max-width: 800px;
+    text-align: center;
+}
+
 header {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.7); /* Lite mer transparent som standard */
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     padding: 20px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    position: sticky; /* Changed to sticky for modern feel */
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    position: sticky;
     width: 100%;
     top: 0;
     z-index: 1000;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
 }
-
-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
 
 header .container {
     display: flex;
@@ -60,10 +63,10 @@ header .container {
 }
 
 .logo {
-    font-size: 1.7em; /* Slightly larger logo */
+    font-size: 1.5em; 
     font-weight: 700;
     color: var(--secondary-color);
-    text-decoration: none; /* Ensure logo is not underlined if it's a link */
+    text-decoration: none;
 }
 
 nav ul {
@@ -72,88 +75,71 @@ nav ul {
 }
 
 nav ul li {
-    margin-left: 30px; /* Increased spacing */
+    margin-left: 35px; /* Ökat avstånd */
 }
 
 nav ul li a {
     text-decoration: none;
     color: var(--secondary-color);
-    font-weight: 500; /* Slightly less bold for nav items */
-    font-size: 0.95em;
+    font-weight: 500;
+    font-size: 1em;
     transition: color 0.3s ease;
-    padding: 5px 0; /* Add some vertical padding for easier clicking */
+    padding: 5px 2px;
 }
 
 nav ul li a:hover,
-nav ul li a.active { /* Style for active page */
+nav ul li a.active {
     color: var(--primary-color);
 }
 
 main {
-     /* Removed padding-top as header is sticky now */
+    width: 100%;
 }
-
-.page-title-section {
-    background-color: var(--light-grey);
-    padding: 50px 0;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.page-title-section h1 {
-    font-size: 2.8em;
-    color: var(--secondary-color);
-    font-weight: 700;
-}
-
 
 #hero {
-    background-color: var(--light-grey);
+    background-color: #fff;
     color: var(--text-color);
-    padding: 120px 0 100px;
+    padding: 100px 0 120px;
     text-align: center;
-    min-height: calc(70vh - 80px); /* Adjust if header height changes */
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
 #hero h1 {
-    font-size: 3.5em;
-    margin-bottom: 25px;
-    font-weight: 700;
-    line-height: 1.15;
-    max-width: 800px;
+    /* MODIFIERAD: Större och djärvare rubrik */
+    font-size: 4em; 
+    font-weight: 800; /* Extra djärv för effekt */
+    line-height: 1.1;
+    margin-bottom: 20px;
+    max-width: 850px;
 }
 
 #hero p {
-    font-size: 1.25em;
-    margin-bottom: 40px;
+    font-size: 1.3em;
+    margin-bottom: 35px;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    font-weight: 300;
-    color: #333;
+    font-weight: 400;
+    color: var(--text-color-secondary);
 }
 
 .cta-button {
     display: inline-block;
     background-color: var(--primary-color);
     color: #fff;
-    padding: 15px 35px; /* Larger padding */
+    padding: 16px 32px;
     text-decoration: none;
-    border-radius: var(--border-radius);
+    border-radius: 50px; /* Helt rundade kanter för knappar */
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 1.05em;
-    box-shadow: var(--shadow-soft);
+    font-size: 1em;
 }
 
 .cta-button:hover {
     background-color: #005bb5;
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
+    transform: scale(1.05);
 }
 
 .cta-button.secondary {
@@ -161,236 +147,180 @@ main {
     color: #fff;
 }
 .cta-button.secondary:hover {
-    background-color: #333;
+    background-color: #000;
 }
-
 
 .content-section {
-    padding: 80px 0; /* More padding */
+    padding: 100px 0; /* Mer luft */
+    overflow: hidden; /* Förhindrar sido-scroll från animationer */
 }
 
-/* Fade-in for sections - keep this if you like it */
-.content-section.hidden {
+/* Fade-in animation */
+.content-section {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transform: translateY(20px); /* Subtilare rörelse */
+    transition: opacity 1s ease-out, transform 1s ease-out;
 }
 .content-section.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-
 .content-section h2 {
     text-align: center;
-    font-size: 2.8em; /* Larger section titles */
-    margin-bottom: 60px; /* More space below title */
+    font-size: 3em; /* Större sektionsrubriker */
+    margin-bottom: 60px;
     font-weight: 700;
 }
-.content-section h3 {
-    font-size: 1.6em;
-    margin-bottom: 15px;
-    color: var(--secondary-color);
-    font-weight: 600;
-}
 
-.grid {
+/* NYTT: Styling för de nya feature-korten */
+.feature-card {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Min width 300px */
-    gap: 40px; /* Increased gap */
-}
-
-.grid-item {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: var(--border-radius);
-    text-align: center;
-    box-shadow: var(--shadow-medium);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex; /* For better content alignment */
-    flex-direction: column;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
     align-items: center;
+    margin-bottom: 80px;
 }
 
-.grid-item:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-hard);
+.feature-card:last-child {
+    margin-bottom: 0;
 }
 
-.grid-item img.service-icon { /* Specific class for service icons */
-    max-width: 70px;
+/* Specifik ordning för bild/text */
+.feature-card.right-align .feature-text {
+    order: 2;
+}
+.feature-card.right-align .feature-image {
+    order: 1;
+}
+
+.feature-text h2 {
+    font-size: 2.8em;
+    font-weight: 700;
+    text-align: left;
     margin-bottom: 20px;
-    /* Add filter for monochrome effect if desired, like Apple */
-    /* filter: grayscale(100%) opacity(0.7); */
-}
-.product-item img {
-    max-width: 180px; /* Larger product images */
-    margin-bottom: 20px;
-    border-radius: 8px;
 }
 
-.grid-item h4 { /* Used for product titles */
-    font-size: 1.3em;
-    margin-bottom: 10px;
-    color: var(--secondary-color);
-    font-weight: 600;
+.feature-text p {
+    font-size: 1.1em;
+    color: var(--text-color-secondary);
+    margin-bottom: 25px;
+    max-width: 450px;
+    line-height: 1.7;
 }
 
-.grid-item p {
-    font-size: 1em;
-    color: #444; /* Slightly darker text */
-    font-weight: 400;
-    flex-grow: 1; /* Allows paragraph to take space if items have different text lengths */
-    margin-bottom: 20px; /* Space before potential button */
-}
-
-.grid-item .learn-more-button {
-    margin-top: auto; /* Pushes button to bottom if item is flex column */
-    background: none;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 8px 18px;
+.feature-image img {
+    max-width: 100%;
     border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+}
+
+.learn-more-link {
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-.grid-item .learn-more-button:hover {
-    background-color: var(--primary-color);
-    color: #fff;
+    font-size: 1.1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
 }
 
+.learn-more-link:hover {
+    gap: 12px;
+}
 
+/* MODIFIERAD: Ny stil för mörk sektion */
 .dark-section {
     background-color: var(--secondary-color);
-    color: var(--light-grey);
+    color: var(--text-color-light);
 }
 .dark-section h2, .dark-section h3 {
     color: #fff;
 }
 .dark-section p {
-    color: #ccc;
+    color: #a1a1a6;
 }
 
 .feature-list {
-    display: flex;
-    justify-content: space-around;
-    gap: 30px;
-    text-align: left; /* Often better for feature lists */
-}
-.feature-item {
-    flex: 1;
-    max-width: 320px;
-    padding: 20px;
-    background-color: rgba(255,255,255,0.05); /* Subtle background for feature items on dark bg */
-    border-radius: var(--border-radius);
-}
-.feature-item i { /* For icons if you use FontAwesome or similar */
-    font-size: 2em;
-    color: var(--primary-color);
-    margin-bottom: 15px;
-    display: block;
-}
-
-
-#contact {
-    background-color: var(--light-grey);
-}
-#contact p.contact-intro { /* Specific class for intro paragraph */
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.1em;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.contact-form {
-    max-width: 650px;
-    margin: 40px auto 0;
     display: grid;
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    text-align: center;
 }
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    font-family: var(--font-family);
-    font-size: 1em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.feature-item i {
+    font-size: 3em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+.feature-item h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
 }
-.contact-form textarea {
-    resize: vertical;
-    min-height: 120px;
+
+/* NY: Ljus sektionsstil */
+#trade-in.light-bg-section {
+    background-color: var(--section-bg-light);
+    padding: 80px 0;
 }
-.contact-form button {
-    width: auto;
-    justify-self: center;
+#trade-in h2 {
+    margin-bottom: 20px;
+}
+#trade-in p {
+    color: var(--text-color-secondary);
+    margin-bottom: 30px;
+    font-size: 1.15em;
 }
 
 footer {
-    background-color: var(--secondary-color);
-    color: #b0b0b0; /* Lighter grey for footer text */
+    background-color: #f5f5f7;
+    color: #6e6e73;
     text-align: center;
-    padding: 40px 20px; /* More padding */
+    padding: 50px 20px;
     font-size: 0.9em;
+    border-top: 1px solid #ddd;
 }
 footer p {
     margin-bottom: 8px;
 }
 footer a {
-    color: #fff;
+    color: var(--secondary-color);
     text-decoration: none;
+    font-weight: 500;
 }
 footer a:hover {
     text-decoration: underline;
 }
 
-/* Responsive adjustments */
+/* Responsive anpassningar */
+@media (max-width: 900px) {
+    .feature-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .feature-card.right-align .feature-text {
+        order: 1; /* Återställ ordning på mindre skärmar */
+    }
+    .feature-card .feature-image {
+        order: 2;
+    }
+    .feature-text h2, .feature-text p {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     header .container {
         flex-direction: column;
-        align-items: center; /* Center logo and nav */
+        gap: 15px;
     }
-    .logo {
-        margin-bottom: 15px;
-    }
-    nav ul {
-        justify-content: center;
-        flex-wrap: wrap;
-        padding-left: 0; /* Remove default ul padding */
-    }
-    nav ul li {
-        margin: 5px 10px;
-    }
-
-    #hero h1 {
-        font-size: 2.5em;
-    }
-    #hero p {
-        font-size: 1.1em;
-    }
-    .content-section h2 {
-        font-size: 2.2em;
-        margin-bottom: 40px;
-    }
-    .feature-list {
-        flex-direction: column;
-        align-items: center;
-    }
-    .feature-item {
-        margin-bottom: 25px;
-        text-align: center; /* Center text on mobile for features */
-    }
-    .grid {
-        grid-template-columns: 1fr; /* Stack grid items on mobile */
-    }
+    #hero h1 { font-size: 2.8em; }
+    #hero p { font-size: 1.1em; }
+    .content-section h2 { font-size: 2.4em; }
+    .feature-text h2 { font-size: 2.2em; }
 }
