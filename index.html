@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechZon Kalmar - Premium Apple Reparation & Produkter</title>
+    <!-- MODIFIERAD: Tydligare och mer inkluderande titel -->
+    <title>TechZon Kalmar - Premium Reparation & Service</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Ikoner från Phosphor Icons, ett modernt och rent bibliotek -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-    <!-- KOPIERA IN HEADER HÄR -->
     <header>
         <div class="container">
             <a href="index.html" class="logo">TechZon Kalmar</a>
@@ -24,81 +26,82 @@
     </header>
 
     <main>
+        <!-- MODIFIERAD: Hero-sektion med mer slagkraftig och inkluderande text -->
         <section id="hero">
             <div class="container">
-                <h1>Expert Reparationer.<br>Premium Känsla.</h1>
-                <p>Din destination i Kalmar för Apple-reparationer, kvalitetsdelar och noggrant utvalda begagnade enheter. Alltid med trygghet och garanti.</p>
-                <a href="reparation.html" class="cta-button">Boka Reparation Nu</a>
+                <h1>Service i premiumklass.<br>För tekniken du älskar.</h1>
+                <p>Din certifierade partner i Kalmar för reparationer, tillbehör och noggrant utvalda enheter från Apple, Samsung och andra ledande varumärken.</p>
+                <a href="reparation.html" class="cta-button">Se våra tjänster</a>
             </div>
         </section>
 
-        <section id="intro-services" class="content-section hidden">
+        <!-- NY STRUKTUR: Stora "feature-kort" istället för små grid-items för en mer Apple-liknande känsla -->
+        <section id="features" class="content-section">
             <div class="container">
-                <h2>Våra Populäraste Tjänster</h2>
-                <div class="grid">
-                    <div class="grid-item">
-                        <img src="images/iphone_icon.png" alt="iPhone Reparation" class="service-icon"> <!-- Byt till din bild -->
-                        <h3>iPhone Reparation</h3>
-                        <p>Skärmbyten, batterier, mjukvara. Vi återställer din iPhone snabbt och säkert.</p>
-                        <a href="reparation.html#iphone" class="learn-more-button">Läs Mer</a>
+                <div class="feature-card right-align">
+                    <div class="feature-text">
+                        <h2>Snabba expert-reparationer</h2>
+                        <p>Från spruckna skärmar till trötta batterier. Vi använder originaldelar eller marknadens bästa komponenter för att återställa din smartphone, laptop eller surfplatta till nyskick. Alltid med garanti.</p>
+                        <a href="reparation.html" class="learn-more-link">Boka reparation <i class="ph-bold ph-arrow-right"></i></a>
                     </div>
-                    <div class="grid-item">
-                        <img src="images/macbook_icon.png" alt="MacBook Reparation" class="service-icon"> <!-- Byt till din bild -->
-                        <h3>MacBook Reparation</h3>
-                        <p>Tangentbord, vätskeskador, uppgraderingar. Expertis för din Mac.</p>
-                        <a href="reparation.html#macbook" class="learn-more-button">Läs Mer</a>
+                    <div class="feature-image">
+                        <!-- Byt till en passande, högupplöst bild -->
+                        <img src="images/repair_showcase.png" alt="Reparation av en smartphone">
                     </div>
-                    <div class="grid-item">
-                        <img src="images/ipad_icon.png" alt="iPad Reparation" class="service-icon"> <!-- Byt till din bild -->
-                        <h3>iPad Reparation</h3>
-                        <p>Sprucken skärm eller trögt batteri? Vi ger din iPad nytt liv.</p>
-                        <a href="reparation.html#ipad" class="learn-more-button">Läs Mer</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-text">
+                        <h2>Kvalitets-kontrollerat begagnat</h2>
+                        <p>Gör ett smart och hållbart val. Utforska vårt sortiment av testade och certifierade begagnade enheter. Ett tryggt och prisvärt alternativ till att köpa nytt, komplett med garanti för din sinnesro.</p>
+                        <a href="begagnat.html" class="learn-more-link">Utforska begagnat <i class="ph-bold ph-arrow-right"></i></a>
+                    </div>
+                     <div class="feature-image">
+                        <!-- Byt till en passande, högupplöst bild -->
+                        <img src="images/used_devices_showcase.png" alt="Flera begagnade telefoner">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="why-us" class="content-section hidden dark-section">
+        <!-- MODIFIERAD: 'Varför Välja Oss'-sektionen har fått en mörk design för kontrast och premiumkänsla -->
+        <section id="why-us" class="content-section dark-section">
             <div class="container">
-                <h2>Varför Välja TechZon?</h2>
+                <h2>Trygghet är vår standard</h2>
                 <div class="feature-list">
                     <div class="feature-item">
-                        <!-- <i class="icon-quality"></i> Ikon här om du har -->
-                        <h3>Premium Kvalitet</h3>
-                        <p>Vi använder endast de bästa reservdelarna och beprövade reparationsmetoder för resultat som håller.</p>
+                        <i class="ph-duotone ph-shield-check"></i>
+                        <h3>Garanti på allt</h3>
+                        <p>Vi står bakom vårt arbete. Alla reparationer och produkter kommer med en solid garanti.</p>
                     </div>
                     <div class="feature-item">
-                        <!-- <i class="icon-security"></i> -->
-                        <h3>Trygghet & Garanti</h3>
-                        <p>Alla våra reparationer och sålda produkter kommer med en solid garanti för din sinnesro.</p>
+                        <i class="ph-duotone ph-wrench"></i>
+                        <h3>Certifierade tekniker</h3>
+                        <p>Våra experter hanterar din enhet med största omsorg och enligt branschens högsta standard.</p>
                     </div>
                     <div class="feature-item">
-                        <!-- <i class="icon-expertise"></i> -->
-                        <h3>Certifierad Expertis</h3>
-                        <p>Våra tekniker är experter på Apples ekosystem och hanterar din enhet med största omsorg.</p>
+                        <i class="ph-duotone ph-sparkle"></i>
+                        <h3>Premiumdelar</h3>
+                        <p>Vi använder endast de bästa reservdelarna för ett resultat som känns och fungerar som nytt.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-         <section id="contact-preview" class="content-section hidden">
-            <div class="container">
-                <h2>Kontakta Oss</h2>
-                <p class="contact-intro">Har du frågor eller vill boka en tid? Tveka inte att höra av dig eller besök vår butik i Kalmar.</p>
-                <p style="text-align:center; margin-bottom: 30px;"><strong>Adress:</strong> DinGatuadress 123, Kalmar | <strong>Telefon:</strong> 0480-XXXXXX | <strong>E-post:</strong> info@techzonkalmar.se</p>
-                <div style="text-align:center;">
-                     <a href="kontakt.html" class="cta-button secondary">Fullständig Kontaktinfo & Karta</a> <!-- Om du skapar kontakt.html -->
-                </div>
-            </div>
+        <!-- NY SEKTION: Ljusgrå bakgrund för att lyfta fram inbytesprogrammet -->
+        <section id="trade-in" class="content-section light-bg-section">
+             <div class="container small-container">
+                <h2>Byt in. Byt upp.</h2>
+                <p>Har du en gammal enhet som samlar damm? Byt in den hos oss! Få rabatt på en reparation, en nyare begagnad modell eller tillbehör. Bra för både plånboken och planeten.</p>
+                <a href="kontakt.html" class="cta-button secondary">Få en värdering</a>
+             </div>
         </section>
-
     </main>
 
-    <!-- KOPIERA IN FOOTER HÄR -->
     <footer>
         <div class="container">
             <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
-            <p>DinGatuadress 123, Kalmar | 0480-XXXXXX | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+            <p>Exempelgatan 123, Kalmar | 0480-123456 | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
         </div>
     </footer>
 
