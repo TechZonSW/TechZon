@@ -1,7 +1,6 @@
 :root {
     --primary-color: #0071e3; /* Apple's classic blue */
     --secondary-color: #1d1d1f; /* Apple's dark grey/black */
-    /* NY: Ljus bakgrundsfärg för sektioner */
     --section-bg-light: #f5f5f7; 
     --text-color: #1d1d1f;
     --text-color-light: #f5f5f7;
@@ -10,7 +9,6 @@
     --container-width: 1100px;
     --border-radius: 18px; /* Mjukare, mer modern radie */
     --font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    /* MODIFIERAD: Mjukare och mer subtila skuggor */
     --shadow-soft: 0 4px 12px rgba(0,0,0,0.06);
     --shadow-medium: 0 8px 24px rgba(0,0,0,0.08);
 }
@@ -23,7 +21,7 @@
 
 body {
     font-family: var(--font-family);
-    line-height: 1.65; /* Justerad för optimal läsbarhet */
+    line-height: 1.65;
     color: var(--text-color);
     background-color: var(--background-color);
     -webkit-font-smoothing: antialiased;
@@ -42,17 +40,15 @@ body {
     text-align: center;
 }
 
+/* MODIFIERAD: Header har nu en solid bakgrund för bästa läsbarhet */
 header {
-    background-color: rgba(255, 255, 255, 0.7); /* Lite mer transparent som standard */
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background-color: var(--background-color); /* Solid vit bakgrund */
     padding: 20px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.07);
+    border-bottom: 1px solid #e5e5e5; /* Lite tydligare kantlinje */
     position: sticky;
     width: 100%;
     top: 0;
     z-index: 1000;
-    transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 header .container {
@@ -61,24 +57,24 @@ header .container {
     align-items: center;
 }
 
-/* MODIFIERAD: Stilar för att hantera logotyp med bild och text */
 .logo {
     color: var(--secondary-color);
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 12px; /* Avstånd mellan bild och text */
+    gap: 10px; /* Justerat avstånd */
 }
 
+/* MODIFIERAD: Logotypens storlek har minskats */
 .logo-img {
-    height: 36px; /* Bestämmer höjden på logotypen */
+    height: 28px; /* Mindre höjd för att passa bättre */
     width: auto;
 }
 
 .logo span {
     font-size: 1.5em; 
     font-weight: 700;
-    line-height: 1; /* Förbättrar vertikal justering */
+    line-height: 1;
 }
 
 nav ul {
@@ -87,7 +83,7 @@ nav ul {
 }
 
 nav ul li {
-    margin-left: 35px; /* Ökat avstånd */
+    margin-left: 35px;
 }
 
 nav ul li a {
@@ -120,7 +116,7 @@ main {
 
 #hero h1 {
     font-size: 4em; 
-    font-weight: 800; /* Extra djärv för effekt */
+    font-weight: 800;
     line-height: 1.1;
     margin-bottom: 20px;
     max-width: 850px;
@@ -142,7 +138,7 @@ main {
     color: #fff;
     padding: 16px 32px;
     text-decoration: none;
-    border-radius: 50px; /* Helt rundade kanter för knappar */
+    border-radius: 50px;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
     font-size: 1em;
@@ -162,14 +158,13 @@ main {
 }
 
 .content-section {
-    padding: 100px 0; /* Mer luft */
-    overflow: hidden; /* Förhindrar sido-scroll från animationer */
+    padding: 100px 0;
+    overflow: hidden;
 }
 
-/* Fade-in animation */
 .content-section {
     opacity: 0;
-    transform: translateY(20px); /* Subtilare rörelse */
+    transform: translateY(20px);
     transition: opacity 1s ease-out, transform 1s ease-out;
 }
 .content-section.visible {
@@ -179,12 +174,11 @@ main {
 
 .content-section h2 {
     text-align: center;
-    font-size: 3em; /* Större sektionsrubriker */
+    font-size: 3em;
     margin-bottom: 60px;
     font-weight: 700;
 }
 
-/* Styling för de stora feature-korten */
 .feature-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -197,7 +191,6 @@ main {
     margin-bottom: 0;
 }
 
-/* Denna klass sätter bilden till vänster och texten till höger */
 .feature-card.right-align .feature-text {
     order: 2;
 }
@@ -241,7 +234,6 @@ main {
     gap: 12px;
 }
 
-/* Mörk sektionsstil */
 .dark-section {
     background-color: var(--secondary-color);
     color: var(--text-color-light);
@@ -269,7 +261,6 @@ main {
     margin-bottom: 10px;
 }
 
-/* Ljus sektionsstil */
 #trade-in.light-bg-section {
     background-color: var(--section-bg-light);
     padding: 80px 0;
@@ -303,7 +294,6 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Responsive anpassningar */
 @media (max-width: 900px) {
     .feature-card {
         grid-template-columns: 1fr;
@@ -311,7 +301,7 @@ footer a:hover {
     }
     .feature-card.right-align .feature-text,
     .feature-card.right-align .feature-image {
-        order: initial; /* Återställ ordning på mindre skärmar */
+        order: initial;
     }
     .feature-text h2, .feature-text p {
         text-align: center;
