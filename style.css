@@ -37,7 +37,6 @@ body {
     padding: 0 20px;
 }
 
-/* NY: Mindre container för centrerat innehåll */
 .small-container {
     max-width: 800px;
     text-align: center;
@@ -62,11 +61,24 @@ header .container {
     align-items: center;
 }
 
+/* MODIFIERAD: Stilar för att hantera logotyp med bild och text */
 .logo {
-    font-size: 1.5em; 
-    font-weight: 700;
     color: var(--secondary-color);
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Avstånd mellan bild och text */
+}
+
+.logo-img {
+    height: 36px; /* Bestämmer höjden på logotypen */
+    width: auto;
+}
+
+.logo span {
+    font-size: 1.5em; 
+    font-weight: 700;
+    line-height: 1; /* Förbättrar vertikal justering */
 }
 
 nav ul {
@@ -107,7 +119,6 @@ main {
 }
 
 #hero h1 {
-    /* MODIFIERAD: Större och djärvare rubrik */
     font-size: 4em; 
     font-weight: 800; /* Extra djärv för effekt */
     line-height: 1.1;
@@ -173,7 +184,7 @@ main {
     font-weight: 700;
 }
 
-/* NYTT: Styling för de nya feature-korten */
+/* Styling för de stora feature-korten */
 .feature-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -186,7 +197,7 @@ main {
     margin-bottom: 0;
 }
 
-/* Specifik ordning för bild/text */
+/* Denna klass sätter bilden till vänster och texten till höger */
 .feature-card.right-align .feature-text {
     order: 2;
 }
@@ -230,7 +241,7 @@ main {
     gap: 12px;
 }
 
-/* MODIFIERAD: Ny stil för mörk sektion */
+/* Mörk sektionsstil */
 .dark-section {
     background-color: var(--secondary-color);
     color: var(--text-color-light);
@@ -258,7 +269,7 @@ main {
     margin-bottom: 10px;
 }
 
-/* NY: Ljus sektionsstil */
+/* Ljus sektionsstil */
 #trade-in.light-bg-section {
     background-color: var(--section-bg-light);
     padding: 80px 0;
@@ -298,11 +309,9 @@ footer a:hover {
         grid-template-columns: 1fr;
         text-align: center;
     }
-    .feature-card.right-align .feature-text {
-        order: 1; /* Återställ ordning på mindre skärmar */
-    }
-    .feature-card .feature-image {
-        order: 2;
+    .feature-card.right-align .feature-text,
+    .feature-card.right-align .feature-image {
+        order: initial; /* Återställ ordning på mindre skärmar */
     }
     .feature-text h2, .feature-text p {
         text-align: center;
