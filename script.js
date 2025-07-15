@@ -27,17 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    // Header-effekt vid scrollning
-    const header = document.querySelector('header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
-            // Gör bakgrunden mer solid och ändrar kantlinjen när man scrollar
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
-            header.style.borderColor = 'rgba(0,0,0,0.1)';
-        } else {
-            // Återställer till den mer genomskinliga initiala stilen
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-            header.style.borderColor = 'rgba(0,0,0,0.07)';
-        }
-    });
+    // BORTTAGEN: Header-effekt vid scrollning är inte längre nödvändig.
+
 });
