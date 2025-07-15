@@ -1,13 +1,13 @@
 :root {
-    --primary-color: #0071e3; /* Apple's classic blue */
-    --secondary-color: #1d1d1f; /* Apple's dark grey/black */
+    --primary-color: #0071e3;
+    --secondary-color: #1d1d1f;
     --section-bg-light: #f5f5f7; 
     --text-color: #1d1d1f;
     --text-color-light: #f5f5f7;
     --text-color-secondary: #6e6e73;
     --background-color: #ffffff;
     --container-width: 1100px;
-    --border-radius: 18px; /* Mjukare, mer modern radie */
+    --border-radius: 18px;
     --font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --shadow-soft: 0 4px 12px rgba(0,0,0,0.06);
     --shadow-medium: 0 8px 24px rgba(0,0,0,0.08);
@@ -40,11 +40,11 @@ body {
     text-align: center;
 }
 
-/* MODIFIERAD: Header har nu en solid bakgrund för bästa läsbarhet */
+/* KORRIGERING: Header med solid bakgrund för att undvika "filter"-problem */
 header {
-    background-color: var(--background-color); /* Solid vit bakgrund */
+    background-color: var(--background-color);
     padding: 20px 0;
-    border-bottom: 1px solid #e5e5e5; /* Lite tydligare kantlinje */
+    border-bottom: 1px solid #e5e5e5;
     position: sticky;
     width: 100%;
     top: 0;
@@ -62,12 +62,12 @@ header .container {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px; /* Justerat avstånd */
+    gap: 10px;
 }
 
-/* MODIFIERAD: Logotypens storlek har minskats */
+/* KORRIGERING: Storleken på logotypen är specifierad här. */
 .logo-img {
-    height: 28px; /* Mindre höjd för att passa bättre */
+    height: 28px; /* Denna regel gör logotypen liten och anpassad för headern */
     width: auto;
 }
 
@@ -213,6 +213,7 @@ main {
     line-height: 1.7;
 }
 
+/* Denna regel säkerställer att bilderna i feature-korten inte blir för stora */
 .feature-image img {
     max-width: 100%;
     border-radius: var(--border-radius);
