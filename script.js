@@ -1,39 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Smooth scroll for navigation links
-    const navLinks = document.querySelectorAll('nav ul li a[href^="#"]');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            let targetId = this.getAttribute('href');
-            let targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                // Calculate offset for fixed header
-                const headerOffset = document.querySelector('header').offsetHeight || 80;
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    // Uppdaterar årtalet i footern
+    const currentYearSpan = document.getElementById('currentYear');
+    if(currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Simple fade-in animation for sections on scroll
+    // Intersection Observer för fade-in-animationer
     const sections = document.querySelectorAll('.content-section');
     const observerOptions = {
-        root: null, // relative to document viewport
+        root: null,
         rootMargin: '0px',
-        threshold: 0.1 // 10% of item is visible
+        threshold: 0.1 // Startar när 10% av sektionen är synlig
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // observer.unobserve(entry.target); // Optional: stop observing once visible
+                observer.unobserve(entry.target); // Sluta observera när den är synlig
             }
         });
     }, observerOptions);
@@ -42,27 +27,17 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    // Optional: Change header background on scroll
+    // Header-effekt vid scrollning
     const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)'; // More opaque
-            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        if (window.scrollY > 20) {
+            // Gör bakgrunden mer solid och ändrar kantlinjen när man scrollar
+            header.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+            header.style.borderColor = 'rgba(0,0,0,0.1)';
         } else {
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-            header.style.boxShadow = 'none';
+            // Återställer till den mer genomskinliga initiala stilen
+            header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            header.style.borderColor = 'rgba(0,0,0,0.07)';
         }
     });
-
-    // Placeholder for contact form submission
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Here you would typically send data to a server
-            alert('Tack för ditt meddelande! Vi återkommer snart.');
-            this.reset(); // Reset form fields
-        });
-    }
-
 });
