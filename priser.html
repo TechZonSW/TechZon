@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priser för Reparationer - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Kalmar Logotyp" class="logo-img">
+                <span>TechZon Kalmar</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                    <li><a href="priser.html" class="active">Priser</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Titel för prissidan -->
+        <section class="page-title-section">
+            <div class="container small-container">
+                <h1>Priser för Reparationer</h1>
+                <p class="page-intro">Få ett prisförslag direkt! Välj din enhet och typ av reparation nedan för att se våra uppskattade priser. Vi använder alltid reservdelar av högsta kvalitet.</p>
+            </div>
+        </section>
+
+        <!-- Samma prisuträknare som på reparationssidan -->
+        <section id="price-checker-section" class="content-section light-bg-section" style="padding-top: 60px;">
+            <div class="container small-container">
+                <!-- Rubrik behövs ej här eftersom den finns ovanför -->
+                <div class="price-calculator">
+                    <select id="category-select" class="styled-select">
+                        <option value="">1. Välj kategori</option>
+                    </select>
+                    <select id="model-select" class="styled-select" disabled>
+                        <option value="">2. Välj modell</option>
+                    </select>
+                    <select id="repair-select" class="styled-select" disabled>
+                        <option value="">3. Välj reparation</option>
+                    </select>
+                </div>
+                <div id="price-display">
+                    <p>Vänligen gör dina val för att se ett pris.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Samma avslutande sektion som på reparationssidan -->
+        <section id="cant-find" class="content-section">
+            <div class="container small-container">
+                 <h2>Hittar du inte det du söker?</h2>
+                <p>Prislistan täcker våra vanligaste reparationer. Om du inte hittar din enhet eller det problem du upplever, tveka inte att kontakta oss. Vi ger dig gärna ett personligt kostnadsförslag.</p>
+                <a href="kontakt.html" class="cta-button">Kontakta Oss Nu</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+            <p>Exempelgatan 123, Kalmar | 0480-123456 | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
