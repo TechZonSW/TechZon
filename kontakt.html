@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakta Oss - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Kalmar Logotyp" class="logo-img">
+                <span>TechZon Kalmar</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                </ul>
+            </nav>
+        </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container">
+                <h1>Kontakta & Besök Oss</h1>
+                <p class="page-intro">Vi är redo att hjälpa dig. Fyll i formuläret, ring oss eller kom förbi butiken i Kalmar.</p>
+            </div>
+        </section>
+
+        <section id="contact-details" class="content-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3>Butiksinformation</h3>
+                        <p>
+                            <strong><i class="ph-bold ph-map-pin"></i> Adress:</strong><br>
+                            Exempelgatan 123<br>
+                            392 34 Kalmar
+                        </p>
+                        <p>
+                            <strong><i class="ph-bold ph-phone"></i> Telefon:</strong><br>
+                            <a href="tel:0480123456">0480-123 456</a>
+                        </p>
+                        <p>
+                            <strong><i class="ph-bold ph-envelope"></i> E-post:</strong><br>
+                            <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a>
+                        </p>
+                        <h3>Öppettider</h3>
+                        <p>
+                            Måndag - Fredag: 10:00 - 18:00<br>
+                            Lördag: 11:00 - 15:00<br>
+                            Söndag: Stängt
+                        </p>
+                    </div>
+                    <div class="contact-form-wrapper">
+                        <h3>Skicka ett meddelande</h3>
+                        <form action="#" method="POST" class="contact-form">
+                            <input type="text" name="name" placeholder="Ditt Namn" required>
+                            <input type="email" name="email" placeholder="Din E-post" required>
+                            <input type="tel" name="phone" placeholder="Ditt Telefonnummer">
+                            <textarea name="message" placeholder="Beskriv ditt ärende..." rows="6" required></textarea>
+                            <button type="submit" class="cta-button">Skicka Förfrågan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+            <p>Exempelgatan 123, Kalmar | 0480-123456 | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
