@@ -265,9 +265,24 @@ main {
 
 /* --- NYA STILAR FÖR REPARATION & KONTAKT-SIDORNA --- */
 
+/* --- STILAR FÖR SIDTITEL-SEKTIONEN (UPPDATERAD) --- */
+.page-title-section {
+    background-color: var(--background-color); /* Använder vit bakgrund för en renare start */
+    text-align: center;
+    padding: 80px 20px; /* MER PADDING: Ger sektionen luft och utrymme att andas */
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.page-title-section h1 {
+    font-size: 3.5em; /* Större, mer slagkraftig rubrik */
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.15;
+}
 .page-intro {
-    font-size: 1.2em;
+    font-size: 1.3em; 
     color: var(--text-color-secondary);
+    line-height: 1.6; 
     margin-top: 15px;
     max-width: 650px;
     margin-left: auto;
