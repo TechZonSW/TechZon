@@ -147,4 +147,76 @@ document.addEventListener('DOMContentLoaded', function() {
             selectElement.disabled = true;
         }
     }
+
+        // --------------------------------------------------------------------
+    // DEL 3: KOD SOM BARA SKA KÖRAS PÅ TILLBEHÖRSSIDAN
+    // --------------------------------------------------------------------
+
+    const accessoriesPage = document.getElementById('accessories-page');
+    if (accessoriesPage) {
+        const grid = document.getElementById('accessories-grid');
+        const filterSelect = document.getElementById('accessory-filter');
+        let allAccessories = [];
+
+        // 1. Hämta produktdata
+        fetch('./accessories.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Kunde inte ladda tillbehör.');
+                return response.json();
+            })
+            .then(data => {
+                allAccessories = data;
+                populateFilters();
+                renderProducts(allAccessories);
+            })
+            .catch(error => {
+                console.error(error);
+                grid.innerHTML = `<p style="text-align:center; color:red;">Kunde inte ladda produkterna. Försök igen senare.</p>`;
+            });
+
+        // 2. Fyll filter-menyn med kategorier
+        function populateFilters() {
+            filterSelect.innerHTML = '<option value="alla">Visa alla</option>';
+            const categories = [...new Set(allAccessories.map(item => item.Kategori))];
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                filterSelect.appendChild(option);
+            });
+        }
+        
+        // 3. Rendera produktkorten i griden
+        function renderProducts(products) {
+            grid.innerHTML = ''; // Rensa griden först
+            if (products.length === 0) {
+                grid.innerHTML = `<p style="text-align:center;">Inga produkter hittades i denna kategori.</p>`;
+                return;
+            }
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.BildURL}" alt="${product.Namn}">
+                    <div class="product-card-content">
+                        <h4>${product.Namn}</h4>
+                        <p>${product.Beskrivning}</p>
+                        <p class="price">${product.Pris} kr</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 4. Lyssna på ändringar i filtret
+        filterSelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            if (selectedCategory === 'alla') {
+                renderProducts(allAccessories);
+            } else {
+                const filteredProducts = allAccessories.filter(p => p.Kategori === selectedCategory);
+                renderProducts(filteredProducts);
+            }
+        });
+    }
 });
