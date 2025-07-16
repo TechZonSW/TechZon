@@ -475,22 +475,29 @@ footer a:hover {
     }
 }
 
-/* --- NYA STILAR FÖR TILLBEHÖR-SIDAN --- */
+
+/* --- UPPDATERADE STILAR FÖR TILLBEHÖR-SIDAN --- */
 
 .filter-bar {
     margin-bottom: 40px;
+    display: flex; /* Använder flexbox för att justera elementen */
+    flex-wrap: wrap; /* Tillåter filtren att hamna under varandra på små skärmar */
+    align-items: flex-end; /* Justerar botten på elementen */
+    gap: 25px; /* Avstånd mellan filter-grupperna */
+}
+
+.filter-group {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    max-width: 400px;
+    flex-direction: column; /* Placerar etiketten ovanför dropdown */
+    gap: 5px; /* Litet avstånd mellan etikett och dropdown */
+    min-width: 200px; /* Ger grupperna en minsta bredd */
+    flex-grow: 1; /* Låter grupperna växa och fylla utrymmet */
 }
 
-.filter-bar label {
+.filter-group label {
     font-weight: 500;
-}
-
-.filter-bar .styled-select {
-    flex-grow: 1; /* Låt dropdownen ta upp resterande plats */
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
 }
 
 .product-grid {
