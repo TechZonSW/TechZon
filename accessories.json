@@ -1,37 +1,50 @@
 [
     {
+        "Enhetstyp":"Mobil",
         "Kategori":"Skal & Skydd",
         "Namn":"Silikonskal för iPhone 15",
         "Pris":299,
-        "Beskrivning":"Ett mjukt och greppvänligt skal som skyddar mot stötar och repor.",
+        "Beskrivning":"Ett mjukt och greppvänligt skal.",
         "BildURL":"bilder\/testbild.png"
     },
     {
+        "Enhetstyp":"Mobil",
         "Kategori":"Skal & Skydd",
         "Namn":"PanzerGlass Skärmskydd",
         "Pris":349,
-        "Beskrivning":"Härdat glas som skyddar din skärm från sprickor. Kristallklart.",
+        "Beskrivning":"Härdat glas som skyddar din skärm.",
         "BildURL":"bilder\/testbild.png"
     },
     {
+        "Enhetstyp":"Mobil",
         "Kategori":"Laddare & Kablar",
         "Namn":"USB-C 20W Laddare",
         "Pris":249,
-        "Beskrivning":"Snabb och effektiv laddning för alla dina enheter med USB-C.",
+        "Beskrivning":"Snabb och effektiv laddning.",
         "BildURL":"bilder\/testbild.png"
     },
     {
+        "Enhetstyp":"Dator",
         "Kategori":"Laddare & Kablar",
-        "Namn":"USB-C till Lightning-kabel",
-        "Pris":229,
-        "Beskrivning":"MFi-certifierad kabel för säker synkning och laddning av dina Apple-enheter.",
+        "Namn":"MacBook Pro 96W Laddare",
+        "Pris":899,
+        "Beskrivning":"Kraftfull laddare för din MacBook.",
         "BildURL":"bilder\/testbild.png"
     },
     {
-        "Kategori":"Audio",
+        "Enhetstyp":"Dator",
+        "Kategori":"Väskor & Fodral",
+        "Namn":"Laptop Sleeve 14\"",
+        "Pris":399,
+        "Beskrivning":"Skyddande fodral med mjuk insida.",
+        "BildURL":"bilder\/testbild.png"
+    },
+    {
+        "Enhetstyp":"Audio",
+        "Kategori":"Övrigt",
         "Namn":"AirPods Pro Fodral",
         "Pris":199,
-        "Beskrivning":"Skyddande fodral i silikon som håller dina AirPods säkra.",
+        "Beskrivning":"Skyddande fodral i silikon.",
         "BildURL":"bilder\/testbild.png"
     }
 ]
