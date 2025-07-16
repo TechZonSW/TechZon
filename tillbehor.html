@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tillbehör - TechZon Kalmar</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <header>
@@ -29,54 +30,52 @@
 
     <main>
         <section class="page-title-section">
-            <div class="container">
-                <h1>Premium Tillbehör</h1>
+            <div class="container small-container">
+                <h1>Utvalda Tillbehör</h1>
+                <p class="page-intro">Allt du behöver för att skydda, ladda och få ut det mesta av dina enheter. Vi har noggrant valt ut produkter som möter våra höga krav på kvalitet och design.</p>
             </div>
         </section>
 
-        <section id="accessories-overview" class="content-section hidden">
+        <section id="accessories-page" class="content-section">
             <div class="container">
-                <h2>Skydda & Förbättra Din Enhet</h2>
-                <p>Vi erbjuder ett noggrant utvalt sortiment av högkvalitativa tillbehör för dina Apple-enheter. Allt från skydd och skal till laddare och adaptrar.</p>
-                <div class="grid">
-                    <div class="grid-item product-item">
-                        <img src="images/skal_placeholder.png" alt="iPhone Skal"> <!-- Byt bild -->
-                        <h4>iPhone Skal & Skydd</h4>
-                        <p>Skydda din iPhone med stil. Vi har allt från tunna silikonskal till robusta skydd.</p>
-                        <a href="#" class="learn-more-button">Se Utbud</a>
-                    </div>
-                    <div class="grid-item product-item">
-                        <img src="images/laddare_placeholder.png" alt="Laddare & Kablar"> <!-- Byt bild -->
-                        <h4>Laddare & Kablar</h4>
-                        <p>Original och MFi-certifierade laddare och kablar för snabb och säker laddning.</p>
-                         <a href="#" class="learn-more-button">Se Utbud</a>
-                    </div>
-                    <div class="grid-item product-item">
-                        <img src="images/airpods_case_placeholder.png" alt="AirPods Tillbehör"> <!-- Byt bild -->
-                        <h4>AirPods & Audio</h4>
-                        <p>Skyddsfodral, rengöringskit och andra tillbehör för dina AirPods och hörlurar.</p>
-                         <a href="#" class="learn-more-button">Se Utbud</a>
-                    </div>
-                    <div class="grid-item product-item">
-                        <img src="images/macbook_sleeve_placeholder.png" alt="MacBook Sleeves"> <!-- Byt bild -->
-                        <h4>MacBook Sleeves & Väskor</h4>
-                        <p>Skydda din MacBook när du är på språng med våra snygga och funktionella fodral.</p>
-                         <a href="#" class="learn-more-button">Se Utbud</a>
-                    </div>
+                <!-- Filter-sektion -->
+                <div class="filter-bar">
+                    <label for="accessory-filter">Filtrera kategori:</label>
+                    <select id="accessory-filter" class="styled-select"></select>
                 </div>
-                 <p style="text-align:center; margin-top:40px;">Besök vår butik för att se hela sortimentet eller kontakta oss för specifika önskemål!</p>
+                
+                <!-- Här kommer produkterna att laddas in av JavaScript -->
+                <div id="accessories-grid" class="product-grid">
+                    <!-- Exempel på hur ett produktkort ser ut (detta skapas av JS)
+                    <div class="product-card">
+                        <img src="bilder/testbild.png" alt="Produktbild">
+                        <div class="product-card-content">
+                            <h4>Produktnamn</h4>
+                            <p>Beskrivning av produkten...</p>
+                            <p class="price">299 kr</p>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section light-bg-section">
+            <div class="container small-container">
+                 <h2>Hittar du inte det du söker?</h2>
+                <p>Vårt sortiment i butiken är ännu större. Om du letar efter något specifikt är du varmt välkommen att besöka oss eller skicka en förfrågan, så hjälper vi dig att hitta rätt.</p>
+                <a href="kontakt.html" class="cta-button">Kontakta Oss</a>
             </div>
         </section>
     </main>
 
-    <!-- KOPIERA IN FOOTER HÄR -->
     <footer>
         <div class="container">
             <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
-            <p>DinGatuadress 123, Kalmar | 0480-XXXXXX | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+            <p>Exempelgatan 123, Kalmar | 0480-123456 | <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
