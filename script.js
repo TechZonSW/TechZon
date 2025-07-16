@@ -148,49 +148,79 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-        // --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     // DEL 3: KOD SOM BARA SKA KÖRAS PÅ TILLBEHÖRSSIDAN
     // --------------------------------------------------------------------
-
+    
     const accessoriesPage = document.getElementById('accessories-page');
     if (accessoriesPage) {
         const grid = document.getElementById('accessories-grid');
-        const filterSelect = document.getElementById('accessory-filter');
+        const deviceFilter = document.getElementById('device-filter');
+        const categoryFilter = document.getElementById('category-filter');
         let allAccessories = [];
-
+    
         // 1. Hämta produktdata
         fetch('./accessories.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Kunde inte ladda tillbehör.');
-                return response.json();
-            })
+            .then(response => { if (!response.ok) throw new Error('Kunde inte ladda tillbehör.'); return response.json(); })
             .then(data => {
                 allAccessories = data;
-                populateFilters();
-                renderProducts(allAccessories);
+                populateDeviceFilter();
+                applyFilters(); // Rendera alla produkter från början
             })
-            .catch(error => {
-                console.error(error);
-                grid.innerHTML = `<p style="text-align:center; color:red;">Kunde inte ladda produkterna. Försök igen senare.</p>`;
+            .catch(error => { console.error(error); grid.innerHTML = `<p style="text-align:center; color:red;">Kunde inte ladda produkterna.</p>`; });
+    
+        // 2. Fyll det första filtret med unika ENHETSTYPER
+        function populateDeviceFilter() {
+            deviceFilter.innerHTML = '<option value="alla">Alla enhetstyper</option>';
+            const devices = [...new Set(allAccessories.map(item => item.Enhetstyp))];
+            devices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device;
+                option.textContent = device;
+                deviceFilter.appendChild(option);
             });
-
-        // 2. Fyll filter-menyn med kategorier
-        function populateFilters() {
-            filterSelect.innerHTML = '<option value="alla">Visa alla</option>';
-            const categories = [...new Set(allAccessories.map(item => item.Kategori))];
+        }
+    
+        // 3. Uppdatera det andra filtret (Kategori) baserat på vald enhetstyp
+        function updateCategoryFilter(products) {
+            categoryFilter.innerHTML = '<option value="alla">Alla kategorier</option>';
+            const categories = [...new Set(products.map(item => item.Kategori))];
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
                 option.textContent = category;
-                filterSelect.appendChild(option);
+                categoryFilter.appendChild(option);
             });
         }
+    
+        // 4. Huvudfunktion för att applicera båda filtren och rendera produkter
+        function applyFilters() {
+            const selectedDevice = deviceFilter.value;
+            const selectedCategory = categoryFilter.value;
+    
+            // Filtrera först baserat på enhetstyp
+            let filteredByDevice = allAccessories;
+            if (selectedDevice !== 'alla') {
+                filteredByDevice = allAccessories.filter(p => p.Enhetstyp === selectedDevice);
+            }
+    
+            // Uppdatera kategori-filtret baserat på enhetsvalet
+            // (Görs bara om enheten ändras, se event listener nedan)
+            
+            // Filtrera sedan resultatet baserat på kategori
+            let finalFilter = filteredByDevice;
+            if (selectedCategory !== 'alla') {
+                finalFilter = filteredByDevice.filter(p => p.Kategori === selectedCategory);
+            }
+    
+            renderProducts(finalFilter);
+        }
         
-        // 3. Rendera produktkorten i griden
+        // 5. Rendera produktkorten
         function renderProducts(products) {
-            grid.innerHTML = ''; // Rensa griden först
+            grid.innerHTML = '';
             if (products.length === 0) {
-                grid.innerHTML = `<p style="text-align:center;">Inga produkter hittades i denna kategori.</p>`;
+                grid.innerHTML = `<p style="text-align:center; margin-top:20px;">Inga produkter matchade ditt val.</p>`;
                 return;
             }
             products.forEach(product => {
@@ -207,16 +237,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 grid.appendChild(card);
             });
         }
-
-        // 4. Lyssna på ändringar i filtret
-        filterSelect.addEventListener('change', function() {
-            const selectedCategory = this.value;
-            if (selectedCategory === 'alla') {
-                renderProducts(allAccessories);
-            } else {
-                const filteredProducts = allAccessories.filter(p => p.Kategori === selectedCategory);
-                renderProducts(filteredProducts);
+    
+        // 6. Lyssna på ändringar i filtren
+        deviceFilter.addEventListener('change', function() {
+            const selectedDevice = this.value;
+            let productsForCategoryFilter = allAccessories;
+            if (selectedDevice !== 'alla') {
+                productsForCategoryFilter = allAccessories.filter(p => p.Enhetstyp === selectedDevice);
             }
+            // Uppdatera kategorifiltret och kör sedan huvudfiltreringen
+            updateCategoryFilter(productsForCategoryFilter);
+            applyFilters();
         });
+    
+        categoryFilter.addEventListener('change', applyFilters);
     }
+
 });
