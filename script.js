@@ -1,12 +1,39 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // --------------------------------------------------------------------
+    // DEL 1: KOD SOM SKA KÖRAS PÅ ALLA SIDOR
+    // --------------------------------------------------------------------
+
     // Uppdaterar årtalet i footern
     const currentYearSpan = document.getElementById('currentYear');
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
 
-    // --- LOGIK FÖR PRISUTRÄKNARE ---
+    // Intersection Observer för fade-in-animationer på sektioner
+    const sections = document.querySelectorAll('.content-section');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1 // Startar när 10% av sektionen är synlig
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Sluta observera när den väl är synlig
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // --------------------------------------------------------------------
+    // DEL 2: KOD SOM BARA SKA KÖRAS PÅ REPARATIONSSIDAN
+    // --------------------------------------------------------------------
 
     // Kontrollera först om vi är på en sida som har prisuträknaren
     const priceCalculatorSection = document.getElementById('price-checker-section');
@@ -120,8 +147,4 @@ document.addEventListener('DOMContentLoaded', function() {
             selectElement.disabled = true;
         }
     }
-
-    // --- GAMMAL KOD FÖR ANIMATIONER (kan finnas på flera sidor) ---
-    // Denna kod är borttagen härifrån för tydlighet, men den ska vara kvar i din slutgiltiga script.js
-    // om du vill ha animationer på sektioner.
 });
