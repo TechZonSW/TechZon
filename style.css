@@ -474,3 +474,80 @@ footer a:hover {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- NYA STILAR FÖR TILLBEHÖR-SIDAN --- */
+
+.filter-bar {
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+}
+
+.filter-bar label {
+    font-weight: 500;
+}
+
+.filter-bar .styled-select {
+    flex-grow: 1; /* Låt dropdownen ta upp resterande plats */
+}
+
+.product-grid {
+    display: grid;
+    /* Justerar automatiskt antalet kolumner baserat på skärmstorlek */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden; /* Gömmer delar av bilden som går utanför */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.product-card img {
+    width: 100%;
+    height: 250px; /* Ger alla bilder en konsekvent höjd */
+    object-fit: cover; /* Ser till att bilden täcker ytan snyggt */
+    border-bottom: 1px solid #eee;
+}
+
+.product-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Ser till att kortets innehåll tar upp all ledig plats */
+}
+
+.product-card-content h4 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.product-card-content p {
+    font-size: 0.95em;
+    color: var(--text-color-secondary);
+    line-height: 1.5;
+    flex-grow: 1; /* Ser till att beskrivningen växer och priset hamnar längst ner */
+    margin-bottom: 15px;
+}
+
+.product-card-content .price {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: right;
+    margin-bottom: 0;
+    flex-grow: 0;
+}
