@@ -147,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
             selectElement.disabled = true;
         }
     }
-
     // --------------------------------------------------------------------
     // DEL 3: KOD SOM BARA SKA KÖRAS PÅ TILLBEHÖRSSIDAN
     // --------------------------------------------------------------------
@@ -164,8 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => { if (!response.ok) throw new Error('Kunde inte ladda tillbehör.'); return response.json(); })
             .then(data => {
                 allAccessories = data;
+                
+                // KORRIGERING: Ny, korrekt startsekvens
                 populateDeviceFilter();
-                applyFilters(); // Rendera alla produkter från början
+                updateCategoryFilter(allAccessories); // Fyll kategorifiltret med ALLA kategorier från start
+                renderProducts(allAccessories); // Visa ALLA produkter från start
             })
             .catch(error => { console.error(error); grid.innerHTML = `<p style="text-align:center; color:red;">Kunde inte ladda produkterna.</p>`; });
     
@@ -203,9 +205,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedDevice !== 'alla') {
                 filteredByDevice = allAccessories.filter(p => p.Enhetstyp === selectedDevice);
             }
-    
-            // Uppdatera kategori-filtret baserat på enhetsvalet
-            // (Görs bara om enheten ändras, se event listener nedan)
             
             // Filtrera sedan resultatet baserat på kategori
             let finalFilter = filteredByDevice;
