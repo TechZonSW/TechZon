@@ -266,15 +266,17 @@ main {
 /* --- NYA STILAR FÖR REPARATION & KONTAKT-SIDORNA --- */
 
 /* --- STILAR FÖR SIDTITEL-SEKTIONEN (UPPDATERAD) --- */
+
 .page-title-section {
-    background-color: var(--background-color); /* Använder vit bakgrund för en renare start */
+    background-color: var(--background-color);
     text-align: center;
-    padding: 80px 20px; /* MER PADDING: Ger sektionen luft och utrymme att andas */
-    border-bottom: 1px solid #e5e5e5;
+    /* UPPDATERAD PADDING: 80px över, 20px på sidorna, 60px under */
+    padding: 80px 20px 60px; 
+    /* BORTTAGEN: border-bottom är borttagen för ett renare flöde */
 }
 
 .page-title-section h1 {
-    font-size: 3.5em; /* Större, mer slagkraftig rubrik */
+    font-size: 3.5em;
     font-weight: 700;
     margin-bottom: 15px;
     line-height: 1.15;
