@@ -1,0 +1,44 @@
+[
+    {
+        "Kategori":"Mobil",
+        "Modell":"iPhone 14 Pro",
+        "Reparationstyp":"Skärmbyte (Premium)",
+        "Pris":4500
+    },
+    {
+        "Kategori":"Mobil",
+        "Modell":"iPhone 14 Pro",
+        "Reparationstyp":"Batteribyte",
+        "Pris":1200
+    },
+    {
+        "Kategori":"Mobil",
+        "Modell":"Samsung S23",
+        "Reparationstyp":"Skärmbyte (Premium)",
+        "Pris":3800
+    },
+    {
+        "Kategori":"Mobil",
+        "Modell":"Samsung S23",
+        "Reparationstyp":"Batteribyte",
+        "Pris":1100
+    },
+    {
+        "Kategori":"Dator",
+        "Modell":"MacBook Air M1",
+        "Reparationstyp":"Batteribyte",
+        "Pris":2500
+    },
+    {
+        "Kategori":"Dator",
+        "Modell":"MacBook Air M1",
+        "Reparationstyp":"Rengöring",
+        "Pris":800
+    },
+    {
+        "Kategori":"Surfplatta",
+        "Modell":"iPad Pro 11\"",
+        "Reparationstyp":"Skärmbyte",
+        "Pris":3200
+    }
+]
