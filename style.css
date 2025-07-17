@@ -164,7 +164,18 @@ main {
 }
 
 /* --- STILAR FÖR UNDERSIDORNAS HERO-SEKTION --- */
-
+.subpage-hero {
+    /* Återanvänder samma grundläggande positionering och höjd som #hero */
+    position: relative;
+    color: #fff;
+    padding: 120px 0 140px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
 
 /* Lägger till den mörka overlayen, precis som på startsidan */
 .subpage-hero::after {
