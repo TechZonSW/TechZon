@@ -415,24 +415,58 @@ main {
     font-size: 1.15em;
 }
 
+/* --- UPPDATERAD FOOTER-STIL --- */
+
 footer {
-    background-color: #f5f5f7;
-    color: #6e6e73;
-    text-align: center;
-    padding: 50px 20px;
+    /* Mörkare bakgrund för en premiumkänsla */
+    background-color: var(--secondary-color); 
+    color: #a1a1a6; /* Ljusare textfärg för kontrast */
+    padding: 60px 20px;
     font-size: 0.9em;
-    border-top: 1px solid #ddd;
 }
-footer p {
-    margin-bottom: 8px;
+
+.footer-grid {
+    display: grid;
+    /* Skapar ett flexibelt grid som anpassar sig efter skärmstorlek */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    max-width: var(--container-width);
+    margin: 0 auto;
 }
-footer a {
-    color: var(--secondary-color);
+
+.footer-column h4 {
+    color: #fff;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.footer-column p, .footer-column li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column a {
+    color: #a1a1a6;
     text-decoration: none;
-    font-weight: 500;
+    transition: color 0.3s ease;
 }
-footer a:hover {
-    text-decoration: underline;
+
+.footer-column a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #333;
+    font-size: 0.85em;
 }
 
 @media (max-width: 900px) {
