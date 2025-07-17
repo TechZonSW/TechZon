@@ -189,6 +189,7 @@ main {
 .subpage-hero .container {
     position: relative;
     z-index: 2;
+    padding: 60px 20px;
 }
 
 /* Stilar för rubriken inuti undersidans hero */
