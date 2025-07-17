@@ -366,15 +366,51 @@ main {
     gap: 60px;
 }
 
-.contact-info p {
-    margin-bottom: 20px;
+/* --- NYA, FÖRBÄTTRADE STILAR FÖR KONTAKTINFORMATION --- */
+.contact-info-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px; /* Lite extra luft under rubriken */
 }
 
-.contact-info i {
+.contact-info-list li {
+    display: flex; /* Placerar ikon och text sida vid sida */
+    align-items: flex-start; /* Justerar i toppen för flerradiga texter */
+    margin-bottom: 30px; /* Luft mellan varje kontaktpunkt */
+}
+
+.contact-info-icon {
+    font-size: 1.5em; /* Större och tydligare ikoner */
     color: var(--primary-color);
-    margin-right: 8px;
-    font-size: 1.2em;
-    vertical-align: middle;
+    width: 40px; /* Ger texten ett fast avstånd från ikonen */
+    flex-shrink: 0; /* Förhindrar att ikonen krymper */
+}
+
+.contact-info-text {
+    display: flex;
+    flex-direction: column; /* Placerar etikett och info ovanpå varandra */
+}
+
+.contact-info-text span {
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--text-color);
+    margin-bottom: 2px;
+}
+
+.contact-info-text p {
+    margin: 0; /* Tar bort standardmarginaler */
+    line-height: 1.5;
+    color: var(--text-color-secondary);
+}
+
+.contact-info-text a {
+    color: var(--text-color-secondary);
+    text-decoration: none;
+}
+.contact-info-text a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 
 .contact-form-wrapper h3 {
