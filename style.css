@@ -155,6 +155,10 @@ main {
     background-color: #000;
 }
 
+.small-container .cta-button {
+    margin-top: 25px;
+}
+
 .content-section {
     padding: 100px 0;
     overflow: hidden;
