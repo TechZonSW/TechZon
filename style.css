@@ -167,7 +167,7 @@ main {
     font-size: 1.1em; /* Större och mer lättläst text */
     color: var(--text-color-secondary);
     line-height: 1.65;
-    max-width: 900px; /* Begränsar radlängden för bättre läsbarhet */
+    max-width: 800px; /* Begränsar radlängden för bättre läsbarhet */
     margin-left: auto;
     margin-right: auto;
 }
