@@ -336,6 +336,10 @@ main {
     margin-right: auto;
 }
 
+.subpage-hero .page-intro {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .repair-card {
     margin-bottom: 60px;
 }
