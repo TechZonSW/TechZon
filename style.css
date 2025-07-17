@@ -155,8 +155,26 @@ main {
     background-color: #000;
 }
 
+/* Applierar stilar på H2-rubriker inuti .small-container som finns i en .light-bg-section */
+.light-bg-section .small-container h2 {
+    font-size: 2.8em; /* Större och mer slagkraftig rubrik */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Applierar stilar på paragrafer inuti .small-container som finns i en .light-bg-section */
+.light-bg-section .small-container p {
+    font-size: 1.2em; /* Större och mer lättläst text */
+    color: var(--text-color-secondary);
+    line-height: 1.65;
+    max-width: 600px; /* Begränsar radlängden för bättre läsbarhet */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Den befintliga regeln, nu med lite mer marginal */
 .small-container .cta-button {
-    margin-top: 25px;
+    margin-top: 30px; /* Ökat avstånd för en luftigare känsla */
 }
 
 .content-section {
