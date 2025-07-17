@@ -353,4 +353,103 @@ document.addEventListener('DOMContentLoaded', function() {
         conditionFilter.addEventListener('change', applyFilters);
     }
 
+    // --------------------------------------------------------------------
+    // DEL 5: KOD SOM BARA SKA KÖRAS PÅ VÄRDERINGS-SIDAN
+    // --------------------------------------------------------------------
+    const valuationPage = document.getElementById('valuation-page');
+    if (valuationPage) {
+        const form = document.getElementById('valuation-form');
+        const steps = Array.from(form.querySelectorAll('.form-step'));
+        const nextBtns = form.querySelectorAll('.next-btn');
+        const prevBtns = form.querySelectorAll('.prev-btn');
+        const progressBarSteps = document.querySelectorAll('.progress-bar-step');
+        const feedbackDiv = document.getElementById('form-feedback');
+        let currentStep = 0;
+    
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0eh2H6eK4x2N2otZxPtifF787O35w6Z3jX7FNzcKX3-aT-ksgo_LZ4YxahCeHtkH4/exec"; // <-- KLISTRA IN DIN URL HÄR!
+    
+        nextBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                if (validateStep(currentStep)) {
+                    currentStep++;
+                    updateFormSteps();
+                }
+            });
+        });
+    
+        prevBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                currentStep--;
+                updateFormSteps();
+            });
+        });
+    
+        function updateFormSteps() {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index === currentStep);
+            });
+            updateProgressBar();
+        }
+        
+        function updateProgressBar() {
+            progressBarSteps.forEach((step, index) => {
+                if (index < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (index === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+    
+        function validateStep(stepIndex) {
+            const currentStepDiv = steps[stepIndex];
+            const inputs = currentStepDiv.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            for (const input of inputs) {
+                if (!input.value) {
+                    input.style.borderColor = 'red';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#ccc';
+                }
+            }
+            return isValid;
+        }
+    
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!validateStep(currentStep)) return;
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Skickar...';
+    
+            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form) })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        currentStep++;
+                        form.style.display = 'none'; // Göm formuläret
+                        feedbackDiv.innerHTML = `<h3>Tack för din förfrågan!</h3><p>Vi har tagit emot din information och återkommer med ett personligt prisförslag till din e-post inom 24 timmar (vardagar).</p>`;
+                        feedbackDiv.className = 'success';
+                        updateFormSteps();
+                    } else {
+                        throw new Error(data.error || 'Okänt fel');
+                    }
+                })
+                .catch(error => {
+                    feedbackDiv.innerHTML = `<h3>Ett fel uppstod</h3><p>Kunde inte skicka din förfrågan. Vänligen försök igen senare eller kontakta oss direkt.</p><p><small>Fel: ${error.message}</small></p>`;
+                    feedbackDiv.className = 'error';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Få min värdering';
+                });
+        });
+    
+        updateFormSteps(); // Initiera första steget
+    }
+
 });
