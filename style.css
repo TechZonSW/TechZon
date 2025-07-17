@@ -102,29 +102,31 @@ main {
     width: 100%;
 }
 
-/* --- UPPDATERAD HERO-SEKTION MED BAKGRUNDSVIDEO --- */
+/* --- UPPDATERAD HERO-SEKTION (GÄLLER NU ÄVEN UNDERSIDOR) --- */
 
-#hero {
-    position: relative; /* Nödvändigt för att positionera video och innehåll */
-    color: #fff; /* Texten ska vara vit för att synas mot den mörka videon/overlayen */
-    padding: 120px 0 140px;
-    min-height: 80vh; /* Ger sektionen en bra höjd */
+/* Kombinerad regel för alla hero-sektioner */
+#hero, .subpage-hero {
+    position: relative;
+    color: #fff;
+    padding: 120px 20px 140px;
+    min-height: 70vh; /* Justerad för en bra höjd på både start- och undersidor */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    overflow: hidden; /* Gömmer delar av videon som går utanför */
+    overflow: hidden;
+    background-color: var(--secondary-color); /* Fallback om video inte laddar */
 }
 
-/* En mörk, halvgenomskinlig overlay som ligger ovanpå videon men under texten */
-#hero::after {
+/* En mörk, halvgenomskinlig overlay för BÅDA hero-typerna */
+#hero::after, .subpage-hero::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Mörk overlay. Justera 0.4 för mer/mindre mörker */
+    background-color: rgba(0, 0, 0, 0.4); 
     z-index: 1;
 }
 
@@ -132,19 +134,21 @@ main {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centrerar videon perfekt */
+    transform: translate(-50%, -50%);
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
-    z-index: 0; /* Placerar videon i botten av lagerstacken */
+    z-index: 0;
 }
 
+/* Gäller endast innehållet på startsidans hero */
 .hero-content {
-    position: relative; /* Placerar texten ovanpå overlayen */
-    z-index: 2; /* Säkerställer att texten är överst */
+    position: relative; 
+    z-index: 2;
 }
 
+/* Gäller endast rubriken på startsidans hero */
 #hero h1 {
     font-size: 4em; 
     font-weight: 800;
@@ -153,14 +157,15 @@ main {
     max-width: 850px;
 }
 
+/* Gäller endast texten på startsidans hero */
 #hero p {
     font-size: 1.3em;
-    margin-bottom: 40px; /* Lite mer utrymme till knappen */
+    margin-bottom: 40px;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.9); /* Lätt genomskinlig vit för en mjukare look */
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .cta-button {
