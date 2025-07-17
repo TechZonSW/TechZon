@@ -10,8 +10,23 @@
 </head>
 <body>
     <header>
-        <!-- Din header-kod här... -->
-    </header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Kalmar Logotyp" class="logo-img">
+                <span>TechZon Kalmar</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                    <li><a href="priser.html">Priser</a></li>
+                    <li><a href="vardering.html">Värdering</a></li>
+                    <li><a href="kontakt.html" class="active">Kontakt</a></li>
+                </ul>
+            </nav>
+        </header>
 
     <main>
         <section class="page-title-section">
@@ -24,13 +39,42 @@
         <section id="contact-details" class="content-section">
             <div class="container">
                 <div class="contact-grid">
+                    <!-- NY, OMSTRUKTURERAD INFO-SEKTION -->
                     <div class="contact-info">
                         <h3>Butiksinformation</h3>
-                        <!-- Din butiksinformation här... -->
+                        <ul class="contact-info-list">
+                            <li>
+                                <div class="contact-info-icon"><i class="ph-bold ph-map-pin"></i></div>
+                                <div class="contact-info-text">
+                                    <span>Adress</span>
+                                    <p>Exempelgatan 123<br>392 34 Kalmar</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-info-icon"><i class="ph-bold ph-phone"></i></div>
+                                <div class="contact-info-text">
+                                    <span>Telefon</span>
+                                    <p><a href="tel:0480123456">0480-123 456</a></p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-info-icon"><i class="ph-bold ph-envelope"></i></div>
+                                <div class="contact-info-text">
+                                    <span>E-post</span>
+                                    <p><a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a></p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-info-icon"><i class="ph-bold ph-clock"></i></div>
+                                <div class="contact-info-text">
+                                    <span>Öppettider</span>
+                                    <p>Mån - Fre: 10:00 - 18:00<br>Lördag: 11:00 - 15:00</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                     <div class="contact-form-wrapper">
                         <h3>Skicka ett meddelande</h3>
-                        <!-- KORRIGERING: Nytt id, action borttagen, telefon ej required -->
                         <form id="contact-page-form" class="contact-form">
                             <input type="text" name="name" placeholder="Ditt Namn" required>
                             <input type="email" name="email" placeholder="Din E-post" required>
@@ -38,7 +82,6 @@
                             <textarea name="message" placeholder="Beskriv ditt ärende..." rows="6" required></textarea>
                             <button type="submit" class="cta-button">Skicka Förfrågan</button>
                         </form>
-                        <!-- NYTT: Div för feedback-meddelanden -->
                         <div id="contact-form-feedback" class="hidden" style="margin-top: 20px;"></div>
                     </div>
                 </div>
@@ -46,7 +89,7 @@
         </section>
     </main>
 
-   <footer>
+    <footer>
         <div class="footer-grid">
             <div class="footer-column">
                 <h4>TechZon Kalmar</h4>
