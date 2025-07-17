@@ -795,3 +795,52 @@ footer {
     .content-section h2 { font-size: 2.4em; }
     .feature-text h2 { font-size: 2.2em; }
 }
+
+/* --- NYA STILAR FÖR FELSÖKNINGS-SIDAN OCH HERO-KNAPPAR --- */
+
+/* Container för knapparna på startsidan */
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Avstånd mellan knapparna */
+    flex-wrap: wrap; /* Låter knapparna hamna under varandra på små skärmar */
+}
+
+/* Stil för process-stegen */
+.process-steps {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    text-align: left;
+}
+
+.process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.process-step-number {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+}
+
+.process-step-text h4 {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.process-step-text p {
+    color: var(--text-color-secondary);
+    line-height: 1.6;
+}
