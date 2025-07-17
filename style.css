@@ -163,6 +163,47 @@ main {
     color: rgba(255, 255, 255, 0.9); /* Lätt genomskinlig vit för en mjukare look */
 }
 
+/* --- STILAR FÖR UNDERSIDORNAS HERO-SEKTION --- */
+
+.subpage-hero {
+    /* Återanvänder samma grundläggande positionering och höjd som #hero */
+    position: relative;
+    color: #fff;
+    padding: 120px 20px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Lägger till den mörka overlayen, precis som på startsidan */
+.subpage-hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+/* DETTA ÄR NYCKELN: Lyfter upp innehållet ovanför videon och overlayen */
+.subpage-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Stilar för rubriken inuti undersidans hero */
+.subpage-hero h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+}
+
+/* Stilar för intro-texten inuti undersidans hero */
+.subpage-hero .page-intro {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .cta-button {
     display: inline-block;
     background-color: var(--primary-color);
