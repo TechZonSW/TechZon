@@ -164,10 +164,10 @@ main {
 
 /* Applierar stilar på paragrafer inuti .small-container som finns i en .light-bg-section */
 .light-bg-section .small-container p {
-    font-size: 1.2em; /* Större och mer lättläst text */
+    font-size: 1.1em; /* Större och mer lättläst text */
     color: var(--text-color-secondary);
     line-height: 1.65;
-    max-width: 600px; /* Begränsar radlängden för bättre läsbarhet */
+    max-width: 900px; /* Begränsar radlängden för bättre läsbarhet */
     margin-left: auto;
     margin-right: auto;
 }
