@@ -170,7 +170,7 @@ main {
     /* Återanvänder samma grundläggande positionering och höjd som #hero */
     position: relative;
     color: #fff;
-    min-height: 100vh;
+    min-height: 95vh;
     display: flex;
     align-items: center;
     justify-content: center;
