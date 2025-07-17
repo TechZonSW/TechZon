@@ -128,16 +128,24 @@ main {
     z-index: 1;
 }
 
+/* --- ROBUST STIL FÖR BAKGRUNDSVIDEO --- */
+
 #hero-video {
+    /* Positionerar videon absolut i förhållande till sin 'relative' förälder (#hero eller .subpage-hero) */
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centrerar videon perfekt */
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: 0; /* Placerar videon i botten av lagerstacken */
+    /* Fäster videon vid alla fyra kanter av sin förälder */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    /* Tvingar videon att fylla hela containern, även om det innebär att kanterna klipps av */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Detta är den magiska regeln. Den skalar om videon så att den täcker hela ytan utan att förvränga proportionerna. */
+
+    /* Placerar videon längst bak */
+    z-index: 0;
 }
 
 .hero-content {
