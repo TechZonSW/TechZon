@@ -102,71 +102,65 @@ main {
     width: 100%;
 }
 
-/* --- STILAR FÖR STARTSIDANS HERO (#hero) --- */
+/* --- UPPDATERAD HERO-SEKTION MED BAKGRUNDSVIDEO --- */
+
 #hero {
-    position: relative;
-    color: #fff; 
-    padding: 120px 20px 140px;
-    min-height: 80vh; 
+    position: relative; /* Nödvändigt för att positionera video och innehåll */
+    color: #fff; /* Texten ska vara vit för att synas mot den mörka videon/overlayen */
+    padding: 120px 0 140px;
+    min-height: 80vh; /* Ger sektionen en bra höjd */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    overflow: hidden;
-    background-color: var(--secondary-color);
+    overflow: hidden; /* Gömmer delar av videon som går utanför */
 }
+
+/* En mörk, halvgenomskinlig overlay som ligger ovanpå videon men under texten */
 #hero::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Mörk overlay. Justera 0.4 för mer/mindre mörker */
     z-index: 1;
 }
-#hero .hero-content { /* Innehåll på startsidan */
-    position: relative;
-    z-index: 2;
+
+#hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrerar videon perfekt */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0; /* Placerar videon i botten av lagerstacken */
 }
+
+.hero-content {
+    position: relative; /* Placerar texten ovanpå overlayen */
+    z-index: 2; /* Säkerställer att texten är överst */
+}
+
 #hero h1 {
     font-size: 4em; 
     font-weight: 800;
+    line-height: 1.1;
     margin-bottom: 20px;
-}
-#hero p {
-    font-size: 1.3em;
-    margin-bottom: 40px;
-    color: rgba(255, 255, 255, 0.9);
+    max-width: 850px;
 }
 
-/* --- STILAR FÖR UNDERSIDORNAS HERO (.subpage-hero) --- */
-.subpage-hero {
-    position: relative;
-    color: #fff;
-    padding: 100px 20px;
-    min-height: 60vh; /* Sätter en generös höjd för undersidornas hero */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    background-color: var(--secondary-color);
-}
-.subpage-hero::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-}
-.subpage-hero .container { /* Innehållet på undersidornas hero */
-    position: relative;
-    z-index: 2;
-}
-.subpage-hero h1 {
-    font-size: 3.5em; /* Använder samma storlek som på andra undersidor */
-    font-weight: 700;
-}
-.subpage-hero .page-intro {
-    color: rgba(255, 255, 255, 0.9); /* Säkerställer att intro-texten blir vit */
+#hero p {
+    font-size: 1.3em;
+    margin-bottom: 40px; /* Lite mer utrymme till knappen */
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9); /* Lätt genomskinlig vit för en mjukare look */
 }
 
 .cta-button {
