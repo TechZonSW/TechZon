@@ -558,3 +558,42 @@ footer a:hover {
     margin-bottom: 0;
     flex-grow: 0;
 }
+
+/* --- NYA STILAR FÖR BEGAGNAT-SIDAN --- */
+
+.used-product-card .used-product-image {
+    position: relative; /* Nödvändigt för att positionera 'badgen' */
+}
+
+/* Badge för produktens skick */
+.condition-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #fff;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Färger för olika skick */
+.condition-badge.nyskick { background-color: rgba(29, 185, 84, 0.8); } /* Grön */
+.condition-badge.mycket-bra-skick { background-color: rgba(0, 113, 227, 0.8); } /* Blå */
+.condition-badge.bra-skick { background-color: rgba(245, 166, 35, 0.9); } /* Orange */
+
+/* Lista för specifikationer som Färg, Lagring etc. */
+.product-specs {
+    list-style: none;
+    padding: 0;
+    margin: -5px 0 15px 0;
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+
+.product-specs li {
+    display: inline-block;
+    margin-right: 15px;
+}
