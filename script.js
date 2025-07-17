@@ -452,4 +452,40 @@ document.addEventListener('DOMContentLoaded', function() {
         updateFormSteps(); // Initiera första steget
     }
 
+    // --------------------------------------------------------------------
+    // DEL 6: KOD SOM BARA SKA KÖRAS PÅ KONTAKT-SIDAN
+    // --------------------------------------------------------------------
+    const contactPageForm = document.getElementById('contact-page-form');
+    if (contactPageForm) {
+        const feedbackDiv = document.getElementById('contact-form-feedback');
+        // ANVÄND DIN NYA URL FÖR KONTAKT-FORMULÄRET HÄR!
+        const SCRIPT_URL_CONTACT = "https://script.google.com/macros/s/AKfycbxC5gtgKz2DIJUQ9AIPPs6uzu7RZBnBC3mNfx68FML9Etx0EMjP153ynM9-_jcun6R1/exec"; // <-- KLISTRA IN DIN URL HÄR!
+    
+        contactPageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = contactPageForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Skickar...';
+    
+            fetch(SCRIPT_URL_CONTACT, { method: 'POST', body: new FormData(contactPageForm) })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        contactPageForm.style.display = 'none'; // Göm formuläret
+                        feedbackDiv.innerHTML = `<h3>Tack för ditt meddelande!</h3><p>Vi har tagit emot din förfrågan och återkommer så snart vi kan.</p>`;
+                        feedbackDiv.className = 'success';
+                    } else {
+                        throw new Error(data.error || 'Okänt fel');
+                    }
+                })
+                .catch(error => {
+                    feedbackDiv.innerHTML = `<h3>Ett fel uppstod</h3><p>Kunde inte skicka ditt meddelande. Vänligen försök igen senare eller kontakta oss direkt.</p>`;
+                    feedbackDiv.className = 'error';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Skicka Förfrågan';
+                });
+        });
+    }
+
 });
