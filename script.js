@@ -252,4 +252,105 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryFilter.addEventListener('change', applyFilters);
     }
 
+    // --------------------------------------------------------------------
+    // DEL 4: KOD SOM BARA SKA KÖRAS PÅ BEGAGNAT-SIDAN
+    // --------------------------------------------------------------------
+    
+    const usedProductsPage = document.getElementById('used-products-page');
+    if (usedProductsPage) {
+        const grid = document.getElementById('used-products-grid');
+        const deviceFilter = document.getElementById('device-filter');
+        const conditionFilter = document.getElementById('condition-filter');
+        let allUsedProducts = [];
+    
+        // 1. Hämta produktdata
+        fetch('./used-products.json')
+            .then(response => { if (!response.ok) throw new Error('Kunde inte ladda begagnade produkter.'); return response.json(); })
+            .then(data => {
+                allUsedProducts = data;
+                populateFilters();
+                renderProducts(allUsedProducts); // Visa alla från start
+            })
+            .catch(error => { console.error(error); grid.innerHTML = `<p style="text-align:center; color:red;">Kunde inte ladda produkterna.</p>`; });
+    
+        // 2. Fyll båda filtren med unika värden
+        function populateFilters() {
+            // Fyll Enhetstyp-filter
+            deviceFilter.innerHTML = '<option value="alla">Alla enhetstyper</option>';
+            const devices = [...new Set(allUsedProducts.map(item => item.Enhetstyp))];
+            devices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device;
+                option.textContent = device;
+                deviceFilter.appendChild(option);
+            });
+    
+            // Fyll Skick-filter
+            conditionFilter.innerHTML = '<option value="alla">Alla skick</option>';
+            // Ordna skick i en logisk ordning
+            const conditions = ["Nyskick", "Mycket bra skick", "Bra skick"];
+            const availableConditions = [...new Set(allUsedProducts.map(item => item.Skick))];
+            conditions.forEach(condition => {
+                if(availableConditions.includes(condition)) {
+                    const option = document.createElement('option');
+                    option.value = condition;
+                    option.textContent = condition;
+                    conditionFilter.appendChild(option);
+                }
+            });
+        }
+    
+        // 3. Huvudfunktion för att applicera filter
+        function applyFilters() {
+            const selectedDevice = deviceFilter.value;
+            const selectedCondition = conditionFilter.value;
+            let filteredProducts = allUsedProducts;
+    
+            if (selectedDevice !== 'alla') {
+                filteredProducts = filteredProducts.filter(p => p.Enhetstyp === selectedDevice);
+            }
+    
+            if (selectedCondition !== 'alla') {
+                filteredProducts = filteredProducts.filter(p => p.Skick === selectedCondition);
+            }
+    
+            renderProducts(filteredProducts);
+        }
+    
+        // 4. Rendera produktkorten
+        function renderProducts(products) {
+            grid.innerHTML = '';
+            if (products.length === 0) {
+                grid.innerHTML = `<p style="text-align:center; margin-top:20px;">Inga produkter matchade ditt val.</p>`;
+                return;
+            }
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card used-product-card'; // Extra klass för specifik styling
+                // Lägg till en klass för skicket för att kunna färgsätta
+                const conditionClass = product.Skick.toLowerCase().replace(/\s+/g, '-');
+                card.innerHTML = `
+                    <div class="used-product-image">
+                        <img src="${product.BildURL}" alt="${product.Namn}">
+                        <span class="condition-badge ${conditionClass}">${product.Skick}</span>
+                    </div>
+                    <div class="product-card-content">
+                        <h4>${product.Namn}</h4>
+                        <ul class="product-specs">
+                            <li><strong>Färg:</strong> ${product.Färg}</li>
+                            <li><strong>Lagring:</strong> ${product.Lagring}</li>
+                        </ul>
+                        <p>${product.Beskrivning}</p>
+                        <p class="price">${product.Pris} kr</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    
+        // 5. Lyssna på ändringar i båda filtren
+        deviceFilter.addEventListener('change', applyFilters);
+        conditionFilter.addEventListener('change', applyFilters);
+    }
+
 });
