@@ -40,7 +40,6 @@ body {
     text-align: center;
 }
 
-/* KORRIGERING: Header med solid bakgrund för att undvika "filter"-problem */
 header {
     background-color: var(--background-color);
     padding: 20px 0;
@@ -65,9 +64,8 @@ header .container {
     gap: 10px;
 }
 
-/* KORRIGERING: Storleken på logotypen är specifierad här. */
 .logo-img {
-    height: 28px; /* Denna regel gör logotypen liten och anpassad för headern */
+    height: 28px;
     width: auto;
 }
 
@@ -213,7 +211,6 @@ main {
     line-height: 1.7;
 }
 
-/* Denna regel säkerställer att bilderna i feature-korten inte blir för stora */
 .feature-image img {
     max-width: 100%;
     border-radius: var(--border-radius);
@@ -262,17 +259,10 @@ main {
     margin-bottom: 10px;
 }
 
-
-/* --- NYA STILAR FÖR REPARATION & KONTAKT-SIDORNA --- */
-
-/* --- STILAR FÖR SIDTITEL-SEKTIONEN (UPPDATERAD) --- */
-
 .page-title-section {
     background-color: var(--background-color);
     text-align: center;
-    /* UPPDATERAD PADDING: 80px över, 20px på sidorna, 60px under */
     padding: 80px 20px 60px; 
-    /* BORTTAGEN: border-bottom är borttagen för ett renare flöde */
 }
 
 .page-title-section h1 {
@@ -292,17 +282,16 @@ main {
 }
 
 .repair-card {
-    margin-bottom: 60px; /* Mer luft mellan reparationskorten */
+    margin-bottom: 60px;
 }
 
 .button-group {
     margin-top: 25px;
     display: flex;
     gap: 15px;
-    justify-content: flex-start; /* Justera till 'center' om korten är centrerade på mobil */
+    justify-content: flex-start;
 }
 
-/* Prisuträknare */
 .price-calculator {
     display: grid;
     grid-template-columns: 1fr;
@@ -313,7 +302,14 @@ main {
     margin-right: auto;
 }
 
-.styled-select {
+/* --- NYTT, KONSOLIDERAT BLOCK FÖR ALLA FORMULÄRFÄLT --- */
+
+/* Kombinerad regel för ett enhetligt utseende på alla formulärfält */
+.styled-select,
+.contact-form input,
+.contact-form textarea,
+.form-step input[type="text"], 
+.form-step input[type="email"] {
     width: 100%;
     padding: 15px;
     border: 1px solid #ccc;
@@ -321,6 +317,11 @@ main {
     font-family: var(--font-family);
     font-size: 1em;
     background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Separat regel för pilen på select-elementen */
+.styled-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -355,7 +356,6 @@ main {
     color: var(--primary-color);
 }
 
-/* Kontakt-sidan */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
@@ -382,52 +382,35 @@ main {
     display: grid;
     gap: 20px;
 }
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    font-family: var(--font-family);
-    font-size: 1em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
+
+/* Fokus-effekt för alla formulärfält */
 .contact-form input:focus,
-.contact-form textarea:focus {
+.contact-form textarea:focus,
+.form-step input:focus,
+.styled-select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
 }
-.contact-form textarea {
+
+.contact-form textarea,
+.form-step textarea { /* Säkerställer att textareas också kan stylas i framtiden */
     resize: vertical;
 }
 
-#trade-in.light-bg-section {
+.light-bg-section {
     background-color: var(--section-bg-light);
-    padding: 80px 0;
 }
-#trade-in h2 {
-    margin-bottom: 20px;
-}
-#trade-in p {
-    color: var(--text-color-secondary);
-    margin-bottom: 30px;
-    font-size: 1.15em;
-}
-
-/* --- UPPDATERAD FOOTER-STIL --- */
 
 footer {
-    /* Mörkare bakgrund för en premiumkänsla */
     background-color: var(--secondary-color); 
-    color: #a1a1a6; /* Ljusare textfärg för kontrast */
+    color: #a1a1a6;
     padding: 60px 20px;
     font-size: 0.9em;
 }
 
 .footer-grid {
     display: grid;
-    /* Skapar ett flexibelt grid som anpassar sig efter skärmstorlek */
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 40px;
     max-width: var(--container-width);
@@ -469,63 +452,20 @@ footer {
     font-size: 0.85em;
 }
 
-@media (max-width: 900px) {
-    .feature-card {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    .feature-card.right-align .feature-text,
-    .feature-card.right-align .feature-image {
-        order: initial;
-    }
-    .feature-text h2, .feature-text p {
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .feature-list {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    header .container {
-        flex-direction: column;
-        gap: 15px;
-    }
-    #hero h1 { font-size: 2.8em; }
-    #hero p { font-size: 1.1em; }
-    .content-section h2 { font-size: 2.4em; }
-    .feature-text h2 { font-size: 2.2em; }
-}
-
-/* Responsivitet för nya element i Reparation */
-@media (max-width: 900px) {
-    .button-group {
-        justify-content: center;
-    }
-    .contact-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* --- UPPDATERADE STILAR FÖR TILLBEHÖR-SIDAN --- */
-
 .filter-bar {
     margin-bottom: 40px;
-    display: flex; /* Använder flexbox för att justera elementen */
-    flex-wrap: wrap; /* Tillåter filtren att hamna under varandra på små skärmar */
-    align-items: flex-end; /* Justerar botten på elementen */
-    gap: 25px; /* Avstånd mellan filter-grupperna */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 25px;
 }
 
 .filter-group {
     display: flex;
-    flex-direction: column; /* Placerar etiketten ovanför dropdown */
-    gap: 5px; /* Litet avstånd mellan etikett och dropdown */
-    min-width: 200px; /* Ger grupperna en minsta bredd */
-    flex-grow: 1; /* Låter grupperna växa och fylla utrymmet */
+    flex-direction: column;
+    gap: 5px;
+    min-width: 200px;
+    flex-grow: 1;
 }
 
 .filter-group label {
@@ -536,7 +476,6 @@ footer {
 
 .product-grid {
     display: grid;
-    /* Justerar automatiskt antalet kolumner baserat på skärmstorlek */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
 }
@@ -545,7 +484,7 @@ footer {
     background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-soft);
-    overflow: hidden; /* Gömmer delar av bilden som går utanför */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -558,8 +497,8 @@ footer {
 
 .product-card img {
     width: 100%;
-    height: 250px; /* Ger alla bilder en konsekvent höjd */
-    object-fit: cover; /* Ser till att bilden täcker ytan snyggt */
+    height: 250px;
+    object-fit: cover;
     border-bottom: 1px solid #eee;
 }
 
@@ -567,7 +506,7 @@ footer {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Ser till att kortets innehåll tar upp all ledig plats */
+    flex-grow: 1;
 }
 
 .product-card-content h4 {
@@ -580,7 +519,7 @@ footer {
     font-size: 0.95em;
     color: var(--text-color-secondary);
     line-height: 1.5;
-    flex-grow: 1; /* Ser till att beskrivningen växer och priset hamnar längst ner */
+    flex-grow: 1;
     margin-bottom: 15px;
 }
 
@@ -593,13 +532,10 @@ footer {
     flex-grow: 0;
 }
 
-/* --- NYA STILAR FÖR BEGAGNAT-SIDAN --- */
-
 .used-product-card .used-product-image {
-    position: relative; /* Nödvändigt för att positionera 'badgen' */
+    position: relative;
 }
 
-/* Badge för produktens skick */
 .condition-badge {
     position: absolute;
     top: 15px;
@@ -613,12 +549,10 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Färger för olika skick */
-.condition-badge.nyskick { background-color: rgba(29, 185, 84, 0.8); } /* Grön */
-.condition-badge.mycket-bra-skick { background-color: rgba(0, 113, 227, 0.8); } /* Blå */
-.condition-badge.bra-skick { background-color: rgba(245, 166, 35, 0.9); } /* Orange */
+.condition-badge.nyskick { background-color: rgba(29, 185, 84, 0.8); }
+.condition-badge.mycket-bra-skick { background-color: rgba(0, 113, 227, 0.8); }
+.condition-badge.bra-skick { background-color: rgba(245, 166, 35, 0.9); }
 
-/* Lista för specifikationer som Färg, Lagring etc. */
 .product-specs {
     list-style: none;
     padding: 0;
@@ -631,8 +565,6 @@ footer {
     display: inline-block;
     margin-right: 15px;
 }
-
-/* --- NYA STILAR FÖR VÄRDERINGS-SIDAN --- */
 
 .form-container {
     background-color: #fff;
@@ -647,7 +579,7 @@ footer {
     margin-bottom: 40px;
     position: relative;
 }
-.progress-bar::before { /* Linjen bakom */
+.progress-bar::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -690,12 +622,11 @@ footer {
 .progress-bar-step.active p { color: var(--text-color); }
 .progress-bar-step.completed p { color: #888; }
 
-
 .form-step {
-    display: none; /* Göm alla steg som standard */
+    display: none;
 }
 .form-step.active {
-    display: block; /* Visa bara det aktiva steget */
+    display: block;
 }
 
 .form-step h3 {
@@ -711,7 +642,6 @@ footer {
 }
 .form-step .styled-select, .form-step input[type="text"], .form-step input[type="email"] {
     margin-bottom: 20px;
-    width: 100%;
 }
 .form-navigation {
     margin-top: 30px;
@@ -737,3 +667,40 @@ footer {
 #form-feedback.success { background-color: #d4edda; color: #155724; }
 #form-feedback.error { background-color: #f8d7da; color: #721c24; }
 .hidden { display: none; }
+
+
+@media (max-width: 900px) {
+    .feature-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .feature-card.right-align .feature-text,
+    .feature-card.right-align .feature-image {
+        order: initial;
+    }
+    .feature-text h2, .feature-text p {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+    .button-group {
+        justify-content: center;
+    }
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    #hero h1 { font-size: 2.8em; }
+    #hero p { font-size: 1.1em; }
+    .content-section h2 { font-size: 2.4em; }
+    .feature-text h2 { font-size: 2.2em; }
+}
