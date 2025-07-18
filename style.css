@@ -890,3 +890,15 @@ footer {
     color: var(--text-color-secondary);
     line-height: 1.6;
 }
+
+/* --- STILAR FÖR BOKA-TID-SIDAN --- */
+
+#booking-section .container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Anpassar ikonerna i listan på boka-tid-sidan */
+.process-step-number i {
+    font-size: 1em; /* Gör ikonen lagom stor inuti cirkeln */
+}
