@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spåra Reparation - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Kalmar Logotyp" class="logo-img">
+                <span>TechZon Kalmar</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                    <li><a href="priser.html">Priser</a></li>
+                    <li><a href="vardering.html">Värdering</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container small-container">
+                <h1>Spåra din reparation live</h1>
+                <p class="page-intro">Ange din unika reparationskod från ditt kvitto eller SMS för att se status i realtid.</p>
+            </div>
+        </section>
+
+        <section id="tracking-page" class="content-section">
+            <div class="container" style="max-width: 600px;">
+                <div class="tracking-form-container">
+                    <form id="trackingForm">
+                        <input type="text" id="repairCodeInput" placeholder="Ex: TEST-1234" required>
+                        <button type="submit" class="cta-button">Spåra</button>
+                    </form>
+                </div>
+                
+                <!-- Här visas status-tidslinjen -->
+                <div id="statusContainer"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h4>TechZon Kalmar</h4>
+                <p>Din certifierade partner för reparationer, tillbehör och service för all din hemelektronik.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Snabblänkar</h4>
+                <ul>
+                    <li><a href="index.html">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li><a href="spara.html">Spåra Reparation</a></li>
+                    <li><a href="felsokning.html">Gratis Felsökning</a></li>
+                    <li><a href="boka-tid.html">Boka Tid</a></li>
+                    <li><a href="tillbehor.html">Tillbehör</a></li>
+                    <li><a href="begagnat.html">Begagnat</a></li>
+                    <li><a href="priser.html">Priser</a></li>
+                    <li><a href="vardering.html">Värdering</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Kontakta oss</h4>
+                <p>
+                    Exempelgatan 123<br>
+                    392 34 Kalmar<br>
+                    <a href="tel:0480123456">0480-123 456</a><br>
+                    <a href="mailto:info@techzonkalmar.se">info@techzonkalmar.se</a>
+                </p>
+            </div>
+            <div class="footer-column">
+                <h4>Öppettider</h4>
+                <p>
+                    Mån - Fre: 10:00 - 18:00<br>
+                    Lördag: 11:00 - 15:00<br>
+                    Söndag: Stängt
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© <span id="currentYear"></span> TechZon Kalmar. Alla rättigheter förbehållna.</p>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
