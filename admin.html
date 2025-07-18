@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Bibliotek för QR/streckkodsläsare -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body class="admin-body">
 
-    <!-- INLOGGNINGSVY (Oförändrad) -->
+    <!-- INLOGGNINGSVY -->
     <div id="loginView" class="admin-view">
         <div class="login-container">
             <h1>Personalportal</h1>
@@ -26,7 +25,7 @@
         </div>
     </div>
 
-    <!-- DASHBOARDVY (Helt ny struktur) -->
+    <!-- DASHBOARDVY -->
     <div id="dashboardView" class="admin-view" style="display: none;">
         <div class="admin-layout-container">
             <!-- Vänsterkolumn: Navigation -->
@@ -35,7 +34,8 @@
                     <h4>TechZon Admin</h4>
                 </div>
                 <nav class="admin-nav">
-                    <button id="navCasesBtn" class="admin-nav-button active"><i class="ph-bold ph-list-dashes"></i> Ärenden</button>
+                    <button id="navActiveBtn" class="admin-nav-button active"><i class="ph-bold ph-list-dashes"></i> Pågående</button>
+                    <button id="navArchivedBtn" class="admin-nav-button"><i class="ph-bold ph-archive"></i> Avslutade</button>
                     <button id="navScanBtn" class="admin-nav-button"><i class="ph-bold ph-qr-code"></i> Skanna</button>
                 </nav>
                 <div class="sidebar-footer">
@@ -45,24 +45,22 @@
 
             <!-- Högerkolumn: Huvudinnehåll -->
             <main class="admin-main-content">
-                <!-- ===================== -->
-                <!-- VY FÖR ÄRENDEN       -->
-                <!-- ===================== -->
+                <!-- VY FÖR ÄRENDEN -->
                 <div id="casesView" class="content-view">
                     <div class="view-header">
-                        <h1>Pågående Ärenden</h1>
-                        <button id="showCreateViewBtn" class="cta-button">Skapa Nytt Ärende</button>
+                        <h1 id="casesViewTitle">Pågående Ärenden</h1>
+                        <div id="cases-header-actions">
+                            <button id="deleteSelectedBtn" class="cta-button danger" style="display: none;">Radera markerade</button>
+                            <button id="showCreateViewBtn" class="cta-button">Skapa Nytt Ärende</button>
+                        </div>
                     </div>
                     <div class="cases-layout">
-                        <!-- Lista med alla pågående ärenden -->
                         <div class="cases-list-container">
                             <ul id="repairsList">
                                 <!-- Ärenden laddas här med JS -->
                             </ul>
                         </div>
-                        <!-- Detaljvy för valt ärende -->
                         <div class="cases-detail-container">
-                            <!-- När ett ärende är valt -->
                             <div id="repairDetailView" style="display: none;">
                                 <h4>Ärendedetaljer</h4>
                                 <p class="repair-meta">Enhet: <strong id="activeDeviceName"></strong></p>
@@ -72,18 +70,18 @@
                                 <h5>Uppdatera Status</h5>
                                 <form id="updateStatusForm">
                                     <input type="text" id="newStatusInput" placeholder="Ny statusuppdatering..." required>
-                                    <div class="form-button-group">
+                                    <div class="form-button-group three-buttons">
                                         <button type="submit" data-action="save" class="secondary-button">Spara Status</button>
                                         <button type="submit" data-action="sms" class="cta-button">Spara & Skicka SMS</button>
+                                        <button type="button" id="archiveCaseBtn" class="cta-button secondary">Avsluta Ärende</button>
                                     </div>
                                 </form>
                                 <hr>
                                 <h5>Status-historik</h5>
                                 <ul id="activeStatusList" class="admin-timeline"></ul>
                             </div>
-                            <!-- När man ska skapa nytt -->
                             <div id="createRepairView" style="display: none;">
-                                 <h4>Registrera Ny Reparation</h4>
+                                <h4>Registrera Ny Reparation</h4>
                                 <form id="createRepairForm">
                                     <input type="text" id="deviceName" placeholder="Enhet (ex: iPhone 15 Pro)" required>
                                     <input type="text" id="customerName" placeholder="Kundens namn" required>
@@ -91,7 +89,6 @@
                                     <button type="submit" class="cta-button">Skapa Ärende</button>
                                 </form>
                             </div>
-                            <!-- När inget är valt -->
                             <div id="selectCasePrompt">
                                 <i class="ph-light ph-arrow-left"></i>
                                 <p>Välj ett ärende i listan till vänster eller skapa ett nytt.</p>
@@ -100,9 +97,7 @@
                     </div>
                 </div>
 
-                <!-- ===================== -->
-                <!-- VY FÖR SKANNING      -->
-                <!-- ===================== -->
+                <!-- VY FÖR SKANNING -->
                 <div id="scanView" class="content-view" style="display: none;">
                     <div class="view-header">
                         <h1>Lager & Skanning</h1>
