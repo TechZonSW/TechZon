@@ -810,44 +810,71 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const newStatusInput = document.getElementById('newStatusInput');
             const newStatus = newStatusInput.value.trim();
-            const action = e.submitter.dataset.action;
+            const action = e.submitter.dataset.action; // Hämtar 'save' eller 'sms'
             
             if (!newStatus || !activeRepair) return;
             
             const button = e.submitter;
+            const originalButtonText = button.textContent;
             button.disabled = true;
-    
+            button.textContent = 'Sparar...';
+        
             try {
+                // Steg 1: Anropa backend för att spara statusen
                 const updateResponse = await fetch('/.netlify/functions/updateRepairStatus', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                    body: JSON.stringify({ repairId: activeRepair.id, newStatus: newStatus }) 
+                    body: JSON.stringify({ repairId: activeRepair.id, newStatus: newStatus })
                 });
-                if (!updateResponse.ok) throw new Error('Kunde inte spara status.');
-                const updatedRepair = await updateResponse.json();
+        
+                if (!updateResponse.ok) {
+                    // Om backend returnerar ett fel, visa det
+                    const errorData = await updateResponse.json();
+                    throw new Error(errorData.message || 'Okänt fel vid uppdatering.');
+                }
+        
+                // --- START PÅ NY, FÖRBÄTTRAD LOGIK ---
+        
+                // Steg 2: Uppdatera den lokala datan och UI:t direkt
+                const newStatusEntry = {
+                    status: newStatus,
+                    // Skapa ett "äkta" timestamp-objekt lokalt för att matcha det gamla formatet
+                    timestamp: { _seconds: Math.floor(Date.now() / 1000) } 
+                };
                 
-                const index = allRepairs.findIndex(r => r.id === updatedRepair.id);
-                if (index !== -1) allRepairs[index] = updatedRepair;
-                
-                handleSelectRepair(updatedRepair.id);
-                newStatusInput.value = '';
-    
+                // Lägg till den nya statusen överst i vår lokala kopia av datan
+                activeRepair.status_history.unshift(newStatusEntry);
+        
+                // Anropa samma funktion som ritar listan för att rita om den med den nya datan
+                handleSelectRepair(activeRepair.id);
+        
+                newStatusInput.value = ''; // Rensa input-fältet
+        
+                // --- SLUT PÅ NY LOGIK ---
+        
+        
+                // Steg 3: Skicka SMS om den knappen trycktes
                 if (action === 'sms') {
                     button.textContent = 'Skickar SMS...';
                     const smsMessage = `Hej ${activeRepair.customer_name}! Ny status för din reparation (${activeRepair.device_name}): ${newStatus}. Mvh TechZon`;
                     const smsResponse = await fetch('/.netlify/functions/sendSms', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                        body: JSON.stringify({ to: activeRepair.customer_phone, message: smsMessage })
+                        body: JSON.stringify({ repairId: activeRepair.id, message: smsMessage })
                     });
-                    if (!smsResponse.ok) throw new Error('Status sparades, men SMS kunde inte skickas.');
-                    alert('Status sparad och SMS skickat!');
+                    if (!smsResponse.ok) {
+                        alert('Status sparades, men SMS kunde inte skickas.');
+                    } else {
+                        alert('Status sparad och SMS skickat!');
+                    }
                 }
+        
             } catch (error) {
-                alert(error.message);
+                alert(`Fel: ${error.message}`);
             } finally {
+                // Återställ alltid knappen
                 button.disabled = false;
-                button.textContent = button.dataset.action === 'sms' ? 'Spara & Skicka SMS' : 'Spara Status';
+                button.textContent = originalButtonText;
             }
         });
     
