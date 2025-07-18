@@ -654,15 +654,27 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('activeDeviceName').textContent = activeRepair.device_name;
             document.getElementById('activeCustomerName').textContent = activeRepair.customer_name;
             document.getElementById('activeRepairCode').textContent = activeRepair.repair_code;
-            
+
+            // Inuti handleSelectRepair-funktionen i DEL 8
             const statusList = document.getElementById('activeStatusList');
             statusList.innerHTML = '';
-            if (activeRepair.status_history) {
+            if (activeRepair.status_history && Array.isArray(activeRepair.status_history)) {
                 activeRepair.status_history
-                    .sort((a, b) => (b.timestamp._seconds || 0) - (a.timestamp._seconds || 0))
+                    .map(statusEntry => {
+                        // Samma smarta datumhantering här
+                        const timestampData = statusEntry.timestamp;
+                        let jsDate;
+                        if (timestampData && typeof timestampData._seconds === 'number') {
+                            jsDate = new Date(timestampData._seconds * 1000);
+                        } else {
+                            jsDate = new Date(timestampData);
+                        }
+                        return { status: statusEntry.status, timestamp: jsDate };
+                    })
+                    .sort((a, b) => b.timestamp - a.timestamp)
                     .forEach(status => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<p class="status-text">${status.status}</p><p class="status-timestamp">${new Date(status.timestamp._seconds * 1000).toLocaleString('sv-SE')}</p>`;
+                        li.innerHTML = `<p class="status-text">${status.status}</p><p class="status-timestamp">${!isNaN(status.timestamp) ? status.timestamp.toLocaleString('sv-SE') : 'Väntar...'}</p>`;
                         statusList.appendChild(li);
                     });
             }
