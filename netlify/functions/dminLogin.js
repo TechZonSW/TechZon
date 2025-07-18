@@ -1,27 +1,61 @@
 // netlify/functions/adminLogin.js
+
 const admin = require('firebase-admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// ... (Firebase initieringskod som i förra filen) ...
+
+// ... (din firebase initieringskod) ...
+// Se till att den koden är här och är korrekt.
 
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return { statusCode: 405 };
+  // LOGG 1: Kontrollera att funktionen körs och vilken metod som används
+  console.log(`adminLogin function started with method: ${event.httpMethod}`);
+
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
   
-  const { username, password } = JSON.parse(event.body);
-  const adminsRef = db.collection('Admins');
-  const snapshot = await adminsRef.where('username', '==', username).limit(1).get();
+  try {
+    // LOGG 2: Se exakt vad som finns i event.body INNAN vi gör något med det
+    console.log('Received raw body:', event.body);
 
-  if (snapshot.empty) return { statusCode: 401 }; // Unauthorized
+    const { username, password } = JSON.parse(event.body);
 
-  const userDoc = snapshot.docs[0];
-  const userData = userDoc.data();
+    // LOGG 3: Se vad variablerna innehåller EFTER att vi parsat JSON
+    console.log('Parsed username:', username);
+    console.log('Parsed password:', password); // Obs: Detta är bara för felsökning, ta bort sen.
 
-  const passwordMatch = await bcrypt.compare(password, userData.password_hash);
+    const adminsRef = db.collection('Admins');
+    const snapshot = await adminsRef.where('username', '==', username).limit(1).get();
 
-  if (!passwordMatch) return { statusCode: 401 }; // Unauthorized
+    if (snapshot.empty) {
+      // LOGG 4: Om vi inte hittar användaren
+      console.log(`User '${username}' not found in database.`);
+      return { statusCode: 401, body: JSON.stringify({ message: 'Fel användarnamn eller lösenord.' }) };
+    }
 
-  // Skapa en JWT-token som är giltig i 8 timmar
-  const token = jwt.sign({ userId: userDoc.id }, process.env.JWT_SECRET, { expiresIn: '8h' });
+    const userDoc = snapshot.docs[0];
+    const userData = userDoc.data();
 
-  return { statusCode: 200, body: JSON.stringify({ token }) };
+    // LOGG 5: Jämför lösenorden
+    console.log('Comparing received password with stored hash...');
+    const passwordMatch = await bcrypt.compare(password, userData.password_hash);
+
+    if (!passwordMatch) {
+      // LOGG 6: Om lösenorden inte matchar
+      console.log('Password comparison failed. No match.');
+      return { statusCode: 401, body: JSON.stringify({ message: 'Fel användarnamn eller lösenord.' }) };
+    }
+
+    // Om vi kommer hit, är allt korrekt!
+    console.log('Login successful! Generating JWT.');
+    const token = jwt.sign({ userId: userDoc.id }, process.env.JWT_SECRET, { expiresIn: '8h' });
+
+    return { statusCode: 200, body: JSON.stringify({ token }) };
+
+  } catch (error) {
+    // LOGG 7: Om något kraschar
+    console.error('CRITICAL ERROR in adminLogin:', error);
+    return { statusCode: 500, body: JSON.stringify({ message: 'Serverfel.' }) };
+  }
 };
