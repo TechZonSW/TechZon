@@ -1026,7 +1026,7 @@ footer {
     min-height: 100vh;
 }
 
-/* Inloggningsvy (små justeringar) */
+/* Inloggningsvy */
 #loginView {
     display: flex;
     align-items: center;
@@ -1060,7 +1060,7 @@ footer {
     min-height: 1.2em;
 }
 
-/* Ny Dashboard Layout */
+/* Dashboard Layout */
 .admin-layout-container {
     display: flex;
     min-height: 100vh;
@@ -1074,7 +1074,7 @@ footer {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    flex-shrink: 0; /* Förhindrar att den krymper */
+    flex-shrink: 0;
 }
 .sidebar-header h4 {
     font-size: 1.5em;
@@ -1109,7 +1109,7 @@ footer {
     color: #fff;
 }
 .sidebar-footer {
-    margin-top: auto; /* Trycker ner logout-knappen i botten */
+    margin-top: auto;
 }
 .sidebar-footer .secondary-button {
     width: 100%;
@@ -1120,10 +1120,10 @@ footer {
 .admin-main-content {
     flex-grow: 1;
     padding: 40px;
-    overflow-y: auto; /* Tillåter scrollning om innehållet är högt */
+    overflow-y: auto;
 }
 .content-view {
-    display: block; /* Döljs/visas med JS */
+    display: block;
 }
 .view-header {
     display: flex;
@@ -1132,17 +1132,28 @@ footer {
     margin-bottom: 30px;
     border-bottom: 1px solid #e5e5e5;
     padding-bottom: 20px;
+    gap: 20px;
 }
 .view-header h1 {
     font-size: 2.5em;
 }
+#cases-header-actions {
+    display: flex;
+    gap: 15px;
+}
+.cta-button.danger {
+    background-color: #dc3545;
+}
+.cta-button.danger:hover {
+    background-color: #c82333;
+}
 
-/* Ärendevy-specifika stilar */
+/* Ärendevy */
 .cases-layout {
     display: grid;
-    grid-template-columns: 350px 1fr; /* Kolumn för lista, kolumn för detaljer */
+    grid-template-columns: 350px 1fr;
     gap: 30px;
-    height: calc(100vh - 180px); /* Justera efter behov */
+    height: calc(100vh - 180px);
 }
 .cases-list-container, .cases-detail-container {
     background-color: #fff;
@@ -1155,36 +1166,58 @@ footer {
     padding: 0;
     margin: 0;
 }
-#repairsList li {
+.repair-list-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 10px;
-    cursor: pointer;
     border: 1px solid transparent;
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
-#repairsList li:hover { background-color: var(--section-bg-light); }
-#repairsList li.active {
+.repair-list-item:not(.empty-list) { cursor: pointer; }
+.repair-list-item:hover:not(.empty-list) { background-color: var(--section-bg-light); }
+.repair-list-item.active {
     background-color: #e3f2fd;
     border-color: var(--primary-color);
 }
-#repairsList li h5 { font-size: 1.1em; margin-bottom: 5px; }
-#repairsList li p { font-size: 0.9em; color: var(--text-color-secondary); }
+.repair-list-item.selected {
+    background-color: #fff0f0;
+    border-color: #dc3545;
+}
+.repair-list-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+.item-content {
+    flex-grow: 1;
+}
+.item-device { font-weight: 600; }
+.item-customer { font-size: 0.9em; color: var(--text-color-secondary); }
+.item-code { font-size: 0.8em; color: #aaa; }
 
-/* Detaljvy för ärenden */
+/* Detaljvy */
 #repairDetailView h4, #createRepairView h4 {
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
 }
-#createRepairForm { display: flex; flex-direction: column; gap: 15px; }
-#createRepairForm input { padding: 12px; border: 1px solid #ccc; border-radius: var(--border-radius); }
-
-#updateStatusForm { display: flex; flex-direction: column; gap: 15px; }
-#updateStatusForm input { flex-grow: 1; padding: 12px; border: 1px solid #ccc; border-radius: var(--border-radius); }
-.form-button-group { display: flex; gap: 10px; }
-.form-button-group button { flex-grow: 1; padding: 10px; }
-
+#createRepairForm, #updateStatusForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#createRepairForm input, #updateStatusForm input { padding: 12px; border: 1px solid #ccc; border-radius: var(--border-radius); }
+.form-button-group.three-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.form-button-group button { padding: 10px; }
 #selectCasePrompt {
     display: flex;
     flex-direction: column;
@@ -1195,20 +1228,13 @@ footer {
     color: var(--text-color-secondary);
 }
 #selectCasePrompt i { font-size: 4em; margin-bottom: 15px; }
-
-hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 25px 0;
-}
-
-/* Admin-tidslinje (återanvänds) */
+hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
 .admin-timeline { /* ...samma som innan... */ }
 
 /* Skannervy */
 #scanView .admin-section { /* ...samma som innan... */ }
 
-/* Responsivitet för ny layout */
+/* Responsivitet */
 @media (max-width: 1024px) {
     .cases-layout {
         grid-template-columns: 1fr;
