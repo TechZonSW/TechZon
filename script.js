@@ -488,4 +488,102 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --------------------------------------------------------------------
+    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN
+    // --------------------------------------------------------------------
+    const trackingForm = document.getElementById('trackingForm');
+    if (trackingForm) {
+        const repairCodeInput = document.getElementById('repairCodeInput');
+        const statusContainer = document.getElementById('statusContainer');
+    
+        trackingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            statusContainer.innerHTML = `<p class="loading">Söker efter din reparation...</p>`;
+    
+            const code = repairCodeInput.value.trim().toUpperCase(); // Gör koden okänslig för skiftläge
+    
+            // Simulera ett anrop. Byt ut detta mot ditt faktiska fetch-anrop.
+            // fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
+            // --- START PÅ SIMULERING (TA BORT FÖR PRODUKTION) ---
+            new Promise((resolve, reject) => {
+                // Detta är exempeldata som din Netlify-funktion skulle returnera
+                const mockDatabase = {
+                    "TEST-1234": {
+                        device_name: "iPhone 14 Pro",
+                        status_history: [
+                            { text: "Reparation påbörjad. Tekniker har tilldelats.", timestamp: "2025-07-21T10:30:00Z" },
+                            { text: "Mottagen och registrerad i vårt system.", timestamp: "2025-07-21T09:05:00Z" }
+                        ]
+                    },
+                    "TEST-5678": {
+                        device_name: "MacBook Air M2",
+                         status_history: [
+                            { text: "Klar för upphämtning! SMS har skickats.", timestamp: "2025-07-22T14:00:00Z" },
+                            { text: "Kvalitetstestad och rengjord.", timestamp: "2025-07-22T11:45:00Z" },
+                            { text: "Reparation slutförd.", timestamp: "2025-07-22T10:20:00Z" },
+                            { text: "Mottagen och registrerad i vårt system.", timestamp: "2025-07-21T15:00:00Z" }
+                        ]
+                    }
+                };
+                setTimeout(() => {
+                    if (mockDatabase[code]) {
+                        resolve({ ok: true, json: () => Promise.resolve(mockDatabase[code]) });
+                    } else {
+                        reject(new Error("Not Found"));
+                    }
+                }, 1000); // Simulera nätverksfördröjning
+            })
+            // --- SLUT PÅ SIMULERING ---
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Not Found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayStatus(data);
+                })
+                .catch(error => {
+                    statusContainer.innerHTML = `<p class="error-message">Koden hittades inte. Kontrollera och försök igen.</p>`;
+                });
+        });
+    
+        function displayStatus(data) {
+            statusContainer.innerHTML = ''; // Rensa
+    
+            const title = document.createElement('h3');
+            title.textContent = `Status för: ${data.device_name}`;
+            statusContainer.appendChild(title);
+    
+            const timeline = document.createElement('ul');
+            timeline.className = 'status-timeline';
+            
+            // Loopa baklänges (senaste först)
+            data.status_history.slice().reverse().forEach((status, index) => {
+                const item = document.createElement('li');
+                if (index === 0) {
+                    item.className = 'active'; // Markera senaste händelsen
+                }
+    
+                const text = document.createElement('p');
+                text.className = 'status-text';
+                text.textContent = status.text;
+    
+                const timestamp = document.createElement('p');
+                timestamp.className = 'status-timestamp';
+                // Formatera datumet snyggt för en svensk publik
+                timestamp.textContent = new Date(status.timestamp).toLocaleString('sv-SE', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                });
+    
+                item.appendChild(text);
+                item.appendChild(timestamp);
+                timeline.appendChild(item);
+            });
+    
+            statusContainer.appendChild(timeline);
+        }
+    }
+
 });
