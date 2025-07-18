@@ -1015,3 +1015,156 @@ footer {
     color: #a1a1a6;
     margin-top: 5px;
 }
+
+/* --- NYA STILAR FÖR ADMIN-PORTALEN --- */
+
+.admin-body {
+    background-color: var(--section-bg-light);
+}
+
+.admin-view {
+    min-height: 100vh;
+}
+
+/* Inloggningsvy */
+#loginView {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+#loginForm input {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+}
+#loginError {
+    margin-top: 15px;
+    color: #721c24;
+    min-height: 1.2em;
+}
+
+/* Dashboardvy */
+.admin-header {
+    background-color: #fff;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+.admin-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-main {
+    padding: 40px 0;
+}
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+.admin-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+}
+.admin-section h3, .admin-section h4 {
+    margin-bottom: 20px;
+}
+.admin-section h5 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: var(--text-color-secondary);
+}
+
+/* Formulär i dashboard */
+#createRepairForm, #updateStatusForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#updateStatusForm {
+    flex-direction: row;
+}
+.admin-section input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+    flex-grow: 1;
+}
+
+/* Admin-tidslinje */
+.admin-timeline {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 15px;
+    border-left: 2px solid #e0e0e0;
+    padding: 0 0 0 20px;
+}
+.admin-timeline li {
+    padding-bottom: 15px;
+    position: relative;
+}
+.admin-timeline li::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    border: 3px solid #fff;
+}
+.admin-timeline li:first-child::before {
+    background-color: var(--primary-color);
+}
+.admin-timeline .status-text { font-size: 1em; }
+.admin-timeline .status-timestamp { font-size: 0.8em; }
+
+.repair-meta {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+
+/* Skanner */
+#scanner-container {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Ger en 4:3 aspect ratio */
+    margin-top: 20px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    display: none; /* Dold från start */
+}
+#scanner-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsivitet för Admin */
+@media (max-width: 900px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}
