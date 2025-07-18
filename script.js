@@ -575,46 +575,55 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 8: KOD FÖR ADMIN-PORTALEN (NY, FÖRBÄTTRAD VERSION)
+    // DEL 8: KOD FÖR ADMIN-PORTALEN (MED ARKIVERING/RADERING)
     // --------------------------------------------------------------------
     const loginView = document.getElementById('loginView');
     if (loginView) {
         // --- Referenser till HTML-element ---
-        const dashboardView = document.getElementById('dashboardView');
-        const loginForm = document.getElementById('loginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const loginError = document.getElementById('loginError');
-        const navCasesBtn = document.getElementById('navCasesBtn');
-        const navScanBtn = document.getElementById('navScanBtn');
-        const casesView = document.getElementById('casesView');
-        const scanView = document.getElementById('scanView');
-        const showCreateViewBtn = document.getElementById('showCreateViewBtn');
-        const repairsList = document.getElementById('repairsList');
-        const repairDetailView = document.getElementById('repairDetailView');
-        const createRepairView = document.getElementById('createRepairView');
-        const selectCasePrompt = document.getElementById('selectCasePrompt');
-        const createRepairForm = document.getElementById('createRepairForm');
-        const updateStatusForm = document.getElementById('updateStatusForm');
+        const dashboardView = document.getElementById('dashboardView'),
+            loginForm = document.getElementById('loginForm'),
+            logoutBtn = document.getElementById('logoutBtn'),
+            loginError = document.getElementById('loginError'),
+            navActiveBtn = document.getElementById('navActiveBtn'),
+            navArchivedBtn = document.getElementById('navArchivedBtn'),
+            navScanBtn = document.getElementById('navScanBtn'),
+            casesView = document.getElementById('casesView'),
+            scanView = document.getElementById('scanView'),
+            casesViewTitle = document.getElementById('casesViewTitle'),
+            showCreateViewBtn = document.getElementById('showCreateViewBtn'),
+            deleteSelectedBtn = document.getElementById('deleteSelectedBtn'),
+            repairsList = document.getElementById('repairsList'),
+            repairDetailView = document.getElementById('repairDetailView'),
+            createRepairView = document.getElementById('createRepairView'),
+            selectCasePrompt = document.getElementById('selectCasePrompt'),
+            createRepairForm = document.getElementById('createRepairForm'),
+            updateStatusForm = document.getElementById('updateStatusForm'),
+            archiveCaseBtn = document.getElementById('archiveCaseBtn'),
+            activeDeviceName = document.getElementById('activeDeviceName'),
+            activeCustomerName = document.getElementById('activeCustomerName'),
+            activeRepairCode = document.getElementById('activeRepairCode'),
+            activeStatusList = document.getElementById('activeStatusList');
     
         // --- State-variabler (appens minne) ---
         let jwtToken = sessionStorage.getItem('techzon_jwt') || null;
         let allRepairs = [];
         let activeRepair = null;
+        let currentCaseView = 'active'; // Håller reda på vilken vy vi är i
     
         // --- Funktioner ---
     
         function switchMainView(viewToShow) {
             casesView.style.display = 'none';
             scanView.style.display = 'none';
-            navCasesBtn.classList.remove('active');
-            navScanBtn.classList.remove('active');
+            [navActiveBtn, navArchivedBtn, navScanBtn].forEach(b => b.classList.remove('active'));
     
-            if (viewToShow === 'cases') {
-                casesView.style.display = 'block';
-                navCasesBtn.classList.add('active');
-            } else if (viewToShow === 'scan') {
+            if (viewToShow === 'scan') {
                 scanView.style.display = 'block';
                 navScanBtn.classList.add('active');
+            } else { // 'cases'
+                casesView.style.display = 'block';
+                if (currentCaseView === 'active') navActiveBtn.classList.add('active');
+                else navArchivedBtn.classList.add('active');
             }
         }
     
@@ -627,11 +636,30 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (viewToShow === 'create') createRepairView.style.display = 'block';
             else selectCasePrompt.style.display = 'block';
         }
-        
+    
+        async function fetchAndRenderRepairs(status = 'active') {
+            currentCaseView = status;
+            casesViewTitle.textContent = status === 'active' ? 'Pågående Ärenden' : 'Avslutade Ärenden';
+            repairsList.innerHTML = `<li class="empty-list">Laddar ärenden...</li>`;
+            switchDetailView('prompt');
+            updateBulkActionUI();
+    
+            try {
+                const response = await fetch(`/.netlify/functions/getRepairs?status=${status}`, {
+                    headers: { 'Authorization': `Bearer ${jwtToken}` }
+                });
+                if (!response.ok) throw new Error('Kunde inte hämta ärenden.');
+                allRepairs = await response.json();
+                populateRepairsList();
+            } catch (error) {
+                repairsList.innerHTML = `<li class="empty-list error-message">${error.message}</li>`;
+            }
+        }
+    
         function populateRepairsList() {
             repairsList.innerHTML = '';
             if (allRepairs.length === 0) {
-                repairsList.innerHTML = `<li class="empty-list">Inga pågående ärenden.</li>`;
+                repairsList.innerHTML = `<li class="empty-list">Inga ${currentCaseView} ärenden hittades.</li>`;
                 return;
             }
             allRepairs.forEach(repair => {
@@ -642,11 +670,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 item.dataset.id = repair.id;
                 item.innerHTML = `
-                    <p class="item-device">${repair.device_name}</p>
-                    <p class="item-customer">${repair.customer_name}</p>
+                    <input type="checkbox" class="repair-checkbox" data-id="${repair.id}">
+                    <div class="item-content">
+                        <p class="item-device">${repair.device_name}</p>
+                        <p class="item-customer">${repair.customer_name}</p>
+                    </div>
                     <span class="item-code">${repair.repair_code}</span>
                 `;
-                item.addEventListener('click', () => handleSelectRepair(repair.id));
+                item.querySelector('.item-content').addEventListener('click', () => handleSelectRepair(repair.id));
+                item.querySelector('.repair-checkbox').addEventListener('change', updateBulkActionUI);
                 repairsList.appendChild(item);
             });
         }
@@ -656,39 +688,36 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!activeRepair) return;
     
             document.querySelectorAll('.repair-list-item').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.repair-list-item[data-id="${repairId}"]`).classList.add('active');
+            const activeListItem = document.querySelector(`.repair-list-item[data-id="${repairId}"]`);
+            if(activeListItem) activeListItem.classList.add('active');
             
-            document.getElementById('activeDeviceName').textContent = activeRepair.device_name;
-            document.getElementById('activeCustomerName').textContent = activeRepair.customer_name;
-            document.getElementById('activeRepairCode').textContent = activeRepair.repair_code;
+            activeDeviceName.textContent = activeRepair.device_name;
+            activeCustomerName.textContent = activeRepair.customer_name;
+            activeRepairCode.textContent = activeRepair.repair_code;
             
-            const statusList = document.getElementById('activeStatusList');
-            statusList.innerHTML = '';
+            activeStatusList.innerHTML = '';
             if (activeRepair.status_history) {
-                activeRepair.status_history
-                    .sort((a, b) => (b.timestamp._seconds || 0) - (a.timestamp._seconds || 0))
-                    .forEach(status => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<p class="status-text">${status.status}</p><p class="status-timestamp">${new Date(status.timestamp._seconds * 1000).toLocaleString('sv-SE')}</p>`;
-                        statusList.appendChild(li);
-                    });
+                const statusUpdates = (activeRepair.status_history || []).map(entry => {
+                    const text = entry.status;
+                    const timestamp = new Date((entry.timestamp._seconds || 0) * 1000);
+                    return { text, timestamp };
+                }).sort((a, b) => b.timestamp - a.timestamp);
+    
+                statusUpdates.forEach(status => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<p class="status-text">${status.text}</p><p class="status-timestamp">${status.timestamp.toLocaleString('sv-SE')}</p>`;
+                    activeStatusList.appendChild(li);
+                });
             }
             
+            archiveCaseBtn.style.display = activeRepair.status === 'active' ? 'block' : 'none';
             switchDetailView('detail');
         }
         
-        async function initializeDashboard() {
-            try {
-                const response = await fetch('/.netlify/functions/getRepairs', {
-                    headers: { 'Authorization': `Bearer ${jwtToken}` }
-                });
-                if (!response.ok) throw new Error('Kunde inte hämta ärenden.');
-                allRepairs = await response.json();
-                populateRepairsList();
-                switchDetailView('prompt');
-            } catch (error) {
-                alert(error.message);
-            }
+        function updateBulkActionUI() {
+            const selectedCount = document.querySelectorAll('.repair-checkbox:checked').length;
+            deleteSelectedBtn.style.display = selectedCount > 0 ? 'inline-block' : 'none';
+            deleteSelectedBtn.textContent = `Radera markerade (${selectedCount})`;
         }
     
         // --- Event Listeners ---
@@ -698,20 +727,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             loginError.textContent = '';
-            
             try {
                 const response = await fetch('/.netlify/functions/adminLogin', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ username, password })
                 });
                 if (!response.ok) throw new Error('Fel användarnamn eller lösenord.');
                 const data = await response.json();
                 jwtToken = data.token;
                 sessionStorage.setItem('techzon_jwt', jwtToken);
-                document.getElementById('dashboardView').style.display = 'block';
-                document.getElementById('loginView').style.display = 'none';
-                await initializeDashboard();
+                dashboardView.style.display = 'block';
+                loginView.style.display = 'none';
+                await fetchAndRenderRepairs('active');
             } catch (error) {
                 loginError.textContent = error.message;
             }
@@ -722,14 +750,32 @@ document.addEventListener('DOMContentLoaded', function() {
             activeRepair = null;
             allRepairs = [];
             sessionStorage.removeItem('techzon_jwt');
-            document.getElementById('loginForm').reset();
-            document.getElementById('loginView').style.display = 'flex';
-            document.getElementById('dashboardView').style.display = 'none';
+            loginForm.reset();
+            createRepairForm.reset();
+            updateStatusForm.reset();
+            loginView.style.display = 'flex';
+            dashboardView.style.display = 'none';
         });
-        
-        navCasesBtn.addEventListener('click', () => switchMainView('cases'));
+            
+        navActiveBtn.addEventListener('click', () => {
+            navArchivedBtn.classList.remove('active');
+            navActiveBtn.classList.add('active');
+            fetchAndRenderRepairs('active');
+        });
+    
+        navArchivedBtn.addEventListener('click', () => {
+            navActiveBtn.classList.remove('active');
+            navArchivedBtn.classList.add('active');
+            fetchAndRenderRepairs('archived');
+        });
+    
         navScanBtn.addEventListener('click', () => switchMainView('scan'));
-        showCreateViewBtn.addEventListener('click', () => switchDetailView('create'));
+    
+        showCreateViewBtn.addEventListener('click', () => {
+            document.querySelectorAll('.repair-list-item').forEach(li => li.classList.remove('active'));
+            activeRepair = null;
+            switchDetailView('create');
+        });
     
         createRepairForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -772,45 +818,71 @@ document.addEventListener('DOMContentLoaded', function() {
             button.disabled = true;
     
             try {
-                // 1. Spara alltid den nya statusen
                 const updateResponse = await fetch('/.netlify/functions/updateRepairStatus', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                    body: JSON.stringify({ repairId: activeRepair.id, newStatus: newStatus })
+                    body: JSON.stringify({ repairId: activeRepair.id, statusText: newStatus }) // newStatus -> statusText
                 });
                 if (!updateResponse.ok) throw new Error('Kunde inte spara status.');
+                const updatedRepair = await updateResponse.json();
                 
-                // Uppdatera lokala datan och UI direkt för snabb feedback
-                const newStatusEntry = { status: newStatus, timestamp: { _seconds: Date.now() / 1000 } };
-                activeRepair.status_history.unshift(newStatusEntry);
-                handleSelectRepair(activeRepair.id);
+                const index = allRepairs.findIndex(r => r.id === updatedRepair.id);
+                if (index !== -1) allRepairs[index] = updatedRepair;
+                
+                handleSelectRepair(updatedRepair.id);
                 newStatusInput.value = '';
     
-                // 2. Skicka SMS om den knappen trycktes
                 if (action === 'sms') {
+                    button.textContent = 'Skickar SMS...';
                     const smsMessage = `Hej ${activeRepair.customer_name}! Ny status för din reparation (${activeRepair.device_name}): ${newStatus}. Mvh TechZon`;
                     const smsResponse = await fetch('/.netlify/functions/sendSms', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                        body: JSON.stringify({ repairId: activeRepair.id, message: smsMessage })
+                        body: JSON.stringify({ to: activeRepair.customer_phone, message: smsMessage })
                     });
                     if (!smsResponse.ok) throw new Error('Status sparades, men SMS kunde inte skickas.');
                     alert('Status sparad och SMS skickat!');
-                } else {
-                    alert('Status sparad!');
                 }
             } catch (error) {
                 alert(error.message);
             } finally {
                 button.disabled = false;
+                button.textContent = button.dataset.action === 'sms' ? 'Spara & Skicka SMS' : 'Spara Status';
             }
         });
-        
-        // Initialisering vid sidladdning
+    
+        deleteSelectedBtn.addEventListener('click', async () => {
+            const checkedBoxes = document.querySelectorAll('.repair-checkbox:checked');
+            const idsToDelete = Array.from(checkedBoxes).map(cb => cb.dataset.id);
+            if (idsToDelete.length === 0 || !confirm(`Radera ${idsToDelete.length} ärende(n) permanent?`)) return;
+            try {
+                await fetch('/.netlify/functions/deleteRepairs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
+                    body: JSON.stringify({ repairIds: idsToDelete })
+                });
+                fetchAndRenderRepairs(currentCaseView);
+            } catch (error) { alert(`Fel: ${error.message}`); }
+        });
+    
+        archiveCaseBtn.addEventListener('click', async () => {
+            if (!activeRepair || !confirm(`Avsluta och arkivera ärendet för ${activeRepair.device_name}?`)) return;
+            try {
+                await fetch('/.netlify/functions/archiveRepair', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
+                    body: JSON.stringify({ repairId: activeRepair.id })
+                });
+                fetchAndRenderRepairs('active');
+            } catch (error) { alert(`Fel: ${error.message}`); }
+        });
+    
+        // --- Sidladdning ---
         if (jwtToken) {
-            document.getElementById('dashboardView').style.display = 'block';
-            document.getElementById('loginView').style.display = 'none';
-            initializeDashboard();
+            dashboardView.style.display = 'block';
+            loginView.style.display = 'none';
+            switchMainView('cases');
+            fetchAndRenderRepairs('active');
         }
     }
 });
