@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN
+    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (LIVE-VERSION)
     // --------------------------------------------------------------------
     const trackingForm = document.getElementById('trackingForm');
     if (trackingForm) {
@@ -500,48 +500,25 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             statusContainer.innerHTML = `<p class="loading">Söker efter din reparation...</p>`;
     
-            const code = repairCodeInput.value.trim().toUpperCase(); // Gör koden okänslig för skiftläge
+            const code = repairCodeInput.value.trim().toUpperCase();
     
-            // Simulera ett anrop. Byt ut detta mot ditt faktiska fetch-anrop.
-            // fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
-            // --- START PÅ SIMULERING (TA BORT FÖR PRODUKTION) ---
-            new Promise((resolve, reject) => {
-                // Detta är exempeldata som din Netlify-funktion skulle returnera
-                const mockDatabase = {
-                    "TEST-1234": {
-                        device_name: "iPhone 14 Pro",
-                        status_history: [
-                            { text: "Reparation påbörjad. Tekniker har tilldelats.", timestamp: "2025-07-21T10:30:00Z" },
-                            { text: "Mottagen och registrerad i vårt system.", timestamp: "2025-07-21T09:05:00Z" }
-                        ]
-                    },
-                    "TEST-5678": {
-                        device_name: "MacBook Air M2",
-                         status_history: [
-                            { text: "Klar för upphämtning! SMS har skickats.", timestamp: "2025-07-22T14:00:00Z" },
-                            { text: "Kvalitetstestad och rengjord.", timestamp: "2025-07-22T11:45:00Z" },
-                            { text: "Reparation slutförd.", timestamp: "2025-07-22T10:20:00Z" },
-                            { text: "Mottagen och registrerad i vårt system.", timestamp: "2025-07-21T15:00:00Z" }
-                        ]
-                    }
-                };
-                setTimeout(() => {
-                    if (mockDatabase[code]) {
-                        resolve({ ok: true, json: () => Promise.resolve(mockDatabase[code]) });
-                    } else {
-                        reject(new Error("Not Found"));
-                    }
-                }, 1000); // Simulera nätverksfördröjning
-            })
-            // --- SLUT PÅ SIMULERING ---
+            // RIKTIGT FETCH-ANROP TILL DIN NETLIFY-FUNKTION
+            fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
                 .then(response => {
                     if (!response.ok) {
+                        // Om Netlify-funktionen returnerar ett fel (t.ex. 404 Not Found)
                         throw new Error('Not Found');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    displayStatus(data);
+                    // Kontrollera om data faktiskt innehåller en enhet
+                    if (data && data.device_name) {
+                        displayStatus(data);
+                    } else {
+                        // Om funktionen lyckas men ingen data hittas för koden
+                        throw new Error('Not Found');
+                    }
                 })
                 .catch(error => {
                     statusContainer.innerHTML = `<p class="error-message">Koden hittades inte. Kontrollera och försök igen.</p>`;
@@ -558,27 +535,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeline = document.createElement('ul');
             timeline.className = 'status-timeline';
             
-            // Loopa baklänges (senaste först)
-            data.status_history.slice().reverse().forEach((status, index) => {
+            // ANPASSAD KOD FÖR DIN FIREBASE-DATASTRUKTUR
+            // Konvertera status_history-arrayen till ett mer lätthanterligt format
+            const statusUpdates = data.status_history.map(entry => {
+                const text = Object.keys(entry)[0]; // Hämta nyckeln (t.ex. "Inlämnad för felsökning")
+                const timestamp = entry[text].toDate(); // Konvertera Firebase-timestamp till ett JavaScript-datum
+                return { text, timestamp };
+            });
+    
+            // Sortera händelserna så den senaste alltid är först
+            statusUpdates.sort((a, b) => b.timestamp - a.timestamp);
+            
+            statusUpdates.forEach((status, index) => {
                 const item = document.createElement('li');
                 if (index === 0) {
-                    item.className = 'active'; // Markera senaste händelsen
+                    item.className = 'active'; // Markera den senaste händelsen
                 }
     
                 const text = document.createElement('p');
                 text.className = 'status-text';
                 text.textContent = status.text;
     
-                const timestamp = document.createElement('p');
-                timestamp.className = 'status-timestamp';
-                // Formatera datumet snyggt för en svensk publik
-                timestamp.textContent = new Date(status.timestamp).toLocaleString('sv-SE', {
+                const timestampElement = document.createElement('p');
+                timestampElement.className = 'status-timestamp';
+                timestampElement.textContent = status.timestamp.toLocaleString('sv-SE', {
                     dateStyle: 'medium',
                     timeStyle: 'short'
                 });
     
                 item.appendChild(text);
-                item.appendChild(timestamp);
+                item.appendChild(timestampElement);
                 timeline.appendChild(item);
             });
     
