@@ -12,7 +12,7 @@
 </head>
 <body class="admin-body">
 
-    <!-- INLOGGNINGSVY -->
+    <!-- INLOGGNINGSVY (Oförändrad) -->
     <div id="loginView" class="admin-view">
         <div class="login-container">
             <h1>Personalportal</h1>
@@ -26,53 +26,88 @@
         </div>
     </div>
 
-    <!-- DASHBOARDVY -->
+    <!-- DASHBOARDVY (Helt ny struktur) -->
     <div id="dashboardView" class="admin-view" style="display: none;">
-        <header class="admin-header">
-            <div class="container">
-                <h2>Admin Dashboard</h2>
-                <button id="logoutBtn" class="secondary-button">Logga ut</button>
-            </div>
-        </header>
+        <div class="admin-layout-container">
+            <!-- Vänsterkolumn: Navigation -->
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h4>TechZon Admin</h4>
+                </div>
+                <nav class="admin-nav">
+                    <button id="navCasesBtn" class="admin-nav-button active"><i class="ph-bold ph-list-dashes"></i> Ärenden</button>
+                    <button id="navScanBtn" class="admin-nav-button"><i class="ph-bold ph-qr-code"></i> Skanna</button>
+                </nav>
+                <div class="sidebar-footer">
+                    <button id="logoutBtn" class="secondary-button">Logga ut</button>
+                </div>
+            </aside>
 
-        <main class="admin-main">
-            <div class="container">
-                <div class="admin-grid">
-                    <!-- Sektion 1: Skapa & Hantera -->
-                    <div class="admin-section">
-                        <h3>Hantera Ärenden</h3>
-                        
-                        <!-- VY FÖR AKTIVT ÄRENDE -->
-                        <div id="activeRepairView" style="display: none;">
-                            <h4>Hanterar: <span id="activeDeviceName"></span></h4>
-                            <p class="repair-meta">Kund: <strong id="activeCustomerName"></strong></p>
-                            <p class="repair-meta">Kod: <strong id="activeRepairCode"></strong></p>
-                            
-                            <form id="updateStatusForm">
-                                <input type="text" id="newStatusInput" placeholder="Ny statusuppdatering..." required>
-                                <button type="submit">Lägg till status</button>
-                            </form>
-                            
-                            <h5>Status-historik:</h5>
-                            <ul id="activeStatusList" class="admin-timeline"></ul>
-                            <button id="finishCaseBtn" class="secondary-button">Avsluta & Nollställ</button>
+            <!-- Högerkolumn: Huvudinnehåll -->
+            <main class="admin-main-content">
+                <!-- ===================== -->
+                <!-- VY FÖR ÄRENDEN       -->
+                <!-- ===================== -->
+                <div id="casesView" class="content-view">
+                    <div class="view-header">
+                        <h1>Pågående Ärenden</h1>
+                        <button id="showCreateViewBtn" class="cta-button">Skapa Nytt Ärende</button>
+                    </div>
+                    <div class="cases-layout">
+                        <!-- Lista med alla pågående ärenden -->
+                        <div class="cases-list-container">
+                            <ul id="repairsList">
+                                <!-- Ärenden laddas här med JS -->
+                            </ul>
                         </div>
-                        
-                        <!-- VY FÖR ATT SKAPA NYTT ÄRENDE -->
-                        <div id="createRepairView">
-                             <h4>Registrera Ny Reparation</h4>
-                            <form id="createRepairForm">
-                                <input type="text" id="deviceName" placeholder="Enhet (ex: iPhone 15 Pro)" required>
-                                <input type="text" id="customerName" placeholder="Kundens namn" required>
-                                <input type="tel" id="customerPhone" placeholder="Kundens mobilnummer" required>
-                                <button type="submit" class="cta-button">Skapa Ärende</button>
-                            </form>
+                        <!-- Detaljvy för valt ärende -->
+                        <div class="cases-detail-container">
+                            <!-- När ett ärende är valt -->
+                            <div id="repairDetailView" style="display: none;">
+                                <h4>Ärendedetaljer</h4>
+                                <p class="repair-meta">Enhet: <strong id="activeDeviceName"></strong></p>
+                                <p class="repair-meta">Kund: <strong id="activeCustomerName"></strong></p>
+                                <p class="repair-meta">Kod: <strong id="activeRepairCode"></strong></p>
+                                <hr>
+                                <h5>Uppdatera Status</h5>
+                                <form id="updateStatusForm">
+                                    <input type="text" id="newStatusInput" placeholder="Ny statusuppdatering..." required>
+                                    <div class="form-button-group">
+                                        <button type="submit" data-action="save" class="secondary-button">Spara Status</button>
+                                        <button type="submit" data-action="sms" class="cta-button">Spara & Skicka SMS</button>
+                                    </div>
+                                </form>
+                                <hr>
+                                <h5>Status-historik</h5>
+                                <ul id="activeStatusList" class="admin-timeline"></ul>
+                            </div>
+                            <!-- När man ska skapa nytt -->
+                            <div id="createRepairView" style="display: none;">
+                                 <h4>Registrera Ny Reparation</h4>
+                                <form id="createRepairForm">
+                                    <input type="text" id="deviceName" placeholder="Enhet (ex: iPhone 15 Pro)" required>
+                                    <input type="text" id="customerName" placeholder="Kundens namn" required>
+                                    <input type="tel" id="customerPhone" placeholder="Kundens mobil (+46...)" required>
+                                    <button type="submit" class="cta-button">Skapa Ärende</button>
+                                </form>
+                            </div>
+                            <!-- När inget är valt -->
+                            <div id="selectCasePrompt">
+                                <i class="ph-light ph-arrow-left"></i>
+                                <p>Välj ett ärende i listan till vänster eller skapa ett nytt.</p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Sektion 2: Lagerhantering -->
+                <!-- ===================== -->
+                <!-- VY FÖR SKANNING      -->
+                <!-- ===================== -->
+                <div id="scanView" class="content-view" style="display: none;">
+                    <div class="view-header">
+                        <h1>Lager & Skanning</h1>
+                    </div>
                     <div class="admin-section">
-                        <h3>Lager & Skanning</h3>
                         <p>Skanna en QR- eller streckkod för att hämta produktinfo eller uppdatera lager.</p>
                         <button id="startScannerBtn" class="cta-button secondary">
                             <i class="ph-bold ph-qr-code"></i> Starta Skanner
@@ -81,8 +116,8 @@
                         <div id="scanResult"></div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <script src="./script.js"></script>
