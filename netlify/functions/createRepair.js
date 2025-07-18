@@ -17,9 +17,16 @@ const db = admin.firestore();
 
 // Hjälpfunktion för att generera en slumpmässig kod
 const generateRepairCode = () => {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let result = 'KAL-';
-  for (let i = 0; i < 5; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const nums = '0123456789';
+  let result = '';
+  
+  for (let i = 0; i < 3; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  for (let i = 0; i < 3; i++) {
+    result += nums.charAt(Math.floor(Math.random() * nums.length));
+  } 
   return result;
 };
 
