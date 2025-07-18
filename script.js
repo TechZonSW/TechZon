@@ -527,57 +527,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     
+        // Ersätt den gamla displayStatus-funktionen i DEL 7
         function displayStatus(data) {
-            statusContainer.innerHTML = ''; 
-    
+            statusContainer.innerHTML = '';
             const title = document.createElement('h3');
             title.textContent = `Status för: ${data.device_name}`;
             statusContainer.appendChild(title);
-    
+        
             const timeline = document.createElement('ul');
             timeline.className = 'status-timeline';
             
-            // Hanterar Firebase Timestamps på ett säkert sätt
-            const statusUpdates = data.status_history.map(entry => {
-                const text = Object.keys(entry)[0];
-                const timestampData = entry[text];
-                
-                if (timestampData && typeof timestampData._seconds === 'number') {
-                    const timestamp = new Date(timestampData._seconds * 1000);
-                    return { text, timestamp };
-                } else {
-                    // Denna fallback är viktig om datan kommer i ett annat format
-                    return { text, timestamp: new Date(timestampData) };
-                }
-            });
-    
-            statusUpdates.sort((a, b) => b.timestamp - a.timestamp);
-            
-            statusUpdates.forEach((status, index) => {
-                const item = document.createElement('li');
-                if (index === 0) {
-                    item.className = 'active';
-                }
-    
-                const text = document.createElement('p');
-                text.className = 'status-text';
-                text.textContent = status.text;
-    
-                const timestampElement = document.createElement('p');
-                timestampElement.className = 'status-timestamp';
-                timestampElement.textContent = status.timestamp.toLocaleString('sv-SE', {
-                    dateStyle: 'medium',
-                    timeStyle: 'short'
-                });
-    
-                item.appendChild(text);
-                item.appendChild(timestampElement);
-                timeline.appendChild(item);
-            });
-    
+            if (data.status_history && Array.isArray(data.status_history)) {
+                data.status_history
+                    .map(statusEntry => {
+                        // Smart datumhantering
+                        const timestampData = statusEntry.timestamp;
+                        let jsDate;
+                        if (timestampData && typeof timestampData._seconds === 'number') {
+                            // Hanterar Firestore Timestamp-objekt
+                            jsDate = new Date(timestampData._seconds * 1000);
+                        } else {
+                            // Hanterar vanliga datum (strängar/isodates)
+                            jsDate = new Date(timestampData);
+                        }
+                        return { status: statusEntry.status, timestamp: jsDate };
+                    })
+                    .sort((a, b) => b.timestamp - a.timestamp)
+                    .forEach((status, index) => {
+                        const item = document.createElement('li');
+                        if (index === 0) item.className = 'active';
+        
+                        item.innerHTML = `
+                            <p class="status-text">${status.status}</p>
+                            <p class="status-timestamp">${!isNaN(status.timestamp) ? status.timestamp.toLocaleString('sv-SE') : 'Väntar...'}</p>
+                        `;
+                        timeline.appendChild(item);
+                    });
+            }
             statusContainer.appendChild(timeline);
         }
-    }
 
     // --------------------------------------------------------------------
     // DEL 8: KOD FÖR ADMIN-PORTALEN (NY, FÖRBÄTTRAD VERSION)
