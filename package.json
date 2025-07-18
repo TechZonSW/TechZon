@@ -4,7 +4,7 @@
   "dependencies": {
     "firebase-admin": "^11.10.1",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2" 
+    "jsonwebtoken": "^9.0.2",
     "twilio": "^5.0.4"
   }
 }
