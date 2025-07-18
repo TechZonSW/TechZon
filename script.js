@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (FELSÖKNINGSVERSION)
+    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (SLUTGILITG VERSION)
     // --------------------------------------------------------------------
     const trackingForm = document.getElementById('trackingForm');
     if (trackingForm) {
@@ -504,27 +504,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
             fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
                 .then(response => {
-                    // Logga den råa responsen för att se statuskod etc.
-                    console.log("Netlify-svar:", response);
                     if (!response.ok) {
-                        throw new Error(`Nätverksfel: ${response.status} ${response.statusText}`);
+                        // Hanterar nätverksfel, t.ex. 404 om funktionen inte hittas
+                        throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    // Logga den data vi fick från funktionen
-                    console.log("Data mottagen:", data);
-    
-                    if (data && data.device_name) {
+                    // KORRIGERING: Ny, robust kontroll.
+                    // Kontrollerar om det returnerade objektet har nyckeln 'repair_code'.
+                    // Om inte, betyder det att funktionen lyckades men inte hittade en match.
+                    if (data && data.repair_code) {
                         displayStatus(data);
                     } else {
-                        // Om vi fick ett "lyckat" svar men det var tomt
-                        throw new Error("Ingen data hittades för den angivna koden.");
+                        // Detta är det troliga scenariot: funktionen returnerade ett tomt objekt.
+                        throw new Error('Code not found in database');
                     }
                 })
                 .catch(error => {
-                    // Logga det exakta felet i konsolen
-                    console.error("Ett fel uppstod i fetch-kedjan:", error);
+                    console.error("Felsökningsinfo:", error); // Behåller loggning för säkerhets skull
                     statusContainer.innerHTML = `<p class="error-message">Koden hittades inte. Kontrollera och försök igen.</p>`;
                 });
         });
@@ -539,18 +537,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeline = document.createElement('ul');
             timeline.className = 'status-timeline';
             
-            // Konvertera och hantera Firebase Timestamps på ett säkert sätt
+            // Hanterar Firebase Timestamps på ett säkert sätt
             const statusUpdates = data.status_history.map(entry => {
                 const text = Object.keys(entry)[0];
                 const timestampData = entry[text];
                 
-                // Firebase Timestamps skickas ofta som objekt med _seconds och _nanoseconds
-                // Vi måste bygga om dem till ett Date-objekt.
                 if (timestampData && typeof timestampData._seconds === 'number') {
                     const timestamp = new Date(timestampData._seconds * 1000);
                     return { text, timestamp };
                 } else {
-                    // Fallback om det är ett annat format (t.ex. en sträng)
+                    // Denna fallback är viktig om datan kommer i ett annat format
                     return { text, timestamp: new Date(timestampData) };
                 }
             });
