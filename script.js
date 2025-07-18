@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (SLUTGILITG VERSION)
+    // DEL 7: KOD FÖR SPÅRA-REPARATION-SIDAN (OPTIMERAD FÖR ADMIN-DATA)
     // --------------------------------------------------------------------
     const trackingForm = document.getElementById('trackingForm');
     if (trackingForm) {
@@ -504,25 +504,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
             fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
                 .then(response => {
-                    if (!response.ok) {
-                        // Hanterar nätverksfel, t.ex. 404 om funktionen inte hittas
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     return response.json();
                 })
                 .then(data => {
-                    // KORRIGERING: Ny, robust kontroll.
-                    // Kontrollerar om det returnerade objektet har nyckeln 'repair_code'.
-                    // Om inte, betyder det att funktionen lyckades men inte hittade en match.
                     if (data && data.repair_code) {
                         displayStatus(data);
                     } else {
-                        // Detta är det troliga scenariot: funktionen returnerade ett tomt objekt.
                         throw new Error('Code not found in database');
                     }
                 })
                 .catch(error => {
-                    console.error("Felsökningsinfo:", error); // Behåller loggning för säkerhets skull
+                    console.error("Felsökningsinfo:", error);
                     statusContainer.innerHTML = `<p class="error-message">Koden hittades inte. Kontrollera och försök igen.</p>`;
                 });
         });
@@ -537,20 +530,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeline = document.createElement('ul');
             timeline.className = 'status-timeline';
             
-            // Hanterar Firebase Timestamps på ett säkert sätt
+            // FÖRENKLAD KOD: Läser bara det nya, korrekta formatet { status: "...", timestamp: ... }
             const statusUpdates = data.status_history.map(entry => {
-                const text = Object.keys(entry)[0];
-                const timestampData = entry[text];
+                const text = entry.status;
+                const timestampData = entry.timestamp;
                 
+                let timestamp;
                 if (timestampData && typeof timestampData._seconds === 'number') {
-                    const timestamp = new Date(timestampData._seconds * 1000);
-                    return { text, timestamp };
+                    timestamp = new Date(timestampData._seconds * 1000);
                 } else {
-                    // Denna fallback är viktig om datan kommer i ett annat format
-                    return { text, timestamp: new Date(timestampData) };
+                    timestamp = new Date(timestampData); // Fallback
                 }
+                
+                return { text, timestamp };
             });
     
+            // Sortera alltid så att det senaste är först
             statusUpdates.sort((a, b) => b.timestamp - a.timestamp);
             
             statusUpdates.forEach((status, index) => {
