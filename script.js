@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (LIVE-VERSION)
+    // DEL 7: KOD SOM BARA SKA KÖRAS PÅ SPÅRA-REPARATION-SIDAN (FELSÖKNINGSVERSION)
     // --------------------------------------------------------------------
     const trackingForm = document.getElementById('trackingForm');
     if (trackingForm) {
@@ -502,31 +502,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
             const code = repairCodeInput.value.trim().toUpperCase();
     
-            // RIKTIGT FETCH-ANROP TILL DIN NETLIFY-FUNKTION
             fetch(`/.netlify/functions/getRepairStatus?code=${code}`)
                 .then(response => {
+                    // Logga den råa responsen för att se statuskod etc.
+                    console.log("Netlify-svar:", response);
                     if (!response.ok) {
-                        // Om Netlify-funktionen returnerar ett fel (t.ex. 404 Not Found)
-                        throw new Error('Not Found');
+                        throw new Error(`Nätverksfel: ${response.status} ${response.statusText}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    // Kontrollera om data faktiskt innehåller en enhet
+                    // Logga den data vi fick från funktionen
+                    console.log("Data mottagen:", data);
+    
                     if (data && data.device_name) {
                         displayStatus(data);
                     } else {
-                        // Om funktionen lyckas men ingen data hittas för koden
-                        throw new Error('Not Found');
+                        // Om vi fick ett "lyckat" svar men det var tomt
+                        throw new Error("Ingen data hittades för den angivna koden.");
                     }
                 })
                 .catch(error => {
+                    // Logga det exakta felet i konsolen
+                    console.error("Ett fel uppstod i fetch-kedjan:", error);
                     statusContainer.innerHTML = `<p class="error-message">Koden hittades inte. Kontrollera och försök igen.</p>`;
                 });
         });
     
         function displayStatus(data) {
-            statusContainer.innerHTML = ''; // Rensa
+            statusContainer.innerHTML = ''; 
     
             const title = document.createElement('h3');
             title.textContent = `Status för: ${data.device_name}`;
@@ -535,21 +539,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeline = document.createElement('ul');
             timeline.className = 'status-timeline';
             
-            // ANPASSAD KOD FÖR DIN FIREBASE-DATASTRUKTUR
-            // Konvertera status_history-arrayen till ett mer lätthanterligt format
+            // Konvertera och hantera Firebase Timestamps på ett säkert sätt
             const statusUpdates = data.status_history.map(entry => {
-                const text = Object.keys(entry)[0]; // Hämta nyckeln (t.ex. "Inlämnad för felsökning")
-                const timestamp = entry[text].toDate(); // Konvertera Firebase-timestamp till ett JavaScript-datum
-                return { text, timestamp };
+                const text = Object.keys(entry)[0];
+                const timestampData = entry[text];
+                
+                // Firebase Timestamps skickas ofta som objekt med _seconds och _nanoseconds
+                // Vi måste bygga om dem till ett Date-objekt.
+                if (timestampData && typeof timestampData._seconds === 'number') {
+                    const timestamp = new Date(timestampData._seconds * 1000);
+                    return { text, timestamp };
+                } else {
+                    // Fallback om det är ett annat format (t.ex. en sträng)
+                    return { text, timestamp: new Date(timestampData) };
+                }
             });
     
-            // Sortera händelserna så den senaste alltid är först
             statusUpdates.sort((a, b) => b.timestamp - a.timestamp);
             
             statusUpdates.forEach((status, index) => {
                 const item = document.createElement('li');
                 if (index === 0) {
-                    item.className = 'active'; // Markera den senaste händelsen
+                    item.className = 'active';
                 }
     
                 const text = document.createElement('p');
