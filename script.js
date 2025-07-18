@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 8: KOD FÖR ADMIN-PORTALEN (NY, FÖRBÄTTRAD VERSION)
+    // DEL 8: KOD FÖR ADMIN-PORTALEN (JUSTERAD OCH FÖRBÄTTRAD VERSION)
     // --------------------------------------------------------------------
     const loginView = document.getElementById('loginView');
     if (loginView) {
@@ -661,7 +661,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!activeRepair) return;
     
             document.querySelectorAll('.repair-list-item').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.repair-list-item[data-id="${repairId}"]`).classList.add('active');
+            const activeListItem = document.querySelector(`.repair-list-item[data-id="${repairId}"]`);
+            if(activeListItem) activeListItem.classList.add('active');
             
             document.getElementById('activeDeviceName').textContent = activeRepair.device_name;
             document.getElementById('activeCustomerName').textContent = activeRepair.customer_name;
@@ -670,13 +671,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const statusList = document.getElementById('activeStatusList');
             statusList.innerHTML = '';
             if (activeRepair.status_history) {
-                activeRepair.status_history
-                    .sort((a, b) => (b.timestamp._seconds || 0) - (a.timestamp._seconds || 0))
-                    .forEach(status => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<p class="status-text">${status.status}</p><p class="status-timestamp">${new Date(status.timestamp._seconds * 1000).toLocaleString('sv-SE')}</p>`;
-                        statusList.appendChild(li);
-                    });
+                // KORRIGERING: Korrekt tolkning av datastrukturen { "Status Text": timestamp }
+                const statusUpdates = activeRepair.status_history.map(entry => {
+                    const text = Object.keys(entry)[0];
+                    const timestamp = new Date((entry[text]._seconds || Date.now() / 1000) * 1000);
+                    return { text, timestamp };
+                }).sort((a, b) => b.timestamp - a.timestamp);
+    
+                statusUpdates.forEach(status => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<p class="status-text">${status.text}</p><p class="status-timestamp">${status.timestamp.toLocaleString('sv-SE')}</p>`;
+                    statusList.appendChild(li);
+                });
             }
             
             switchDetailView('detail');
@@ -684,7 +690,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         async function initializeDashboard() {
             try {
-                const response = await fetch('/.netlify/functions/getRepairs', {
+                // KORRIGERING: Säkerställer att funktionsnamnet är korrekt
+                const response = await fetch('/.netlify/functions/getAllRepairs', {
                     headers: { 'Authorization': `Bearer ${jwtToken}` }
                 });
                 if (!response.ok) throw new Error('Kunde inte hämta ärenden.');
@@ -728,13 +735,19 @@ document.addEventListener('DOMContentLoaded', function() {
             allRepairs = [];
             sessionStorage.removeItem('techzon_jwt');
             document.getElementById('loginForm').reset();
+            createRepairForm.reset(); // KORRIGERING: Rensar formulär vid utloggning
+            updateStatusForm.reset();
             document.getElementById('loginView').style.display = 'flex';
             document.getElementById('dashboardView').style.display = 'none';
         });
         
         navCasesBtn.addEventListener('click', () => switchMainView('cases'));
         navScanBtn.addEventListener('click', () => switchMainView('scan'));
-        showCreateViewBtn.addEventListener('click', () => switchDetailView('create'));
+        showCreateViewBtn.addEventListener('click', () => {
+            document.querySelectorAll('.repair-list-item').forEach(li => li.classList.remove('active'));
+            activeRepair = null;
+            switchDetailView('create');
+        });
     
         createRepairForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -753,9 +766,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 if (!response.ok) throw new Error('Kunde inte skapa ärende.');
                 const newRepair = await response.json();
-                allRepairs.unshift(newRepair);
-                populateRepairsList();
-                handleSelectRepair(newRepair.id);
+                allRepairs.unshift(newRepair); // Lägg till överst i den lokala listan
+                populateRepairsList(); // Rita om listan
+                handleSelectRepair(newRepair.id); // Visa det nya ärendet i detaljvyn
                 createRepairForm.reset();
             } catch (error) {
                 alert(error.message);
@@ -777,27 +790,29 @@ document.addEventListener('DOMContentLoaded', function() {
             button.disabled = true;
     
             try {
-                // 1. Spara alltid den nya statusen
                 const updateResponse = await fetch('/.netlify/functions/updateRepairStatus', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                    body: JSON.stringify({ repairId: activeRepair.id, newStatus: newStatus })
+                    body: JSON.stringify({ repairId: activeRepair.id, statusText: newStatus })
                 });
                 if (!updateResponse.ok) throw new Error('Kunde inte spara status.');
                 
-                // Uppdatera lokala datan och UI direkt för snabb feedback
-                const newStatusEntry = { status: newStatus, timestamp: { _seconds: Date.now() / 1000 } };
-                activeRepair.status_history.unshift(newStatusEntry);
+                const updatedRepair = await updateResponse.json();
+                // KORRIGERING: Uppdatera det lokala objektet med den nya datan från servern
+                const index = allRepairs.findIndex(r => r.id === updatedRepair.id);
+                if (index !== -1) allRepairs[index] = updatedRepair;
+                activeRepair = updatedRepair; // Se till att vi har den senaste versionen aktiv
+                
                 handleSelectRepair(activeRepair.id);
                 newStatusInput.value = '';
     
-                // 2. Skicka SMS om den knappen trycktes
                 if (action === 'sms') {
+                    button.textContent = 'Skickar SMS...';
                     const smsMessage = `Hej ${activeRepair.customer_name}! Ny status för din reparation (${activeRepair.device_name}): ${newStatus}. Mvh TechZon`;
                     const smsResponse = await fetch('/.netlify/functions/sendSms', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                        body: JSON.stringify({ repairId: activeRepair.id, message: smsMessage })
+                        body: JSON.stringify({ to: activeRepair.customer_phone, message: smsMessage })
                     });
                     if (!smsResponse.ok) throw new Error('Status sparades, men SMS kunde inte skickas.');
                     alert('Status sparad och SMS skickat!');
@@ -808,6 +823,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(error.message);
             } finally {
                 button.disabled = false;
+                button.textContent = button.dataset.action === 'sms' ? 'Spara & Skicka SMS' : 'Spara Status';
             }
         });
         
@@ -815,6 +831,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (jwtToken) {
             document.getElementById('dashboardView').style.display = 'block';
             document.getElementById('loginView').style.display = 'none';
+            switchMainView('cases');
             initializeDashboard();
         }
     }
