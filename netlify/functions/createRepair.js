@@ -61,7 +61,7 @@ exports.handler = async (event) => {
     created_at: admin.firestore.FieldValue.serverTimestamp(),
     status_history: [{
       status: 'Ärende registrerat',
-      timestamp: new Date()
+      timestamp: admin.firestore.FieldValue.serverTimestamp()
     }]
   };
 
