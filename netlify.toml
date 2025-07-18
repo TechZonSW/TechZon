@@ -1,0 +1,13 @@
+# Netlify konfigurationsfil för en enkel statisk sida
+
+[build]
+  # Inget byggkommando behövs eftersom det är rena HTML/CSS/JS-filer.
+  command = ""
+
+  # Publicera filerna från roten av repositoryt.
+  publish = "."
+
+# Omdirigeringsregler kan läggas till här i framtiden om det behövs.
+# [[redirects]]
+#   from = "/gammal-sida"
+#   to = "/ny-sida"
