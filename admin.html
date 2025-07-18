@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Bibliotek för QR/streckkodsläsare -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body class="admin-body">
+
+    <!-- INLOGGNINGSVY -->
+    <div id="loginView" class="admin-view">
+        <div class="login-container">
+            <h1>Personalportal</h1>
+            <p class="page-intro" style="color: #6e6e73;">Logga in för att hantera ärenden och lager.</p>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Användarnamn" required>
+                <input type="password" id="password" placeholder="Lösenord" required>
+                <button type="submit" class="cta-button">Logga in</button>
+                <p id="loginError" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARDVY -->
+    <div id="dashboardView" class="admin-view" style="display: none;">
+        <header class="admin-header">
+            <div class="container">
+                <h2>Admin Dashboard</h2>
+                <button id="logoutBtn" class="secondary-button">Logga ut</button>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="container">
+                <div class="admin-grid">
+                    <!-- Sektion 1: Skapa & Hantera -->
+                    <div class="admin-section">
+                        <h3>Hantera Ärenden</h3>
+                        
+                        <!-- VY FÖR AKTIVT ÄRENDE -->
+                        <div id="activeRepairView" style="display: none;">
+                            <h4>Hanterar: <span id="activeDeviceName"></span></h4>
+                            <p class="repair-meta">Kund: <strong id="activeCustomerName"></strong></p>
+                            <p class="repair-meta">Kod: <strong id="activeRepairCode"></strong></p>
+                            
+                            <form id="updateStatusForm">
+                                <input type="text" id="newStatusInput" placeholder="Ny statusuppdatering..." required>
+                                <button type="submit">Lägg till status</button>
+                            </form>
+                            
+                            <h5>Status-historik:</h5>
+                            <ul id="activeStatusList" class="admin-timeline"></ul>
+                            <button id="finishCaseBtn" class="secondary-button">Avsluta & Nollställ</button>
+                        </div>
+                        
+                        <!-- VY FÖR ATT SKAPA NYTT ÄRENDE -->
+                        <div id="createRepairView">
+                             <h4>Registrera Ny Reparation</h4>
+                            <form id="createRepairForm">
+                                <input type="text" id="deviceName" placeholder="Enhet (ex: iPhone 15 Pro)" required>
+                                <input type="text" id="customerName" placeholder="Kundens namn" required>
+                                <input type="tel" id="customerPhone" placeholder="Kundens mobilnummer" required>
+                                <button type="submit" class="cta-button">Skapa Ärende</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Sektion 2: Lagerhantering -->
+                    <div class="admin-section">
+                        <h3>Lager & Skanning</h3>
+                        <p>Skanna en QR- eller streckkod för att hämta produktinfo eller uppdatera lager.</p>
+                        <button id="startScannerBtn" class="cta-button secondary">
+                            <i class="ph-bold ph-qr-code"></i> Starta Skanner
+                        </button>
+                        <div id="scanner-container"></div>
+                        <div id="scanResult"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
