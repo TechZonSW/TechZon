@@ -908,7 +908,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Steg 3: Skicka SMS om den knappen trycktes
                 if (action === 'sms') {
                     button.textContent = 'Skickar SMS...';
-                    const smsMessage = `Hej ${activeRepair.customer_name}! Ny status för din reparation (${activeRepair.device_name}): ${newStatus}. Mvh TechZon`;
+                    const smsMessage = `Hej ${activeRepair.customer_name}, en uppdatering för din ${activeRepair.device_name}: "${newStatus}". Följ ditt ärende live på https://techzon.netlify.app/spara med koden: ${activeRepair.repair_code}. Mvh, TechZon`;
                     const smsResponse = await fetch('/.netlify/functions/sendSms', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
