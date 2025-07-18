@@ -38,7 +38,8 @@ exports.handler = async (event) => {
       customer_name: customerName,
       customer_phone: customerPhone,
       repair_code: generateRepairCode(),
-      created_at: new Date(), // Spara som vanligt JS-datum
+      created_at: new Date(), 
+      status: 'active',
       status_history: [
           {
               status: 'Ärende registrerat',
