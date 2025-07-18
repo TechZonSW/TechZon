@@ -46,7 +46,7 @@ exports.handler = async (event) => {
     console.log('Parsed username:', username);
     console.log('Parsed password:', password); // Obs: Detta är bara för felsökning, ta bort sen.
 
-    const adminsRef = db.collection('Admins');
+    const adminsRef = db.collection('Admin');
     const snapshot = await adminsRef.where('username', '==', username).limit(1).get();
 
     if (snapshot.empty) {
