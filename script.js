@@ -770,6 +770,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
         navScanBtn.addEventListener('click', () => switchMainView('scan'));
+
+        // NYTT KODBLOCK ATT LÄGGA TILL
+        // Lyssna på knappen som finns INUTI skanner-vyn
+        const startScannerBtn = document.getElementById('startScannerBtn');
+        if (startScannerBtn) {
+            startScannerBtn.addEventListener('click', () => {
+                const scannerContainer = document.getElementById('scanner-container');
+                const scanResult = document.getElementById('scanResult');
+                
+                // Kontrollera att elementen finns
+                if (!scannerContainer || !scanResult) {
+                    console.error("Skanner-element saknas i HTML.");
+                    return;
+                }
+        
+                scannerContainer.style.display = 'block';
+                scanResult.innerHTML = '';
+                
+                // Kontrollera att biblioteket har laddats
+                if (typeof Html5Qrcode === 'undefined') {
+                    alert("Fel: Skanner-biblioteket (html5-qrcode.min.js) kunde inte laddas.");
+                    return;
+                }
+        
+                try {
+                    const html5QrCode = new Html5Qrcode("scanner-container");
+                    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                        // Stoppa skannern när en kod har hittats
+                        html5QrCode.stop().then(() => {
+                            scannerContainer.style.display = 'none';
+                            scanResult.innerHTML = `<h4>Kod skannad!</h4><p>Kod: ${decodedText}</p><p>Här kommer info från backend att visas.</p>`;
+                        }).catch(err => console.error("Fel vid stopp av skanner:", err));
+                    };
+        
+                    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                    
+                    // Starta skannern
+                    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                        .catch(err => {
+                            console.error("Kunde inte starta skanner:", err);
+                            scanResult.innerHTML = `<p class="error-message">Kunde inte starta kameran. Kontrollera webbläsarens behörigheter.</p>`;
+                            scannerContainer.style.display = 'none';
+                        });
+                } catch (error) {
+                    console.error("Ett oväntat fel inträffade vid start av skanner:", error);
+                    alert("Ett oväntat fel inträffade. Se konsolen för mer info.");
+                }
+            });
+        }
     
         showCreateViewBtn.addEventListener('click', () => {
             document.querySelectorAll('.repair-list-item').forEach(li => li.classList.remove('active'));
