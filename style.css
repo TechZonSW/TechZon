@@ -902,3 +902,116 @@ footer {
 .process-step-number i {
     font-size: 1em; /* Gör ikonen lagom stor inuti cirkeln */
 }
+
+/* --- NYA STILAR FÖR SPÅRA-REPARATION-SIDAN --- */
+
+.tracking-form-container {
+    margin-bottom: 50px;
+}
+
+#trackingForm {
+    display: flex;
+    gap: 15px;
+}
+
+#trackingForm input[type="text"] {
+    flex-grow: 1; /* Låter textfältet ta upp mest plats */
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 50px; /* Samma runda form som knappen */
+    font-family: var(--font-family);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#trackingForm input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+}
+
+/* Feedback-meddelanden */
+#statusContainer .loading,
+#statusContainer .error-message {
+    text-align: center;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+}
+#statusContainer .loading {
+    color: var(--text-color-secondary);
+}
+#statusContainer .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Tidslinjen */
+.status-timeline {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 30px;
+    position: relative;
+}
+
+/* Den vertikala linjen */
+.status-timeline::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 0;
+    bottom: 10px;
+    width: 2px;
+    background-color: #e0e0e0;
+}
+
+.status-timeline li {
+    padding-left: 30px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+/* Prickarna på tidslinjen */
+.status-timeline li::before {
+    content: '';
+    position: absolute;
+    left: -9px; /* Centrerar pricken på linjen */
+    top: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    border: 3px solid #fff;
+}
+
+/* Ikonen (checkmark) för avklarade steg */
+.status-timeline li::after {
+    content: '✓';
+    position: absolute;
+    left: -4px;
+    top: 7px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Styling för det aktiva/senaste steget */
+.status-timeline li.active::before {
+    background-color: var(--primary-color);
+}
+.status-timeline li.active::after {
+    content: ''; /* Ingen checkmark på det aktiva steget */
+}
+.status-timeline li.active .status-text {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.status-text {
+    font-size: 1.1em;
+    color: var(--text-color-secondary);
+}
+.status-timestamp {
+    font-size: 0.9em;
+    color: #a1a1a6;
+    margin-top: 5px;
+}
