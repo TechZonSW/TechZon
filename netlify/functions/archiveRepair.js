@@ -3,9 +3,23 @@
 const admin = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 
-// ... (ditt kompletta initieringsblock ska vara här) ...
-if (!admin.apps.length) { /* ... */ }
+// --- START PÅ KORREKT INITIERINGSBLOCK ---
+// Hämta Firebase-autentiseringsuppgifter från Netlifys miljövariabler
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Ersätter escape-tecken för radbrytningar
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+};
+
+// Initiera Firebase Admin SDK, men bara om det inte redan har gjorts
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
+
 const db = admin.firestore();
+// --- SLUT PÅ KORREKT INITIERINGSBLOCK ---
 
 exports.handler = async (event) => {
     // Endast POST-metod tillåten
