@@ -579,4 +579,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // --------------------------------------------------------------------
+    // DEL 8: KOD FÖR ADMIN-PORTALEN (admin.html)
+    // --------------------------------------------------------------------
+    const loginView = document.getElementById('loginView');
+    if (loginView) {
+        const dashboardView = document.getElementById('dashboardView');
+        
+        // Formulär och vyer
+        const loginForm = document.getElementById('loginForm');
+        const createRepairForm = document.getElementById('createRepairForm');
+        const updateStatusForm = document.getElementById('updateStatusForm');
+        const createRepairView = document.getElementById('createRepairView');
+        const activeRepairView = document.getElementById('activeRepairView');
+    
+        // Knappar
+        const logoutBtn = document.getElementById('logoutBtn');
+        const finishCaseBtn = document.getElementById('finishCaseBtn');
+        const startScannerBtn = document.getElementById('startScanner
+
 });
