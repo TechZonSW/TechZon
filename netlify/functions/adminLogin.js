@@ -4,8 +4,29 @@ const admin = require('firebase-admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// ... (din firebase initieringskod) ...
-// Se till att den koden är här och är korrekt.
+// =================================================================
+// START PÅ KORREKT FIREBASE-INITIERING
+// =================================================================
+
+// Denna kod ser till att vi bara ansluter till Firebase en gång.
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      // Denna rad hanterar ett formateringsproblem mellan Netlify och Firebase
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    }),
+  });
+}
+
+// Skapa en databas-referens som resten av koden kan använda.
+const db = admin.firestore();
+
+// =================================================================
+// SLUT PÅ FIREBASE-INITIERING
+// =================================================================
+
 
 exports.handler = async (event) => {
   // LOGG 1: Kontrollera att funktionen körs och vilken metod som används
