@@ -24,11 +24,9 @@ const generateRepairCode = () => {
 };
 
 exports.handler = async (event) => {
-  // JWT-säkerhetskontroll (oförändrad)
+  // JWT-säkerhetskontroll (oförändrad) ...
   const authHeader = event.headers.authorization;
-  if (!authHeader) {
-    return { statusCode: 401, body: JSON.stringify({ message: 'Ingen token angiven. Åtkomst nekad.' }) };
-  }
+  if (!authHeader) return { statusCode: 401, body: JSON.stringify({ message: 'Ingen token angiven. Åtkomst nekad.' }) };
   const token = authHeader.split(' ')[1];
   try {
     jwt.verify(token, process.env.JWT_SECRET);
@@ -38,34 +36,30 @@ exports.handler = async (event) => {
   
   const { deviceName, customerName, customerPhone } = JSON.parse(event.body);
 
-  // Steg 1: Skapa det nya ärendet med en tom status-historik
-  const newRepairData = {
-      device_name: deviceName,
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      repair_code: generateRepairCode(),
-      created_at: admin.firestore.FieldValue.serverTimestamp(), // Detta är ok här
-      status_history: [] // Starta med en tom lista
+  const initialRepairData = {
+    device_name: deviceName,
+    customer_name: customerName,
+    customer_phone: customerPhone,
+    repair_code: generateRepairCode(),
+    created_at: admin.firestore.FieldValue.serverTimestamp(),
+    status_history: [
+        {
+            status: 'Ärende registrerat',
+            timestamp: new Date() // Vi använder ett vanligt JS-datum här
+        }
+    ]
   };
 
   try {
-    // Skapa dokumentet och få en referens till det (inklusive dess nya ID)
-    const docRef = await db.collection('Reparationer').add(newRepairData);
-    
-    // Steg 2: Uppdatera det nyskapade dokumentet direkt med den första statusen
-    await docRef.update({
-        status_history: admin.firestore.FieldValue.arrayUnion({
-            status: 'Ärende registrerat',
-            timestamp: admin.firestore.FieldValue.serverTimestamp() // Detta är ok i en 'update'
-        })
-    });
-    
-    // Steg 3: Hämta den fullständiga, uppdaterade datan för att skicka tillbaka
+    const docRef = await db.collection('Reparationer').add(initialRepairData);
     const newDoc = await docRef.get();
     const createdRepair = newDoc.data();
     
-    return { statusCode: 200, body: JSON.stringify({ id: newDoc.id, ...createdRepair }) };
+    // Konvertera JS-datumet till ett Firestore Timestamp FÖR ATT SKICKA TILLBAKA TILL FRONTEND
+    // så att frontend-koden hanterar all data likadant.
+    createdRepair.status_history[0].timestamp = admin.firestore.Timestamp.fromDate(createdRepair.status_history[0].timestamp);
 
+    return { statusCode: 200, body: JSON.stringify({ id: newDoc.id, ...createdRepair }) };
   } catch (error) {
     console.error("Error creating repair:", error);
     return { statusCode: 500, body: JSON.stringify({ message: "Kunde inte skapa reparation."}) };
