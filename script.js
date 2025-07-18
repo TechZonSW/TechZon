@@ -611,17 +611,18 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentCaseView = 'active'; // Håller reda på vilken vy vi är i
     
         // --- Funktioner ---
-    
+
         function switchMainView(viewToShow) {
             casesView.style.display = 'none';
             scanView.style.display = 'none';
             [navActiveBtn, navArchivedBtn, navScanBtn].forEach(b => b.classList.remove('active'));
-    
+        
             if (viewToShow === 'scan') {
                 scanView.style.display = 'block';
                 navScanBtn.classList.add('active');
             } else { // 'cases'
                 casesView.style.display = 'block';
+                // Markera rätt ärende-knapp baserat på vilken vy vi senast var i
                 if (currentCaseView === 'active') navActiveBtn.classList.add('active');
                 else navArchivedBtn.classList.add('active');
             }
@@ -758,12 +759,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
             
         navActiveBtn.addEventListener('click', () => {
+            switchMainView('cases');
             navArchivedBtn.classList.remove('active');
             navActiveBtn.classList.add('active');
             fetchAndRenderRepairs('active');
         });
     
         navArchivedBtn.addEventListener('click', () => {
+            switchMainView('cases');
             navActiveBtn.classList.remove('active');
             navArchivedBtn.classList.add('active');
             fetchAndRenderRepairs('archived');
