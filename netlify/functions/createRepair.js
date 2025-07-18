@@ -3,10 +3,7 @@
 const admin = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 
-// =================================================================
-// START PÅ FIREBASE-INITIERING
-// =================================================================
-
+// ... (ditt kompletta initieringsblock ska vara här) ...
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -16,12 +13,7 @@ if (!admin.apps.length) {
     }),
   });
 }
-
 const db = admin.firestore();
-
-// =================================================================
-// SLUT PÅ FIREBASE-INITIERING
-// =================================================================
 
 // Hjälpfunktion för att generera en slumpmässig kod
 const generateRepairCode = () => {
@@ -32,47 +24,47 @@ const generateRepairCode = () => {
 };
 
 exports.handler = async (event) => {
-  // =================================================================
-  // START PÅ JWT-SÄKERHETSKONTROLL
-  // =================================================================
+  // JWT-säkerhetskontroll (oförändrad)
   const authHeader = event.headers.authorization;
   if (!authHeader) {
     return { statusCode: 401, body: JSON.stringify({ message: 'Ingen token angiven. Åtkomst nekad.' }) };
   }
-  
   const token = authHeader.split(' ')[1];
   try {
     jwt.verify(token, process.env.JWT_SECRET);
-    // Om token är giltig, fortsätter koden. Annars kastas ett fel.
   } catch (error) {
     return { statusCode: 403, body: JSON.stringify({ message: 'Ogiltig token. Åtkomst nekad.' }) };
   }
-  // =================================================================
-  // SLUT PÅ JWT-SÄKERHETSKONTROLL
-  // =================================================================
   
   const { deviceName, customerName, customerPhone } = JSON.parse(event.body);
 
-  const newRepair = {
-    device_name: deviceName,
-    customer_name: customerName,
-    customer_phone: customerPhone,
-    repair_code: generateRepairCode(),
-    created_at: admin.firestore.FieldValue.serverTimestamp(),
-    status_history: [{
-      status: 'Ärende registrerat',
-      timestamp: admin.firestore.FieldValue.serverTimestamp()
-    }]
+  // Steg 1: Skapa det nya ärendet med en tom status-historik
+  const newRepairData = {
+      device_name: deviceName,
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      repair_code: generateRepairCode(),
+      created_at: admin.firestore.FieldValue.serverTimestamp(), // Detta är ok här
+      status_history: [] // Starta med en tom lista
   };
 
   try {
-    const docRef = await db.collection('Reparationer').add(newRepair);
-    // Hämta den nyskapade reparationen för att returnera den fullständiga datan
-    const newDoc = await docRef.get();
-    const newDocData = newDoc.data();
+    // Skapa dokumentet och få en referens till det (inklusive dess nya ID)
+    const docRef = await db.collection('Reparationer').add(newRepairData);
     
-    // Inkludera dokument-ID:t i svaret, det är viktigt för framtida uppdateringar
-    return { statusCode: 200, body: JSON.stringify({ id: newDoc.id, ...newDocData }) };
+    // Steg 2: Uppdatera det nyskapade dokumentet direkt med den första statusen
+    await docRef.update({
+        status_history: admin.firestore.FieldValue.arrayUnion({
+            status: 'Ärende registrerat',
+            timestamp: admin.firestore.FieldValue.serverTimestamp() // Detta är ok i en 'update'
+        })
+    });
+    
+    // Steg 3: Hämta den fullständiga, uppdaterade datan för att skicka tillbaka
+    const newDoc = await docRef.get();
+    const createdRepair = newDoc.data();
+    
+    return { statusCode: 200, body: JSON.stringify({ id: newDoc.id, ...createdRepair }) };
 
   } catch (error) {
     console.error("Error creating repair:", error);
