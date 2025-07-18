@@ -585,17 +585,163 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginView = document.getElementById('loginView');
     if (loginView) {
         const dashboardView = document.getElementById('dashboardView');
-        
-        // Formulär och vyer
         const loginForm = document.getElementById('loginForm');
         const createRepairForm = document.getElementById('createRepairForm');
         const updateStatusForm = document.getElementById('updateStatusForm');
         const createRepairView = document.getElementById('createRepairView');
         const activeRepairView = document.getElementById('activeRepairView');
-    
-        // Knappar
         const logoutBtn = document.getElementById('logoutBtn');
         const finishCaseBtn = document.getElementById('finishCaseBtn');
-        const startScannerBtn = document.getElementById('startScanner
+        const startScannerBtn = document.getElementById('startScannerBtn');
+        const loginError = document.getElementById('loginError');
+        const activeDeviceName = document.getElementById('activeDeviceName');
+        const activeCustomerName = document.getElementById('activeCustomerName');
+        const activeRepairCode = document.getElementById('activeRepairCode');
+        const activeStatusList = document.getElementById('activeStatusList');
+        
+        let jwtToken = null;
+        let activeRepairId = null;
+
+        function showLoginView() {
+            loginView.style.display = 'flex';
+            dashboardView.style.display = 'none';
+        }
+
+        function showDashboardView() {
+            loginView.style.display = 'none';
+            dashboardView.style.display = 'block';
+        }
+        
+        function displayActiveRepair(data) {
+            activeRepairId = data.id;
+            activeDeviceName.textContent = data.device_name;
+            activeCustomerName.textContent = data.customer_name;
+            activeRepairCode.textContent = data.repair_code;
+
+            activeStatusList.innerHTML = '';
+            const statusUpdates = data.status_history.map(entry => {
+                const text = Object.keys(entry)[0];
+                const timestamp = new Date((entry[text]._seconds || 0) * 1000);
+                return { text, timestamp };
+            }).sort((a, b) => b.timestamp - a.timestamp);
+
+            statusUpdates.forEach(status => {
+                const item = document.createElement('li');
+                item.innerHTML = `<p class="status-text">${status.text}</p><p class="status-timestamp">${status.timestamp.toLocaleString('sv-SE')}</p>`;
+                activeStatusList.appendChild(item);
+            });
+
+            createRepairView.style.display = 'none';
+            activeRepairView.style.display = 'block';
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            loginError.textContent = '';
+            
+            fetch('/.netlify/functions/adminLogin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Fel användarnamn eller lösenord.');
+                return response.json();
+            })
+            .then(data => {
+                jwtToken = data.token;
+                sessionStorage.setItem('techzon_jwt', jwtToken);
+                showDashboardView();
+            })
+            .catch(error => {
+                loginError.textContent = error.message;
+            });
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            jwtToken = null;
+            activeRepairId = null;
+            sessionStorage.removeItem('techzon_jwt');
+            createRepairView.style.display = 'block';
+            activeRepairView.style.display = 'none';
+            showLoginView();
+        });
+
+        createRepairForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const deviceName = document.getElementById('deviceName').value;
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+
+            fetch('/.netlify/functions/createRepair', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwtToken 
+                },
+                body: JSON.stringify({ deviceName, customerName, customerPhone })
+            })
+            .then(response => response.json())
+            .then(data => {
+                createRepairForm.reset();
+                displayActiveRepair(data);
+            })
+            .catch(error => console.error('Fel vid skapande:', error));
+        });
+        
+        updateStatusForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newStatusInput = document.getElementById('newStatusInput');
+            const newStatus = newStatusInput.value.trim();
+            if (!newStatus || !activeRepairId) return;
+
+            fetch('/.netlify/functions/updateRepairStatus', {
+                 method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwtToken 
+                },
+                body: JSON.stringify({ repairId: activeRepairId, statusText: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                newStatusInput.value = '';
+                displayActiveRepair(data);
+            })
+            .catch(error => console.error('Fel vid uppdatering:', error));
+        });
+
+        finishCaseBtn.addEventListener('click', () => {
+            activeRepairId = null;
+            createRepairView.style.display = 'block';
+            activeRepairView.style.display = 'none';
+        });
+        
+        startScannerBtn.addEventListener('click', () => {
+            const scannerContainer = document.getElementById('scanner-container');
+            const scanResult = document.getElementById('scanResult');
+            scannerContainer.style.display = 'block';
+            scanResult.innerHTML = '';
+
+            const html5QrCode = new Html5Qrcode("scanner-container");
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                html5QrCode.stop().then(() => {
+                    scannerContainer.style.display = 'none';
+                    scanResult.innerHTML = `<p class="loading">Hämtar info för ${decodedText}...</p>`;
+                    scanResult.innerHTML = `<h4>Produkt hittad!</h4><p>Kod: ${decodedText}</p><p>Här skulle info om lager etc. visas.</p>`;
+                });
+            };
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+        });
+
+        const savedToken = sessionStorage.getItem('techzon_jwt');
+        if (savedToken) {
+            jwtToken = savedToken;
+            showDashboardView();
+        }
+    }
 
 });
