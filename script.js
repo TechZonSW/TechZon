@@ -821,7 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const updateResponse = await fetch('/.netlify/functions/updateRepairStatus', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                    body: JSON.stringify({ repairId: activeRepair.id, statusText: newStatus }) // newStatus -> statusText
+                    body: JSON.stringify({ repairId: activeRepair.id, newStatus: newStatus }) 
                 });
                 if (!updateResponse.ok) throw new Error('Kunde inte spara status.');
                 const updatedRepair = await updateResponse.json();
