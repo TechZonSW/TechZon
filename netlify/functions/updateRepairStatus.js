@@ -24,43 +24,46 @@ const db = admin.firestore();
 // =================================================================
 
 exports.handler = async (event) => {
-  // =================================================================
-  // START PÅ JWT-SÄKERHETSKONTROLL
-  // =================================================================
-  const authHeader = event.headers.authorization;
-  if (!authHeader) {
-    return { statusCode: 401, body: JSON.stringify({ message: 'Ingen token angiven. Åtkomst nekad.' }) };
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
-    return { statusCode: 403, body: JSON.stringify({ message: 'Ogiltig token. Åtkomst nekad.' }) };
-  }
-  // =================================================================
-  // SLUT PÅ JWT-SÄKERHETSKONTROLL
-  // =================================================================
-
-  const { repairId, newStatus } = JSON.parse(event.body);
-
-  if (!repairId || !newStatus) {
-      return { statusCode: 400, body: JSON.stringify({ message: 'Repair ID och ny status krävs.'}) };
-  }
-
-  try {
-    const repairRef = db.collection('Reparationer').doc(repairId);
+    // JWT-säkerhetskontroll...
+    if (event.httpMethod !== 'POST') return { statusCode: 405 };
+    const authHeader = event.headers.authorization;
+    if (!authHeader) return { statusCode: 401, body: 'Åtkomst nekad' };
+    const token = authHeader.split(' ')[1];
+    try { jwt.verify(token, process.env.JWT_SECRET); }
+    catch (error) { return { statusCode: 403, body: 'Ogiltig token' };}
     
-    await repairRef.update({
-      status_history: admin.firestore.FieldValue.arrayUnion({
-        status: newStatus,
-        timestamp: new Date()
-      })
-    });
+    try {
+        const { repairId, newStatus } = JSON.parse(event.body);
 
-    return { statusCode: 200, body: JSON.stringify({ message: 'Status uppdaterad!' }) };
-  } catch (error) {
-    console.error("Error updating status:", error);
-    return { statusCode: 500, body: JSON.stringify({ message: "Kunde inte uppdatera status."}) };
-  }
+        if (!repairId || !newStatus) {
+            return { statusCode: 400, body: JSON.stringify({ message: 'Repair ID och ny status krävs.' }) };
+        }
+
+        const repairRef = db.collection('Reparationer').doc(repairId);
+
+        // Steg 1: Hämta det nuvarande dokumentet
+        const doc = await repairRef.get();
+        if (!doc.exists) {
+            return { statusCode: 404, body: JSON.stringify({ message: 'Ärende hittades ej.' }) };
+        }
+
+        // Steg 2: Ta den befintliga historiken (eller skapa en tom lista)
+        const currentHistory = doc.data().status_history || [];
+
+        // Steg 3: Lägg till den nya statusen i listan
+        currentHistory.push({
+            status: newStatus,
+            timestamp: new Date() // Lägg till ett vanligt JS-datum
+        });
+
+        // Steg 4: Skriv över hela historik-fältet med den nya, uppdaterade listan
+        await repairRef.update({
+            status_history: currentHistory
+        });
+
+        return { statusCode: 200, body: JSON.stringify({ message: 'Status uppdaterad!' }) };
+    } catch (error) {
+        console.error("Error updating status:", error);
+        return { statusCode: 500, body: JSON.stringify({ message: "Kunde inte uppdatera status." }) };
+    }
 };
