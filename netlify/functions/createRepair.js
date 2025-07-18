@@ -60,7 +60,7 @@ exports.handler = async (event) => {
       // --- START PÅ NY SMS-LOGIK ---
   
       if (customerPhone) { // Skicka bara om ett telefonnummer finns
-          const welcomeMessage = `Hej ${customerName}! Ditt serviceärende hos TechZon är nu registrerat för din ${deviceName}. Din unika spårningskod är ${newRepairCode}. Följ reparationen live här: https://techzon.netlify.app/spara`;
+          const welcomeMessage = `Hej ${customerName}! Vi har nu tagit emot din ${deviceName}. Spåra reparationen med kod ${newRepairCode}: https://techzon.netlify.app/spara. Mvh, Techzon';
   
           try {
               await twilioClient.messages.create({
