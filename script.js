@@ -1144,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL (ROBUST VERSION) ---
+        // --- 4. MODAL (ROBUST OCH KORRIGERAD VERSION) ---
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
@@ -1152,15 +1152,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Säkra fallback-värden för alla fält
             const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/testbild.png'];
             const specifikationer = product.specifikationer || [];
-    
+        
             modalBody.innerHTML = `
                 <div class="product-detail-layout">
                     <div class="product-detail-gallery">
-                        <div class="swiper">
+                        <!-- Swiper-containern måste ha en unik klass för varje modalöppning -->
+                        <div class="swiper modal-swiper">
                             <div class="swiper-wrapper">
                                 ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                             </div>
-                            <div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
                         </div>
                     </div>
                     <div class="product-detail-info">
@@ -1179,13 +1182,22 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             modal.style.display = 'flex';
-            setTimeout(() => { modal.style.opacity = 1; modal.querySelector('.modal-content').style.transform = 'scale(1)'; }, 10);
             
-            new Swiper('.swiper', {
-                loop: bilder.length > 1, // Aktivera bara loop om det finns mer än en bild
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            });
+            // KORRIGERING: Använder setTimeout för att säkerställa att DOM är redo innan Swiper initieras.
+            setTimeout(() => {
+                modal.style.opacity = 1;
+                modal.querySelector('.modal-content').style.transform = 'scale(1)';
+                
+                // Initiera Swiper-karusellen efter att modalen är synlig
+                new Swiper('.modal-swiper', {
+                    loop: bilder.length > 1,
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            }, 10); // En minimal fördröjning räcker
         }
     
         function closeModal() {
