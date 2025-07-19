@@ -1258,92 +1258,44 @@ hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
     .view-header { flex-direction: column; align-items: flex-start; gap: 15px; }
 }
 
-/* --- NYA STILAR FÖR /KOP.HTML OCH E-HANDEL (OMORGANISERAD) --- */
+/* --- NYA, FÖRBÄTTRADE STILAR FÖR /KOP.HTML (VERSION 4 - TVÅKOLUMNSLAYOUT) --- */
 
 /* =================================================================
-   1. HEADER & NAVIGATION
+   1. HEADER & NAVIGATION (Oförändrad)
    ================================================================= */
-
-/* Dropdown-meny i headern */
-nav ul.main-nav {
-    display: flex;
-    align-items: center;
-}
-.dropdown {
-    position: relative;
-}
+nav ul.main-nav { display: flex; align-items: center; }
+.dropdown { position: relative; }
 .dropdown .dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    min-width: 220px;
-    box-shadow: var(--shadow-medium);
-    border-radius: var(--border-radius);
-    padding: 15px 0; 
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 100;
+    display: none; position: absolute; top: 100%; left: 0;
+    background-color: #fff; min-width: 220px;
+    box-shadow: var(--shadow-medium); border-radius: var(--border-radius);
+    padding: 15px 0; opacity: 0; transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease; z-index: 100;
 }
-.dropdown:hover .dropdown-content {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-.dropdown-content a {
-    display: block;
-    padding: 12px 20px;
-    color: var(--text-color);
-    font-weight: 500;
-}
-.dropdown-content a:hover {
-    background-color: var(--section-bg-light);
-    color: var(--primary-color);
-}
-.dropdown-content hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 8px 0;
-}
+.dropdown:hover .dropdown-content { display: block; opacity: 1; transform: translateY(0); }
+.dropdown-content a { display: block; padding: 12px 20px; color: var(--text-color); font-weight: 500; }
+.dropdown-content a:hover { background-color: var(--section-bg-light); color: var(--primary-color); }
+.dropdown-content hr { border: none; border-top: 1px solid #eee; margin: 8px 0; }
 
 /* =================================================================
-   2. SIDLAYOUT & FILTER
+   2. SIDLAYOUT & FILTER (FINJUSTERAD)
    ================================================================= */
 
-/* Sökfält */
-.search-bar-container {
-    position: relative;
-    margin: 30px auto 0;
-    max-width: 600px;
-}
-#searchInput {
-    width: 100%;
-    padding: 18px 25px 18px 55px;
-    font-size: 1.1em;
-    border-radius: 50px;
-    border: 1px solid #ddd;
-    font-family: var(--font-family);
-}
-.search-bar-container i {
-    position: absolute;
-    left: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.4em;
-    color: #aaa;
-}
+/* Sökfält (Oförändrad) */
+.search-bar-container { position: relative; margin: 30px auto 0; max-width: 600px; }
+#searchInput { width: 100%; padding: 18px 25px 18px 55px; font-size: 1.1em; border-radius: 50px; border: 1px solid #ddd; font-family: var(--font-family); }
+.search-bar-container i { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); font-size: 1.4em; color: #aaa; }
 
-/* E-handelssida layout */
+/* E-handelssida layout (Justerad för mer utrymme) */
 .shop-layout {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    /* KORRIGERING: Filterpanelen är nu smalare */
+    grid-template-columns: 240px 1fr; 
     gap: 40px;
 }
 .filter-panel {
-    border-right: 1px solid #e5e5e5;
-    padding-right: 30px;
+    /* Tar bort högerbården för en renare look */
+    padding-right: 0;
 }
 .filter-group {
     padding-bottom: 20px;
@@ -1352,17 +1304,18 @@ nav ul.main-nav {
 }
 .filter-group h4 {
     margin-bottom: 15px;
-    cursor: pointer;
+    font-size: 1.1em; /* Något mindre rubrik för en kompaktare panel */
 }
 .filter-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px; /* Lite tätare mellan filtervalen */
 }
 .filter-options label {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 0.95em; /* Något mindre text */
 }
 
 /* Pris-slider */
@@ -1370,14 +1323,15 @@ nav ul.main-nav {
 #price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
 
 /* =================================================================
-   3. PRODUKT-GRID & KORT
+   3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
    ================================================================= */
 
-/* Grid-layout (justerad för 3 kolumner) */
+/* Grid-layout */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 30px;
+    /* KORRIGERING: Justerat minmax för att garantera tre kort */
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px; /* Något mindre mellanrum */
 }
 
 /* Produktkortens huvudcontainer */
@@ -1390,13 +1344,10 @@ nav ul.main-nav {
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-medium);
-}
+.product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-medium); }
 .product-card img {
     width: 100%;
-    height: 200px; 
+    height: 180px; /* Minskad höjd för att passa de smalare korten */
     object-fit: cover;
     display: block;
 }
@@ -1409,14 +1360,14 @@ nav ul.main-nav {
     flex-grow: 1;
 }
 .product-card-content h4 {
-    font-size: 1.05em;
+    font-size: 1em; /* Anpassad för den mindre storleken */
     font-weight: 600;
     margin-bottom: 5px;
-    line-height: 1.3;
-    min-height: 2.6em;
+    line-height: 1.4;
+    min-height: 2.8em; /* Plats för två rader */
 }
 .product-card-content .price {
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 700;
     color: var(--text-color);
     margin-bottom: 5px;
@@ -1444,7 +1395,7 @@ nav ul.main-nav {
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 0.8em; /* Anpassad för mindre knappar */
     transition: all 0.2s ease;
 }
 .product-card-buttons .details-btn {
@@ -1452,17 +1403,12 @@ nav ul.main-nav {
     color: var(--text-color);
     border-color: #ddd;
 }
-.product-card-buttons .details-btn:hover {
-    background-color: #e5e5e5;
-    border-color: #ccc;
-}
+.product-card-buttons .details-btn:hover { background-color: #e5e5e5; border-color: #ccc; }
 .product-card-buttons .add-to-cart-btn {
     background-color: var(--primary-color);
     color: #fff;
 }
-.product-card-buttons .add-to-cart-btn:hover {
-    background-color: #005bb5;
-}
+.product-card-buttons .add-to-cart-btn:hover { background-color: #005bb5; }
 
 /* =================================================================
    4. MODAL FÖR PRODUKTDETALJER
