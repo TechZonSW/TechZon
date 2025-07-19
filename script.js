@@ -982,6 +982,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- State ---
         let allProducts = [];
         let priceSlider = null;
+        let modalSwiper = null;
         let activeFilters = {
             kategori: [],
             marke: [],
@@ -1144,10 +1145,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL (ROBUST OCH KORRIGERAD VERSION) ---
+       // --- 4. MODAL (SLUTGILITG, FELSÄKER VERSION) ---
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
+        
+            // Förstör den gamla Swiper-instansen om den finns, för att undvika konflikter
+            if (modalSwiper) {
+                modalSwiper.destroy(true, true);
+                modalSwiper = null;
+            }
             
             // Säkra fallback-värden för alla fält
             const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/testbild.png'];
@@ -1156,8 +1163,8 @@ document.addEventListener('DOMContentLoaded', function() {
             modalBody.innerHTML = `
                 <div class="product-detail-layout">
                     <div class="product-detail-gallery">
-                        <!-- Swiper-containern måste ha en unik klass för varje modalöppning -->
-                        <div class="swiper modal-swiper">
+                        <!-- Swiper-containern -->
+                        <div class="swiper">
                             <div class="swiper-wrapper">
                                 ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                             </div>
@@ -1183,13 +1190,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             modal.style.display = 'flex';
             
-            // KORRIGERING: Använder setTimeout för att säkerställa att DOM är redo innan Swiper initieras.
             setTimeout(() => {
                 modal.style.opacity = 1;
                 modal.querySelector('.modal-content').style.transform = 'scale(1)';
                 
-                // Initiera Swiper-karusellen efter att modalen är synlig
-                new Swiper('.modal-swiper', {
+                // Initiera en NY Swiper-instans och spara den i vår globala variabel
+                modalSwiper = new Swiper('.swiper', {
                     loop: bilder.length > 1,
                     pagination: { el: '.swiper-pagination', clickable: true },
                     navigation: {
@@ -1197,9 +1203,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         prevEl: '.swiper-button-prev',
                     },
                 });
-            }, 10); // En minimal fördröjning räcker
+            }, 10);
         }
-    
+
         function closeModal() {
             modal.style.opacity = 0;
             modal.querySelector('.modal-content').style.transform = 'scale(0.95)';
