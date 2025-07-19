@@ -614,7 +614,7 @@ footer {
 .product-grid {
     display: grid;
     /* Justerat minmax för att tillåta tre kort per rad på större skärmar */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 30px;
 }
 
