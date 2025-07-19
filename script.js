@@ -964,4 +964,91 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchAndRenderRepairs('active');
         }
     }
+
+    // --------------------------------------------------------------------
+    // DEL 9: KOD FÖR E-HANDELSSIDAN (/kop.html)
+    // --------------------------------------------------------------------
+    const shopPage = document.getElementById('shop-page');
+    if (shopPage) {
+        // --- Referenser ---
+        const searchInput = document.getElementById('searchInput');
+        const filtersContainer = document.getElementById('filters-container');
+        const productGrid = document.getElementById('product-grid');
+        const noResultsMessage = document.getElementById('no-results-message');
+        const modal = document.getElementById('productModal');
+        const modalBody = document.getElementById('modalBody');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+    
+        // --- State ---
+        let allProducts = [];
+        let activeFilters = {
+            kategori: [],
+            marke: [],
+            typ: [],
+            price: { min: 0, max: 100000 }
+        };
+    
+        // --- Funktioner ---
+        
+        async function initializeShop() {
+            try {
+                // Hämta all data parallellt
+                const [newDevices, usedDevices, accessories] = await Promise.all([
+                    fetch('./nya-enheter.json').then(res => res.json()),
+                    fetch('./used-products.json').then(res => res.json()),
+                    fetch('./accessories.json').then(res => res.json())
+                ]);
+                
+                // Slå ihop all data och lägg till kategorier
+                allProducts = [
+                    ...newDevices.map(p => ({ ...p, kategori_slug: 'nytt' })),
+                    ...usedDevices.map(p => ({ ...p, kategori_slug: 'andrahand' })),
+                    ...accessories.map(p => ({ ...p, kategori_slug: 'tillbehor' }))
+                ];
+                
+                populateFilters();
+                parseUrlParams();
+                applyFiltersAndSearch();
+            } catch (error) {
+                console.error("Kunde inte ladda produkter:", error);
+                productGrid.innerHTML = '<p>Kunde inte ladda produkterna. Försök igen senare.</p>';
+            }
+        }
+    
+        function populateFilters() {
+            // ... (Logik för att skapa filter-HTML från `allProducts`)
+        }
+    
+        function parseUrlParams() {
+            // ... (Logik för att läsa URL och sätta `activeFilters`)
+        }
+    
+        function applyFiltersAndSearch() {
+            // ... (Huvudlogik för att filtrera `allProducts` baserat på `activeFilters` och sökterm)
+            // Anropa renderProducts(filtered) i slutet
+        }
+    
+        function renderProducts(products) {
+            // ... (Logik för att skapa produktkort och lägga till i `productGrid`)
+        }
+    
+        function openProductModal(productId) {
+            // ... (Logik för att hitta produkten och bygga modalens innehåll)
+            // Inklusive initiering av Swiper.js för bildgalleriet
+        }
+    
+        // --- Event Listeners ---
+        searchInput.addEventListener('input', applyFiltersAndSearch);
+        filtersContainer.addEventListener('change', (e) => {
+            // ... (Logik för att uppdatera `activeFilters` baserat på filter-interaktioner)
+            applyFiltersAndSearch();
+        });
+        closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+        
+        // --- Starta allt ---
+        initializeShop();
+    }
 });
