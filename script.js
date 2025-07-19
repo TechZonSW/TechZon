@@ -1145,10 +1145,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-       // --- 4. MODAL (SLUTGILITG, FELSÄKER VERSION) ---
+        // --- 4. MODAL (SLUTGILITG, FELSÄKER VERSION) ---
         function openProductModal(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            if (!product) return;
+            const product = allProducts.find(p => String(p.id) === String(productId));
+            if (!product) {
+                console.error("Kunde inte hitta produkt med ID:", productId);
+                return;
+            }
         
             // Förstör den gamla Swiper-instansen om den finns, för att undvika konflikter
             if (modalSwiper) {
@@ -1157,7 +1160,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Säkra fallback-värden för alla fält
-            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/testbild.png'];
+            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png']; // Använd en generell placeholder-bild
             const specifikationer = product.specifikationer || [];
         
             modalBody.innerHTML = `
@@ -1168,9 +1171,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="swiper-wrapper">
                                 ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
+                            <!-- Lägg till pagination och navigation endast om det finns mer än en bild -->
+                            ${bilder.length > 1 ? `
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            ` : ''}
                         </div>
                     </div>
                     <div class="product-detail-info">
@@ -1183,27 +1189,38 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ${specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
                             </ul>
                         ` : ''}
-                        <button class="add-to-cart-btn">Lägg i varukorg</button>
+                        <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
                     </div>
                 </div>
             `;
             
             modal.style.display = 'flex';
             
+            // Använd en liten fördröjning för att säkerställa att DOM är uppdaterat
             setTimeout(() => {
+                // Starta CSS-animationen för att tona in modalen
                 modal.style.opacity = 1;
                 modal.querySelector('.modal-content').style.transform = 'scale(1)';
                 
-                // Initiera en NY Swiper-instans och spara den i vår globala variabel
+                // Initiera en NY Swiper-instans EFTER att HTML är garanterat på plats
+                // Spara referensen i vår globala variabel för att kunna förstöra den senare
                 modalSwiper = new Swiper('.swiper', {
+                    // Aktivera loop endast om det finns mer än en bild att loopa igenom
                     loop: bilder.length > 1,
-                    pagination: { el: '.swiper-pagination', clickable: true },
+                    
+                    // Inställningar för pagination (prickarna)
+                    pagination: { 
+                        el: '.swiper-pagination', 
+                        clickable: true 
+                    },
+        
+                    // Inställningar för navigeringspilar
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
                     },
                 });
-            }, 10);
+            }, 10); // 10 millisekunder är tillräckligt för att webbläsaren ska hinna med
         }
 
         function closeModal() {
