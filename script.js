@@ -1145,99 +1145,81 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL (NY, CSS-FOKUSERAD METOD) ---
+// --- 4. MODAL (NY, FÖRENKLAD OCH DIREKT METOD) ---
 
-        // Håll koll på vilken modal-content som är aktiv
-        let activeModalContent = null;
+function openProductModal(productId) {
+    const product = allProducts.find(p => String(p.id) === String(productId));
+    if (!product) return;
 
-        function openProductModal(productId) {
-            const product = allProducts.find(p => String(p.id) === String(productId));
-            if (!product) return;
-        
-            // Förstör en gammal Swiper-instans
-            if (modalSwiper) {
-                modalSwiper.destroy(true, true);
-                modalSwiper = null;
-            }
-            
-            // Förbered data
-            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
-            const specifikationer = product.specifikationer || [];
-        
-            // Skapa det nya innehållet för modalen
-            const modalContentHTML = `
-                <div class="product-detail-layout">
-                    <div class="product-detail-gallery">
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
-                            </div>
-                            ${bilder.length > 1 ? `
-                                <div class="swiper-pagination"></div>
-                                <div class="swiper-button-prev"></div>
-                                <div class="swiper-button-next"></div>
-                            ` : ''}
-                        </div>
+    // Förstör alltid en gammal instans
+    if (modalSwiper) {
+        modalSwiper.destroy(true, true);
+        modalSwiper = null;
+    }
+    
+    // Förbered data
+    const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
+    
+    // Injicera HTML
+    modalBody.innerHTML = `
+        <div class="product-detail-layout">
+            <div class="product-detail-gallery">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                     </div>
-                    <div class="product-detail-info">
-                        <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
-                        <p class="price">${product.pris} kr</p>
-                        ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
-                        <p>${product.beskrivning || 'Detaljerad information kommer snart.'}</p>
-                        ${specifikationer.length > 0 ? `
-                            <ul class="product-detail-specs">
-                                ${specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
-                            </ul>` : ''}
-                        <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
-                    </div>
+                    ${bilder.length > 1 ? `
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    ` : ''}
                 </div>
-            `;
-            
-            modalBody.innerHTML = modalContentHTML;
-            modal.style.display = 'flex'; // Gör overlayen redo, men den är fortfarande osynlig (opacity: 0)
-        
-            // Funktion för att initiera Swiper, denna kommer att anropas när animationen är klar
-            function initializeSwiper() {
-                const swiperElement = modalBody.querySelector('.swiper');
-                if (swiperElement) {
-                    modalSwiper = new Swiper(swiperElement, {
-                        loop: bilder.length > 1,
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                    });
-                }
-                // Ta bort lyssnaren efter att den har körts en gång
-                activeModalContent.removeEventListener('transitionend', initializeSwiper);
-            }
-        
-            activeModalContent = modal.querySelector('.modal-content');
-        
-            // Lägg till en lyssnare som väntar på att CSS-animationen (transform) ska bli klar
-            activeModalContent.addEventListener('transitionend', initializeSwiper, { once: true });
-        
-            // Använd requestAnimationFrame för att säkerställa att `display: flex` har applicerats
-            // innan vi lägger till `visible`-klassen som startar animationen.
-            requestAnimationFrame(() => {
-                modal.classList.add('visible');
-            });
-        }
-        
-        function closeModal() {
-            modal.classList.remove('visible');
-            
-            // Använd en lyssnare för att veta när "tona ut"-animationen är klar
-            function handleTransitionEnd() {
-                modal.style.display = 'none'; // Dölj nu elementet helt
-                modal.removeEventListener('transitionend', handleTransitionEnd);
-                
-                if (modalSwiper) {
-                    modalSwiper.destroy(true, true);
-                    modalSwiper = null;
-                }
-            }
-            
-            modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
-        }
+            </div>
+            <div class="product-detail-info">
+                <!-- ... all din produktinfo-HTML här ... -->
+                <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
+                <p class="price">${product.pris} kr</p>
+                ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
+                <p>${product.beskrivning || 'Detaljerad information kommer snart.'}</p>
+                ${(product.specifikationer || []).length > 0 ? `
+                    <ul class="product-detail-specs">
+                        ${product.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
+                    </ul>` : ''}
+                <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
+            </div>
+        </div>
+    `;
+    
+    // Visa modalen
+    modal.style.display = 'flex';
+    // Starta CSS-animationen
+    requestAnimationFrame(() => {
+        modal.classList.add('visible');
+    });
+
+    // Initiera Swiper direkt på det specifika elementet.
+    // Detta är den mest avgörande delen. Vi ger den en referens till det
+    // faktiska DOM-elementet istället för en sträng.
+    const swiperElement = modalBody.querySelector('.swiper');
+    if (swiperElement) {
+        modalSwiper = new Swiper(swiperElement, {
+            loop: bilder.length > 1,
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
+    }
+}
+
+function closeModal() {
+    modal.classList.remove('visible');
+    
+    // Vi behöver en lyssnare här för att veta när vi ska sätta display:none
+    const handleTransitionEnd = () => {
+        modal.style.display = 'none';
+        modal.removeEventListener('transitionend', handleTransitionEnd);
+    };
+    modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
+}
         
         // --- 5. EVENT LISTENERS ---
         searchInput.addEventListener('input', applyFiltersAndSearch);
