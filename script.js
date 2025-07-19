@@ -970,7 +970,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------------------------
     const shopPage = document.getElementById('shop-page');
     if (shopPage) {
-        // --- Referenser ---
+        // --- Referenser till DOM-element ---
         const searchInput = document.getElementById('searchInput');
         const filtersContainer = document.getElementById('filters-container');
         const productGrid = document.getElementById('product-grid');
@@ -979,31 +979,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const modalBody = document.getElementById('modalBody');
         const closeModalBtn = document.getElementById('closeModalBtn');
     
-        // --- State ---
+        // --- State (Appens minne) ---
         let allProducts = [];
+        let priceSlider = null; // Håller referens till slider-instansen
         let activeFilters = {
             kategori: [],
             marke: [],
             typ: [],
-            price: { min: 0, max: 100000 }
+            price: { min: 0, max: 20000 } // Sätt ett rimligt startvärde
         };
     
-        // --- Funktioner ---
-        
+        // --- 1. INITIALISERING ---
         async function initializeShop() {
             try {
-                // Hämta all data parallellt
-                const [newDevices, usedDevices, accessories] = await Promise.all([
-                    fetch('./nya-enheter.json').then(res => res.json()),
-                    fetch('./used-products.json').then(res => res.json()),
-                    fetch('./accessories.json').then(res => res.json())
+                const [newDevicesRes, usedDevicesRes, accessoriesRes] = await Promise.all([
+                    fetch('./nya-enheter.json'),
+                    fetch('./used-products.json'),
+                    fetch('./accessories.json')
                 ]);
                 
-                // Slå ihop all data och lägg till kategorier
+                const newDevices = await newDevicesRes.json();
+                const usedDevices = await usedDevicesRes.json();
+                const accessories = await accessoriesRes.json();
+                
+                // Slå ihop all data, normalisera den och ge varje produkt ett unikt ID.
                 allProducts = [
-                    ...newDevices.map(p => ({ ...p, kategori_slug: 'nytt' })),
-                    ...usedDevices.map(p => ({ ...p, kategori_slug: 'andrahand' })),
-                    ...accessories.map(p => ({ ...p, kategori_slug: 'tillbehor' }))
+                    ...newDevices.map((p, i) => ({ ...p, id: `new-${i}`, kategori_slug: 'nytt' })),
+                    ...usedDevices.map((p, i) => ({ ...p, id: `used-${i}`, kategori_slug: 'andrahand' })),
+                    ...accessories.map((p, i) => ({ ...p, id: `acc-${i}`, kategori_slug: 'tillbehor' }))
                 ];
                 
                 populateFilters();
@@ -1011,41 +1014,227 @@ document.addEventListener('DOMContentLoaded', function() {
                 applyFiltersAndSearch();
             } catch (error) {
                 console.error("Kunde inte ladda produkter:", error);
-                productGrid.innerHTML = '<p>Kunde inte ladda produkterna. Försök igen senare.</p>';
+                productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter. Försök igen senare.</p>';
             }
         }
     
+        // --- 2. FILTERS ---
         function populateFilters() {
-            // ... (Logik för att skapa filter-HTML från `allProducts`)
-        }
+            const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
+            const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
+            const typer = [...new Set(allProducts.map(p => p.typ).filter(Boolean))];
     
+            filtersContainer.innerHTML = `
+                <div class="filter-group">
+                    <h4>Kategori</h4>
+                    <div class="filter-options">
+                        ${Object.entries(kategorier).map(([slug, name]) => `
+                            <label><input type="checkbox" data-filter="kategori" value="${slug}"> ${name}</label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Märke</h4>
+                    <div class="filter-options">
+                        ${marken.map(m => `
+                            <label><input type="checkbox" data-filter="marke" value="${m}"> ${m}</label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Produkttyp</h4>
+                    <div class="filter-options">
+                        ${typer.map(t => `
+                            <label><input type="checkbox" data-filter="typ" value="${t}"> ${t}</label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Pris</h4>
+                    <div id="price-slider"></div>
+                    <div id="price-values">
+                        <span id="min-price"></span>
+                        <span id="max-price"></span>
+                    </div>
+                </div>
+            `;
+    
+            // Initiera pris-slider
+            const priceSliderElement = document.getElementById('price-slider');
+            const minPriceLabel = document.getElementById('min-price');
+            const maxPriceLabel = document.getElementById('max-price');
+    
+            priceSlider = noUiSlider.create(priceSliderElement, {
+                start: [0, 20000],
+                connect: true,
+                range: { min: 0, max: 20000 },
+                step: 100,
+                format: {
+                    to: value => Math.round(value) + ' kr',
+                    from: value => Number(value.replace(' kr', ''))
+                }
+            });
+            
+            priceSlider.on('update', ([min, max]) => {
+                minPriceLabel.textContent = min;
+                maxPriceLabel.textContent = max;
+            });
+    
+            priceSlider.on('change', ([min, max]) => {
+                activeFilters.price.min = Number(min.replace(' kr', ''));
+                activeFilters.price.max = Number(max.replace(' kr', ''));
+                applyFiltersAndSearch();
+            });
+        }
+        
         function parseUrlParams() {
-            // ... (Logik för att läsa URL och sätta `activeFilters`)
+            const params = new URLSearchParams(window.location.search);
+            params.forEach((value, key) => {
+                if (activeFilters[key] !== undefined) {
+                    const values = value.split(',');
+                    activeFilters[key] = values;
+                    
+                    // Förifyll checkboxar
+                    values.forEach(val => {
+                        const checkbox = document.querySelector(`input[data-filter="${key}"][value="${val}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            });
         }
     
         function applyFiltersAndSearch() {
-            // ... (Huvudlogik för att filtrera `allProducts` baserat på `activeFilters` och sökterm)
-            // Anropa renderProducts(filtered) i slutet
-        }
+            const searchTerm = searchInput.value.toLowerCase();
     
+            const filteredProducts = allProducts.filter(p => {
+                // Sökfilter
+                const matchesSearch = !searchTerm || 
+                                      (p.namn && p.namn.toLowerCase().includes(searchTerm)) ||
+                                      (p.marke && p.marke.toLowerCase().includes(searchTerm)) ||
+                                      (p.typ && p.typ.toLowerCase().includes(searchTerm));
+    
+                // Checkbox-filter
+                const matchesKategori = activeFilters.kategori.length === 0 || activeFilters.kategori.includes(p.kategori_slug);
+                const matchesMarke = activeFilters.marke.length === 0 || activeFilters.marke.includes(p.marke);
+                const matchesTyp = activeFilters.typ.length === 0 || activeFilters.typ.includes(p.typ);
+    
+                // Pris-filter
+                const matchesPrice = p.pris >= activeFilters.price.min && p.pris <= activeFilters.price.max;
+                
+                return matchesSearch && matchesKategori && matchesMarke && matchesTyp && matchesPrice;
+            });
+            
+            renderProducts(filteredProducts);
+        }
+        
+        // --- 3. RENDERING ---
         function renderProducts(products) {
-            // ... (Logik för att skapa produktkort och lägga till i `productGrid`)
+            productGrid.innerHTML = '';
+            noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
+    
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.dataset.id = p.id;
+                card.innerHTML = `
+                    <img src="${p.bilder ? p.bilder[0] : (p.BildURL || 'bilder/testbild.png')}" alt="${p.namn || p.Namn}">
+                    <div class="product-card-content">
+                        <h4>${p.marke ? `${p.marke} ${p.namn || p.Namn}` : (p.namn || p.Namn)}</h4>
+                        <p class="price">${p.pris || p.Pris} kr</p>
+                        ${p.delbetalning_mojlig ? `<p class="price-installment">${p.delbetalning_pris}</p>` : ''}
+                        <button class="add-to-cart-btn">Lägg i varukorg</button>
+                    </div>
+                `;
+                // Lägg till event listener för att öppna modalen på kortet (men inte på knappen)
+                card.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('add-to-cart-btn')) {
+                        openProductModal(p.id);
+                    }
+                });
+                productGrid.appendChild(card);
+            });
         }
     
+        // --- 4. MODAL ---
         function openProductModal(productId) {
-            // ... (Logik för att hitta produkten och bygga modalens innehåll)
-            // Inklusive initiering av Swiper.js för bildgalleriet
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            modalBody.innerHTML = `
+                <div class="product-detail-layout">
+                    <div class="product-detail-gallery">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                ${(product.bilder || [product.BildURL || 'bilder/testbild.png']).map(img => `
+                                    <div class="swiper-slide"><img src="${img}" alt="${product.namn || product.Namn}"></div>
+                                `).join('')}
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <h2>${product.marke ? `${product.marke} ${product.namn || product.Namn}` : (product.namn || product.Namn)}</h2>
+                        <p class="price">${product.pris || product.Pris} kr</p>
+                        ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
+                        <p>${product.beskrivning || product.Beskrivning || ''}</p>
+                        ${product.specifikationer ? `
+                            <ul class="product-detail-specs">
+                                ${product.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        <button class="add-to-cart-btn">Lägg i varukorg</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            // En liten fördröjning för att CSS-animationen ska fungera
+            setTimeout(() => {
+                modal.style.opacity = 1;
+                modal.querySelector('.modal-content').style.transform = 'scale(1)';
+            }, 10);
+            
+            // Initiera Swiper-karusellen
+            new Swiper('.swiper', {
+                loop: true,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
         }
     
-        // --- Event Listeners ---
+        function closeModal() {
+            modal.style.opacity = 0;
+            modal.querySelector('.modal-content').style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300); // Vänta tills CSS-animationen är klar
+        }
+    
+        // --- 5. EVENT LISTENERS ---
         searchInput.addEventListener('input', applyFiltersAndSearch);
+    
         filtersContainer.addEventListener('change', (e) => {
-            // ... (Logik för att uppdatera `activeFilters` baserat på filter-interaktioner)
-            applyFiltersAndSearch();
+            if (e.target.type === 'checkbox') {
+                const filterType = e.target.dataset.filter;
+                const value = e.target.value;
+                
+                if (e.target.checked) {
+                    activeFilters[filterType].push(value);
+                } else {
+                    activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
+                }
+                applyFiltersAndSearch();
+            }
         });
-        closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+    
+        closeModalBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.style.display = 'none';
+            if (e.target === modal) closeModal();
         });
         
         // --- Starta allt ---
