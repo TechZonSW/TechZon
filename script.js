@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 9: KOD FÖR E-HANDELSSIDAN (/kop.html) - KORRIGERAD VERSION 2
+    // DEL 9: KOD FÖR E-HANDELSSIDAN (/kop.html) - SLUTGILTIG VERSION
     // --------------------------------------------------------------------
     const shopPage = document.getElementById('shop-page');
     if (shopPage) {
@@ -992,16 +992,25 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- 1. INITIALISERING ---
         async function initializeShop() {
             try {
-                const [newDevices, usedDevices, accessories] = await Promise.all([
-                    fetch('./nya-enheter.json').then(res => res.json()),
-                    fetch('./used-products.json').then(res => res.json()),
-                    fetch('./accessories.json').then(res => res.json())
+                const [newDevicesRes, usedDevicesRes, accessoriesRes] = await Promise.all([
+                    fetch('./nya-enheter.json'),
+                    fetch('./used-products.json'),
+                    fetch('./accessories.json')
                 ]);
                 
+                if (!newDevicesRes.ok || !usedDevicesRes.ok || !accessoriesRes.ok) {
+                    throw new Error('En eller flera produktfiler kunde inte laddas.');
+                }
+                
+                const newDevices = await newDevicesRes.json();
+                const usedDevices = await usedDevicesRes.json();
+                const accessories = await accessoriesRes.json();
+                
+                // Standardisera all data till ett gemensamt format
                 allProducts = [
-                    ...newDevices.map((p, i) => ({ ...p, id: `new-${i}`, kategori_slug: 'nytt', bild: (p.bilder && p.bilder[0]) || 'bilder/testbild.png' })),
-                    ...usedDevices.map((p, i) => ({ ...p, id: `used-${i}`, kategori_slug: 'andrahand', bild: p.BildURL || 'bilder/testbild.png', namn: p.Namn, pris: p.Pris })),
-                    ...accessories.map((p, i) => ({ ...p, id: `acc-${i}`, kategori_slug: 'tillbehor', bild: p.BildURL || 'bilder/testbild.png', namn: p.Namn, pris: p.Pris }))
+                    ...newDevices,
+                    ...usedDevices,
+                    ...accessories
                 ];
                 
                 populateFilters();
@@ -1009,11 +1018,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 applyFiltersAndSearch();
             } catch (error) {
                 console.error("Kunde inte ladda produkter:", error);
-                productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter.</p>';
+                productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter. Försök igen senare.</p>';
             }
         }
     
-        // --- 2. FILTERS ---
+        // --- 2. FILTERS (Oförändrad logik, men kommer nu hantera standardiserad data) ---
         function populateFilters() {
             const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
             const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
@@ -1040,7 +1049,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h4>Produkttyp</h4>
                     <div class="filter-options">
                         ${typer.map(t => `
-                            <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase().replace('telefon','mobil')}"> ${t}</label>
+                            <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase()}"> ${t}</label>
                         `).join('')}
                     </div>
                 </div>
@@ -1050,28 +1059,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
                 </div>
             `;
-
-            // Initiera pris-slider
+            
             const priceSliderElement = document.getElementById('price-slider');
             const minPriceLabel = document.getElementById('min-price');
             const maxPriceLabel = document.getElementById('max-price');
     
             priceSlider = noUiSlider.create(priceSliderElement, {
-                start: [0, 20000],
-                connect: true,
-                range: { min: 0, max: 20000 },
-                step: 100,
-                format: {
-                    to: value => Math.round(value) + ' kr',
-                    from: value => Number(value.replace(' kr', ''))
-                }
+                start: [0, 20000], connect: true, range: { min: 0, max: 20000 }, step: 100,
+                format: { to: value => Math.round(value) + ' kr', from: value => Number(value.replace(' kr', '')) }
             });
             
-            priceSlider.on('update', ([min, max]) => {
-                minPriceLabel.textContent = min;
-                maxPriceLabel.textContent = max;
-            });
-    
+            priceSlider.on('update', ([min, max]) => { minPriceLabel.textContent = min; maxPriceLabel.textContent = max; });
             priceSlider.on('change', ([min, max]) => {
                 activeFilters.price.min = Number(min.replace(' kr', ''));
                 activeFilters.price.max = Number(max.replace(' kr', ''));
@@ -1079,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        function parseUrlParams() {
+         function parseUrlParams() {
             const params = new URLSearchParams(window.location.search);
             params.forEach((value, key) => {
                 if (activeFilters[key] !== undefined) {
@@ -1131,14 +1129,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${p.bild}" alt="${p.namn}">
+                    <img src="${p.bilder[0]}" alt="${p.namn}">
                     <div class="product-card-content">
                         <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
                         <p class="price">${p.pris} kr</p>
                         ${p.delbetalning_mojlig ? `<p class="price-installment">${p.delbetalning_pris}</p>` : ''}
                         <div class="product-card-buttons">
                             <button class="details-btn" data-id="${p.id}">Se detaljer</button>
-                            <!-- KORRIGERING: Ändrad knapptext -->
                             <button class="add-to-cart-btn" data-id="${p.id}">Lägg i korg</button>
                         </div>
                     </div>
@@ -1147,13 +1144,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL ---
+        // --- 4. MODAL (ROBUST VERSION) ---
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
             
-            // KORRIGERING: Använder fallback-värden för att förhindra fel
-            const bilder = product.bilder || [product.bild];
+            // Säkra fallback-värden för alla fält
+            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/testbild.png'];
             const specifikationer = product.specifikationer || [];
     
             modalBody.innerHTML = `
@@ -1170,7 +1167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
                         <p class="price">${product.pris} kr</p>
                         ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
-                        <p>${product.beskrivning || 'Mer information kommer snart.'}</p>
+                        <p>${product.beskrivning || 'Detaljerad information för denna produkt kommer snart.'}</p>
                         ${specifikationer.length > 0 ? `
                             <ul class="product-detail-specs">
                                 ${specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
@@ -1184,23 +1181,17 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'flex';
             setTimeout(() => { modal.style.opacity = 1; modal.querySelector('.modal-content').style.transform = 'scale(1)'; }, 10);
             
-            // Initiera Swiper-karusellen
             new Swiper('.swiper', {
-                loop: true,
+                loop: bilder.length > 1, // Aktivera bara loop om det finns mer än en bild
                 pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             });
         }
     
         function closeModal() {
             modal.style.opacity = 0;
             modal.querySelector('.modal-content').style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300); // Vänta tills CSS-animationen är klar
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
     
         // --- 5. EVENT LISTENERS ---
