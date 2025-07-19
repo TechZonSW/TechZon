@@ -1,50 +1,36 @@
 [
-    {
-        "Enhetstyp":"Mobil",
-        "Kategori":"Skal & Skydd",
-        "Namn":"Silikonskal för iPhone 15",
-        "Pris":299,
-        "Beskrivning":"Ett mjukt och greppvänligt skal.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Mobil",
-        "Kategori":"Skal & Skydd",
-        "Namn":"PanzerGlass Skärmskydd",
-        "Pris":349,
-        "Beskrivning":"Härdat glas som skyddar din skärm.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Mobil",
-        "Kategori":"Laddare & Kablar",
-        "Namn":"USB-C 20W Laddare",
-        "Pris":249,
-        "Beskrivning":"Snabb och effektiv laddning.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Dator",
-        "Kategori":"Laddare & Kablar",
-        "Namn":"MacBook Pro 96W Laddare",
-        "Pris":899,
-        "Beskrivning":"Kraftfull laddare för din MacBook.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Dator",
-        "Kategori":"Väskor & Fodral",
-        "Namn":"Laptop Sleeve 14\"",
-        "Pris":399,
-        "Beskrivning":"Skyddande fodral med mjuk insida.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Audio",
-        "Kategori":"Övrigt",
-        "Namn":"AirPods Pro Fodral",
-        "Pris":199,
-        "Beskrivning":"Skyddande fodral i silikon.",
-        "BildURL":"bilder\/testbild.png"
-    }
+  {
+    "id": "acc-001",
+    "kategori_slug": "tillbehor",
+    "marke": "TechZon Basics",
+    "typ": "Skal",
+    "namn": "Silikonskal för iPhone 15",
+    "pris": 299,
+    "delbetalning_mojlig": false,
+    "delbetalning_pris": null,
+    "beskrivning": "Ett mjukt och greppvänligt skal som skyddar din iPhone mot vardagliga stötar och repor utan att addera onödig bulk.",
+    "bilder": ["bilder/testbild.png"],
+    "specifikationer": [
+      { "label": "Material", "value": "Flexibelt silikon" },
+      { "label": "Kompatibilitet", "value": "iPhone 15, iPhone 15 Pro" },
+      { "label": "Färg", "value": "Svart" }
+    ]
+  },
+  {
+    "id": "acc-002",
+    "kategori_slug": "tillbehor",
+    "marke": "Apple",
+    "typ": "Laddare",
+    "namn": "USB-C 20W Strömadapter",
+    "pris": 249,
+    "delbetalning_mojlig": false,
+    "delbetalning_pris": null,
+    "beskrivning": "Apples 20W USB-C strömadapter ger snabb och effektiv laddning hemma, på kontoret eller på resan. Perfekt för snabbladdning av iPhone och iPad.",
+    "bilder": ["bilder/testbild.png"],
+    "specifikationer": [
+      { "label": "Effekt", "value": "20 Watt" },
+      { "label": "Anslutning", "value": "USB-C" },
+      { "label": "Certifiering", "value": "Original Apple" }
+    ]
+  }
 ]
