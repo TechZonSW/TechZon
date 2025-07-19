@@ -1258,7 +1258,11 @@ hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
     .view-header { flex-direction: column; align-items: flex-start; gap: 15px; }
 }
 
-/* --- NYA STILAR FÖR /KOP.HTML OCH E-HANDEL --- */
+/* --- NYA STILAR FÖR /KOP.HTML OCH E-HANDEL (OMORGANISERAD) --- */
+
+/* =================================================================
+   1. HEADER & NAVIGATION
+   ================================================================= */
 
 /* Dropdown-meny i headern */
 nav ul.main-nav {
@@ -1277,7 +1281,6 @@ nav ul.main-nav {
     min-width: 220px;
     box-shadow: var(--shadow-medium);
     border-radius: var(--border-radius);
-    /* PADDING istället för MARGIN för att undvika hovrings-glipa */
     padding: 15px 0; 
     opacity: 0;
     transform: translateY(-10px);
@@ -1304,6 +1307,10 @@ nav ul.main-nav {
     border-top: 1px solid #eee;
     margin: 8px 0;
 }
+
+/* =================================================================
+   2. SIDLAYOUT & FILTER
+   ================================================================= */
 
 /* Sökfält */
 .search-bar-container {
@@ -1357,60 +1364,110 @@ nav ul.main-nav {
     align-items: center;
     gap: 10px;
 }
+
 /* Pris-slider */
 #price-slider { margin: 20px 5px 30px; }
 #price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
 
-/* Produktkort (utökad) */
-.product-card .price-installment {
-    font-size: 0.85em;
-    color: var(--text-color-secondary);
-    text-align: right;
-    margin-top: -10px;
-    margin-bottom: 15px;
-}
-.product-card .add-to-cart-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background-color: var(--primary-color);
-    color: #fff;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    cursor: pointer;
+/* =================================================================
+   3. PRODUKT-GRID & KORT
+   ================================================================= */
+
+/* Grid-layout (justerad för 3 kolumner) */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
 }
 
-/* --- NYA KNAPPAR FÖR PRODUKTKORT --- */
+/* Produktkortens huvudcontainer */
+.product-card {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+.product-card img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
+    display: block;
+}
+
+/* Innehållet i produktkorten */
+.product-card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.product-card-content h4 {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 5px;
+    line-height: 1.3;
+    min-height: 2.6em;
+}
+.product-card-content .price {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    text-align: left;
+}
+.product-card .price-installment {
+    font-size: 0.8em;
+    color: var(--text-color-secondary);
+    text-align: left;
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
+
+/* Knapparna i produktkorten */
 .product-card-buttons {
-    margin-top: auto; /* Trycker ner knapparna i botten av kortet */
+    margin-top: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 .product-card-buttons button {
     width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: var(--border-radius);
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s ease;
+    font-size: 0.85em;
+    transition: all 0.2s ease;
 }
 .product-card-buttons .details-btn {
     background-color: var(--section-bg-light);
     color: var(--text-color);
-    border: 1px solid #ddd;
+    border-color: #ddd;
 }
 .product-card-buttons .details-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #e5e5e5;
+    border-color: #ccc;
 }
 .product-card-buttons .add-to-cart-btn {
     background-color: var(--primary-color);
     color: #fff;
 }
+.product-card-buttons .add-to-cart-btn:hover {
+    background-color: #005bb5;
+}
 
-/* Modal för produktdetaljer */
+/* =================================================================
+   4. MODAL FÖR PRODUKTDETALJER
+   ================================================================= */
+
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
