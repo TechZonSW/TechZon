@@ -1,52 +1,38 @@
 [
-    {
-        "Enhetstyp":"Mobil",
-        "Namn":"iPhone 14 Pro",
-        "Pris":9500,
-        "Skick":"Nyskick",
-        "Färg":"Rymdsvart",
-        "Lagring":"128 GB",
-        "Beskrivning":"Inga repor, batterihälsa 100%. Inkluderar kartong.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Mobil",
-        "Namn":"iPhone 13",
-        "Pris":6200,
-        "Skick":"Mycket bra skick",
-        "Färg":"Blå",
-        "Lagring":"128 GB",
-        "Beskrivning":"Endast mikroskopiska spår av användning. Batterihälsa 92%.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Dator",
-        "Namn":"MacBook Air M1",
-        "Pris":8500,
-        "Skick":"Mycket bra skick",
-        "Färg":"Silver",
-        "Lagring":"256 GB",
-        "Beskrivning":"Fullt funktionstestad med garanti. Perfekt för studier.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Surfplatta",
-        "Namn":"iPad Air 4",
-        "Pris":4800,
-        "Skick":"Bra skick",
-        "Färg":"Rymdgrå",
-        "Lagring":"64 GB",
-        "Beskrivning":"Mindre repa på baksidan, skärmen är felfri. Fullt funktionell.",
-        "BildURL":"bilder\/testbild.png"
-    },
-    {
-        "Enhetstyp":"Mobil",
-        "Namn":"Samsung S22",
-        "Pris":5500,
-        "Skick":"Mycket bra skick",
-        "Färg":"Svart",
-        "Lagring":"128 GB",
-        "Beskrivning":"Utmärkt skick, levereras med laddare och garanti.",
-        "BildURL":"bilder\/testbild.png"
-    }
+  {
+    "id": "used-001",
+    "kategori_slug": "andrahand",
+    "marke": "Apple",
+    "typ": "Mobiltelefon",
+    "namn": "iPhone 14 Pro",
+    "pris": 9500,
+    "delbetalning_mojlig": true,
+    "delbetalning_pris": "från 396 kr/mån",
+    "beskrivning": "Denna enhet är i nyskick utan repor och har 100% batterihälsa. Enheten är fullt testad, olåst och fungerar som ny. Originalkartong medföljer.",
+    "bilder": ["bilder/testbild.png"],
+    "specifikationer": [
+      { "label": "Skick", "value": "Nyskick" },
+      { "label": "Färg", "value": "Rymdsvart" },
+      { "label": "Lagring", "value": "128 GB" },
+      { "label": "Garanti", "value": "12 månader" }
+    ]
+  },
+  {
+    "id": "used-002",
+    "kategori_slug": "andrahand",
+    "marke": "Apple",
+    "typ": "Dator",
+    "namn": "MacBook Air M1",
+    "pris": 8500,
+    "delbetalning_mojlig": true,
+    "delbetalning_pris": "från 354 kr/mån",
+    "beskrivning": "En kraftfull och lätt laptop i mycket bra skick, perfekt för studier eller arbete. Fullt funktionstestad av våra certifierade tekniker.",
+    "bilder": ["bilder/testbild.png"],
+    "specifikationer": [
+      { "label": "Skick", "value": "Mycket bra skick" },
+      { "label": "Färg", "value": "Silver" },
+      { "label": "Lagring", "value": "256 GB SSD" },
+      { "label": "Garanti", "value": "12 månader" }
+    ]
+  }
 ]
