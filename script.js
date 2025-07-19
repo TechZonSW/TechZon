@@ -1145,22 +1145,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-// --- 4. MODAL (NY, FÖRENKLAD OCH DIREKT METOD) ---
+// --- 4. MODAL (SLUTGILTIG, KORRIGERAD CSS-FOKUSERAD METOD) ---
+
+// Håll koll på den aktiva modalens innehålls-element
+let activeModalContent = null;
 
 function openProductModal(productId) {
     const product = allProducts.find(p => String(p.id) === String(productId));
     if (!product) return;
 
-    // Förstör alltid en gammal instans
+    // Förstör en gammal Swiper-instans för att undvika minnesläckor
     if (modalSwiper) {
         modalSwiper.destroy(true, true);
         modalSwiper = null;
     }
     
-    // Förbered data
+    // Förbered data med säkra fallbacks
     const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
     
-    // Injicera HTML
+    // Injicera HTML-innehållet i modal-kroppen
     modalBody.innerHTML = `
         <div class="product-detail-layout">
             <div class="product-detail-gallery">
@@ -1176,7 +1179,6 @@ function openProductModal(productId) {
                 </div>
             </div>
             <div class="product-detail-info">
-                <!-- ... all din produktinfo-HTML här ... -->
                 <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
                 <p class="price">${product.pris} kr</p>
                 ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
@@ -1190,34 +1192,59 @@ function openProductModal(productId) {
         </div>
     `;
     
-    // Visa modalen
+    // Gör modalens overlay redo att visas
     modal.style.display = 'flex';
-    // Starta CSS-animationen
+
+    // Funktion som startar Swiper
+    function initializeSwiper() {
+        const swiperElement = modalBody.querySelector('.swiper');
+        if (swiperElement) {
+            modalSwiper = new Swiper(swiperElement, {
+                loop: bilder.length > 1,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            });
+            
+            // DEN AVGÖRANDE KORRIGERINGEN:
+            // Tvinga Swiper att uppdatera sina dimensioner och slides
+            // efter att animationen är klar.
+            setTimeout(() => {
+                if (modalSwiper) {
+                    modalSwiper.update();
+                }
+            }, 10); // En minimal fördröjning räcker
+        }
+        
+        // Ta bort lyssnaren så den inte körs igen av misstag
+        activeModalContent.removeEventListener('transitionend', initializeSwiper);
+    }
+
+    activeModalContent = modal.querySelector('.modal-content');
+
+    // Lyssnar på när CSS-animationen (transform) är färdig
+    activeModalContent.addEventListener('transitionend', initializeSwiper, { once: true });
+
+    // Starta "tona in"-animationen
     requestAnimationFrame(() => {
         modal.classList.add('visible');
     });
-
-    // Initiera Swiper direkt på det specifika elementet.
-    // Detta är den mest avgörande delen. Vi ger den en referens till det
-    // faktiska DOM-elementet istället för en sträng.
-    const swiperElement = modalBody.querySelector('.swiper');
-    if (swiperElement) {
-        modalSwiper = new Swiper(swiperElement, {
-            loop: bilder.length > 1,
-            pagination: { el: '.swiper-pagination', clickable: true },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        });
-    }
 }
 
 function closeModal() {
     modal.classList.remove('visible');
     
-    // Vi behöver en lyssnare här för att veta när vi ska sätta display:none
-    const handleTransitionEnd = () => {
+    // Lyssnar på när "tona ut"-animationen är färdig
+    function handleTransitionEnd() {
         modal.style.display = 'none';
         modal.removeEventListener('transitionend', handleTransitionEnd);
-    };
+        
+        // Förstör Swiper-instansen helt när modalen är borta
+        if (modalSwiper) {
+            modalSwiper.destroy(true, true);
+            modalSwiper = null;
+        }
+    }
+    
     modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
 }
         
