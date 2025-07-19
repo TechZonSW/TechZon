@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Köp Produkter - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Bibliotek för bildkarusell och prisslider -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css"/>
+</head>
+<body>
+    <header>
+        <!-- Den nya, uppdaterade headern med dropdown -->
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container small-container">
+                <h1>Utforska vårt utvalda sortiment</h1>
+                <p class="page-intro">Hitta den perfekta enheten för dig, oavsett om du letar efter det senaste, ett hållbart andrahandsval eller smarta tillbehör.</p>
+                <div class="search-bar-container">
+                    <input type="text" id="searchInput" placeholder="Sök efter produkter (t.ex. iPhone 15, skärmskydd)...">
+                    <i class="ph ph-magnifying-glass"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="shop-page" class="content-section">
+            <div class="container shop-layout">
+                <!-- Vänsterkolumn: Filter -->
+                <aside class="filter-panel">
+                    <h3>Filter</h3>
+                    <div id="filters-container">
+                        <!-- Filter fylls på här av JS -->
+                    </div>
+                </aside>
+
+                <!-- Högerkolumn: Produkter -->
+                <div class="product-listing">
+                    <div id="product-grid" class="product-grid">
+                        <!-- Produkter renderas här av JS -->
+                    </div>
+                    <div id="loading-indicator" style="display: none;">Laddar...</div>
+                    <p id="no-results-message" style="display: none;">Inga produkter matchade din sökning.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal/Popup för produktdetaljer -->
+    <div id="productModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="closeModalBtn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
+            <div id="modalBody">
+                <!-- Innehållet fylls på här av JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Den vanliga sidfoten här -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
