@@ -1411,20 +1411,30 @@ nav ul.main-nav { display: flex; align-items: center; }
 .product-card-buttons .add-to-cart-btn:hover { background-color: #005bb5; }
 
 /* =================================================================
-   4. MODAL FÖR PRODUKTDETALJER
+   4. MODAL FÖR PRODUKTDETALJER (UPPDATERAD OCH ROBUST VERSION)
    ================================================================= */
 
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.6);
-    display: flex;
+    display: flex; /* Ska alltid vara flex för att kunna centrera */
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    
+    /* Dölj med opacity och visibility istället för display:none */
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+/* Denna klass styr när modalen är synlig */
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
 .modal-content {
     background-color: #fff;
     border-radius: var(--border-radius);
@@ -1434,24 +1444,61 @@ nav ul.main-nav { display: flex; align-items: center; }
     overflow-y: auto;
     position: relative;
     padding: 40px;
+
+    /* Startposition för animationen */
     transform: scale(0.95);
     transition: transform 0.3s ease;
 }
+
+/* När modalen är synlig, animera innehållet till sin slutposition */
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
 .modal-close-btn {
     position: absolute;
     top: 20px; right: 20px;
     background: none; border: none; font-size: 1.8em; cursor: pointer;
+    color: #888;
+    transition: color 0.2s ease;
 }
+.modal-close-btn:hover {
+    color: #000;
+}
+
 .product-detail-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
 }
+.product-detail-gallery .swiper {
+    /* Viktigt att ge Swiper en definierad bredd */
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: hidden; /* Döljer pilar utanför om det behövs */
+}
 .product-detail-gallery .swiper-slide {
     background-color: var(--section-bg-light);
-    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.product-detail-gallery img { width: 100%; }
+.product-detail-gallery img { 
+    width: 100%; 
+    height: auto;
+    object-fit: contain;
+}
+
+/* Stilar för Swiper-knappar och pagination kan behövas här */
+/* Exempel: */
+.swiper-button-next, .swiper-button-prev {
+    color: var(--primary-color);
+}
+.swiper-pagination-bullet-active {
+    background: var(--primary-color);
+}
+
+
 .product-detail-info h2 { font-size: 2em; }
 .product-detail-specs {
     list-style: none;
@@ -1481,4 +1528,18 @@ nav ul.main-nav { display: flex; align-items: center; }
 .product-detail-info .add-to-cart-btn:hover {
     background-color: #005bb5;
     transform: scale(1.05);
+}
+
+/* Responsivitet för modalen */
+@media (max-width: 768px) {
+    .product-detail-layout {
+        grid-template-columns: 1fr; /* Stapla på mindre skärmar */
+    }
+    .modal-content {
+        padding: 20px;
+    }
+    .modal-close-btn {
+        top: 10px;
+        right: 10px;
+    }
 }
