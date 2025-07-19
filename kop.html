@@ -13,7 +13,32 @@
 </head>
 <body>
     <header>
-        <!-- Den nya, uppdaterade headern med dropdown -->
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Kalmar Logotyp" class="logo-img">
+                <span>TechZon Kalmar</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Hem</a></li>
+                    <li><a href="reparation.html">Reparation</a></li>
+                    <li class="dropdown active">
+                    <a href="kop.html" id="shopLink">Köp <i class="ph ph-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="kop.html?kategori=nytt&marke=apple&typ=mobil">iPhone</a>
+                            <a href="kop.html?kategori=nytt&marke=apple&typ=laptop">MacBook</a>
+                            <a href="kop.html?kategori=nytt&marke=samsung">Samsung</a>
+                            <hr>
+                            <a href="kop.html?kategori=andrahand">Andrahands Enheter</a>
+                            <a href="kop.html?kategori=tillbehor">Tillbehör</a>
+                        </div>
+                    </li>
+                    <li><a href="priser.html">Priser</a></li>
+                    <li><a href="vardering.html">Värdering</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main>
