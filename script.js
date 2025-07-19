@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-    // DEL 9: KOD FÖR E-HANDELSSIDAN (/kop.html) - KORRIGERAD VERSION
+    // DEL 9: KOD FÖR E-HANDELSSIDAN (/kop.html) - KORRIGERAD VERSION 2
     // --------------------------------------------------------------------
     const shopPage = document.getElementById('shop-page');
     if (shopPage) {
@@ -1012,7 +1012,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter.</p>';
             }
         }
-
+    
         // --- 2. FILTERS ---
         function populateFilters() {
             const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h4>Märke</h4>
                     <div class="filter-options">
                         ${marken.map(m => `
-                            <label><input type="checkbox" data-filter="marke" value="${m}"> ${m}</label>
+                            <label><input type="checkbox" data-filter="marke" value="${m.toLowerCase()}"> ${m}</label>
                         `).join('')}
                     </div>
                 </div>
@@ -1040,20 +1040,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h4>Produkttyp</h4>
                     <div class="filter-options">
                         ${typer.map(t => `
-                            <label><input type="checkbox" data-filter="typ" value="${t}"> ${t}</label>
+                            <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase().replace('telefon','mobil')}"> ${t}</label>
                         `).join('')}
                     </div>
                 </div>
                 <div class="filter-group">
                     <h4>Pris</h4>
                     <div id="price-slider"></div>
-                    <div id="price-values">
-                        <span id="min-price"></span>
-                        <span id="max-price"></span>
-                    </div>
+                    <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
                 </div>
             `;
-    
+
             // Initiera pris-slider
             const priceSliderElement = document.getElementById('price-slider');
             const minPriceLabel = document.getElementById('min-price');
@@ -1089,7 +1086,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     const values = value.split(',');
                     activeFilters[key] = values;
                     
-                    // Förifyll checkboxar
                     values.forEach(val => {
                         const checkbox = document.querySelector(`input[data-filter="${key}"][value="${val}"]`);
                         if (checkbox) checkbox.checked = true;
@@ -1100,22 +1096,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
         function applyFiltersAndSearch() {
             const searchTerm = searchInput.value.toLowerCase();
-            
-            // KORRIGERING: Hanterar fallet där inga filter är valda
             const hasActiveCheckboxFilters = activeFilters.kategori.length > 0 || activeFilters.marke.length > 0 || activeFilters.typ.length > 0;
     
             const filteredProducts = allProducts.filter(p => {
-                const matchesSearch = !searchTerm || 
-                                      (p.namn && p.namn.toLowerCase().includes(searchTerm)) ||
-                                      (p.marke && p.marke.toLowerCase().includes(searchTerm)) ||
-                                      (p.typ && p.typ.toLowerCase().includes(searchTerm));
+                const matchesSearch = !searchTerm || (p.namn && p.namn.toLowerCase().includes(searchTerm)) || (p.marke && p.marke.toLowerCase().includes(searchTerm)) || (p.typ && p.typ.toLowerCase().includes(searchTerm));
     
-                // KORRIGERING: Om inga checkbox-filter är aktiva, visa alla. Annars, filtrera.
-                let matchesFilters = true;
+                let matchesFilters = !hasActiveCheckboxFilters;
                 if (hasActiveCheckboxFilters) {
                     const matchesKategori = activeFilters.kategori.length === 0 || activeFilters.kategori.includes(p.kategori_slug);
-                    const matchesMarke = activeFilters.marke.length === 0 || activeFilters.marke.includes(p.marke);
-                    const matchesTyp = activeFilters.typ.length === 0 || activeFilters.typ.includes(p.typ);
+                    
+                    // KORRIGERING: Jämför allt i gemener (lowercase)
+                    const matchesMarke = activeFilters.marke.length === 0 || (p.marke && activeFilters.marke.includes(p.marke.toLowerCase()));
+                    
+                    // KORRIGERING: Jämför 'mobil' med 'mobiltelefon' etc.
+                    const matchesTyp = activeFilters.typ.length === 0 || (p.typ && activeFilters.typ.some(filterTyp => p.typ.toLowerCase().includes(filterTyp)));
+    
                     matchesFilters = matchesKategori && matchesMarke && matchesTyp;
                 }
     
@@ -1141,10 +1136,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
                         <p class="price">${p.pris} kr</p>
                         ${p.delbetalning_mojlig ? `<p class="price-installment">${p.delbetalning_pris}</p>` : ''}
-                        <!-- NY KNAPP-STRUKTUR -->
                         <div class="product-card-buttons">
                             <button class="details-btn" data-id="${p.id}">Se detaljer</button>
-                            <button class="add-to-cart-btn" data-id="${p.id}">Köp</button>
+                            <!-- KORRIGERING: Ändrad knapptext -->
+                            <button class="add-to-cart-btn" data-id="${p.id}">Lägg i korg</button>
                         </div>
                     </div>
                 `;
@@ -1225,13 +1220,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // KORRIGERING: Använder event delegation för att hantera klick på dynamiskt skapade knappar
         productGrid.addEventListener('click', (e) => {
-            if (e.target.classList.contains('details-btn')) {
-                openProductModal(e.target.dataset.id);
+            const button = e.target.closest('button');
+            if (!button) return;
+    
+            if (button.classList.contains('details-btn')) {
+                openProductModal(button.dataset.id);
             }
-            if (e.target.classList.contains('add-to-cart-btn')) {
-                alert(`Produkt med ID ${e.target.dataset.id} lades till i varukorgen (logik ej implementerad).`);
+            if (button.classList.contains('add-to-cart-btn')) {
+                alert(`Produkt med ID ${button.dataset.id} lades till (logik ej implementerad).`);
             }
         });
     
