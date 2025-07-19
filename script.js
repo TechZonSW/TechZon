@@ -1145,30 +1145,30 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL (NY, ROBUST VERSION 2.0) ---
+        // --- 4. MODAL (NY, CSS-FOKUSERAD METOD) ---
+
+        // Håll koll på vilken modal-content som är aktiv
+        let activeModalContent = null;
+
         function openProductModal(productId) {
             const product = allProducts.find(p => String(p.id) === String(productId));
-            if (!product) {
-                console.error("Kunde inte hitta produkt med ID:", productId);
-                return;
-            }
+            if (!product) return;
         
-            // Förstör alltid en gammal Swiper-instans om den mot förmodan skulle finnas kvar.
+            // Förstör en gammal Swiper-instans
             if (modalSwiper) {
                 modalSwiper.destroy(true, true);
                 modalSwiper = null;
             }
             
-            // Förbered datan med säkra fallbacks
+            // Förbered data
             const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
             const specifikationer = product.specifikationer || [];
         
-            // Steg 1: Injicera den nya HTML-koden i modalen
-            modalBody.innerHTML = `
+            // Skapa det nya innehållet för modalen
+            const modalContentHTML = `
                 <div class="product-detail-layout">
                     <div class="product-detail-gallery">
-                        <!-- Ge Swiper-containern ett UNIKT ID för att vara 100% specifik -->
-                        <div id="modal-swiper-container" class="swiper">
+                        <div class="swiper">
                             <div class="swiper-wrapper">
                                 ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                             </div>
@@ -1180,56 +1180,65 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="product-detail-info">
-                        <!-- ... (resten av din info-HTML, oförändrad) ... -->
-                         <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
+                        <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
                         <p class="price">${product.pris} kr</p>
                         ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
-                        <p>${product.beskrivning || 'Detaljerad information för denna produkt kommer snart.'}</p>
+                        <p>${product.beskrivning || 'Detaljerad information kommer snart.'}</p>
                         ${specifikationer.length > 0 ? `
                             <ul class="product-detail-specs">
                                 ${specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
-                            </ul>
-                        ` : ''}
+                            </ul>` : ''}
                         <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
                     </div>
                 </div>
             `;
             
-            // Steg 2: Visa modalen och starta CSS-animationen
-            modal.style.display = 'flex';
-            // Vi tvingar webbläsaren att rendera genom att fråga efter en egenskap, t.ex. offsetHeight
-            // Detta är en mer tillförlitlig metod än setTimeout(0)
-            void modal.offsetHeight; 
-            modal.style.opacity = 1;
-            modal.querySelector('.modal-content').style.transform = 'scale(1)';
-            
-            // Steg 3: Hitta det specifika Swiper-element vi just skapade
-            const swiperElement = document.getElementById('modal-swiper-container');
-            
-            // Steg 4: Initiera Swiper på det SPECIFIKA elementet, inte på en generell klass
-            if (swiperElement) {
-                modalSwiper = new Swiper(swiperElement, {
-                    loop: bilder.length > 1,
-                    pagination: { 
-                        el: '.swiper-pagination', 
-                        clickable: true 
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    },
-                });
-            } else {
-                console.error("Kunde inte hitta #modal-swiper-container i DOM efter rendering.");
+            modalBody.innerHTML = modalContentHTML;
+            modal.style.display = 'flex'; // Gör overlayen redo, men den är fortfarande osynlig (opacity: 0)
+        
+            // Funktion för att initiera Swiper, denna kommer att anropas när animationen är klar
+            function initializeSwiper() {
+                const swiperElement = modalBody.querySelector('.swiper');
+                if (swiperElement) {
+                    modalSwiper = new Swiper(swiperElement, {
+                        loop: bilder.length > 1,
+                        pagination: { el: '.swiper-pagination', clickable: true },
+                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    });
+                }
+                // Ta bort lyssnaren efter att den har körts en gång
+                activeModalContent.removeEventListener('transitionend', initializeSwiper);
             }
+        
+            activeModalContent = modal.querySelector('.modal-content');
+        
+            // Lägg till en lyssnare som väntar på att CSS-animationen (transform) ska bli klar
+            activeModalContent.addEventListener('transitionend', initializeSwiper, { once: true });
+        
+            // Använd requestAnimationFrame för att säkerställa att `display: flex` har applicerats
+            // innan vi lägger till `visible`-klassen som startar animationen.
+            requestAnimationFrame(() => {
+                modal.classList.add('visible');
+            });
         }
-
+        
         function closeModal() {
-            modal.style.opacity = 0;
-            modal.querySelector('.modal-content').style.transform = 'scale(0.95)';
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            modal.classList.remove('visible');
+            
+            // Använd en lyssnare för att veta när "tona ut"-animationen är klar
+            function handleTransitionEnd() {
+                modal.style.display = 'none'; // Dölj nu elementet helt
+                modal.removeEventListener('transitionend', handleTransitionEnd);
+                
+                if (modalSwiper) {
+                    modalSwiper.destroy(true, true);
+                    modalSwiper = null;
+                }
+            }
+            
+            modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
         }
-    
+        
         // --- 5. EVENT LISTENERS ---
         searchInput.addEventListener('input', applyFiltersAndSearch);
     
