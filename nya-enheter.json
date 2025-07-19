@@ -10,9 +10,7 @@
     "delbetalning_pris": "från 562 kr/mån",
     "beskrivning": "iPhone 15 Pro är den första iPhone-modellen med en design i rymdindustriklassat titan, samma legering som används i rymdfarkoster för resor till Mars. Den har det största optiska zoomomfånget någonsin på en iPhone.",
     "bilder": [
-      "bilder/testbild.png",
-      "bilder/testbild-2.png",
-      "bilder/testbild-3.png"
+      "bilder/testbild.png"
     ],
     "specifikationer": [
       { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
