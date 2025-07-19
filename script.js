@@ -1145,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-        // --- 4. MODAL (SLUTGILITG, FELSÄKER VERSION) ---
+        // --- 4. MODAL (NY, ROBUST VERSION 2.0) ---
         function openProductModal(productId) {
             const product = allProducts.find(p => String(p.id) === String(productId));
             if (!product) {
@@ -1153,25 +1153,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
         
-            // Förstör den gamla Swiper-instansen om den finns, för att undvika konflikter
+            // Förstör alltid en gammal Swiper-instans om den mot förmodan skulle finnas kvar.
             if (modalSwiper) {
                 modalSwiper.destroy(true, true);
                 modalSwiper = null;
             }
             
-            // Säkra fallback-värden för alla fält
-            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png']; // Använd en generell placeholder-bild
+            // Förbered datan med säkra fallbacks
+            const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
             const specifikationer = product.specifikationer || [];
         
+            // Steg 1: Injicera den nya HTML-koden i modalen
             modalBody.innerHTML = `
                 <div class="product-detail-layout">
                     <div class="product-detail-gallery">
-                        <!-- Swiper-containern -->
-                        <div class="swiper">
+                        <!-- Ge Swiper-containern ett UNIKT ID för att vara 100% specifik -->
+                        <div id="modal-swiper-container" class="swiper">
                             <div class="swiper-wrapper">
                                 ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
                             </div>
-                            <!-- Lägg till pagination och navigation endast om det finns mer än en bild -->
                             ${bilder.length > 1 ? `
                                 <div class="swiper-pagination"></div>
                                 <div class="swiper-button-prev"></div>
@@ -1180,7 +1180,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="product-detail-info">
-                        <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
+                        <!-- ... (resten av din info-HTML, oförändrad) ... -->
+                         <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
                         <p class="price">${product.pris} kr</p>
                         ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
                         <p>${product.beskrivning || 'Detaljerad information för denna produkt kommer snart.'}</p>
@@ -1194,33 +1195,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             
+            // Steg 2: Visa modalen och starta CSS-animationen
             modal.style.display = 'flex';
+            // Vi tvingar webbläsaren att rendera genom att fråga efter en egenskap, t.ex. offsetHeight
+            // Detta är en mer tillförlitlig metod än setTimeout(0)
+            void modal.offsetHeight; 
+            modal.style.opacity = 1;
+            modal.querySelector('.modal-content').style.transform = 'scale(1)';
             
-            // Använd en liten fördröjning för att säkerställa att DOM är uppdaterat
-            setTimeout(() => {
-                // Starta CSS-animationen för att tona in modalen
-                modal.style.opacity = 1;
-                modal.querySelector('.modal-content').style.transform = 'scale(1)';
-                
-                // Initiera en NY Swiper-instans EFTER att HTML är garanterat på plats
-                // Spara referensen i vår globala variabel för att kunna förstöra den senare
-                modalSwiper = new Swiper('.swiper', {
-                    // Aktivera loop endast om det finns mer än en bild att loopa igenom
+            // Steg 3: Hitta det specifika Swiper-element vi just skapade
+            const swiperElement = document.getElementById('modal-swiper-container');
+            
+            // Steg 4: Initiera Swiper på det SPECIFIKA elementet, inte på en generell klass
+            if (swiperElement) {
+                modalSwiper = new Swiper(swiperElement, {
                     loop: bilder.length > 1,
-                    
-                    // Inställningar för pagination (prickarna)
                     pagination: { 
                         el: '.swiper-pagination', 
                         clickable: true 
                     },
-        
-                    // Inställningar för navigeringspilar
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
                     },
                 });
-            }, 10); // 10 millisekunder är tillräckligt för att webbläsaren ska hinna med
+            } else {
+                console.error("Kunde inte hitta #modal-swiper-container i DOM efter rendering.");
+            }
         }
 
         function closeModal() {
