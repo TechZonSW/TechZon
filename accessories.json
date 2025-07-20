@@ -8,8 +8,11 @@
     "pris": 299,
     "delbetalning_mojlig": false,
     "delbetalning_pris": null,
-    "beskrivning": "Ett mjukt och greppvänligt skal som skyddar din iPhone mot vardagliga stötar och repor utan att addera onödig bulk.",
-    "bilder": ["bilder/testbild.png"],
+    "beskrivning_kort": "Ett mjukt och greppvänligt skal som skyddar din iPhone mot vardagliga stötar.",
+    "beskrivning_lang": "Tillverkat av högkvalitativt silikon som ger ett utmärkt grepp och skyddar din enhet utan att addera onödig bulk. De upphöjda kanterna skyddar både skärmen och kameran.",
+    "media": [
+        { "typ": "bild", "url": "bilder/testbild.png" }
+    ],
     "specifikationer": [
       { "label": "Material", "value": "Flexibelt silikon" },
       { "label": "Kompatibilitet", "value": "iPhone 15, iPhone 15 Pro" },
@@ -25,8 +28,11 @@
     "pris": 249,
     "delbetalning_mojlig": false,
     "delbetalning_pris": null,
-    "beskrivning": "Apples 20W USB-C strömadapter ger snabb och effektiv laddning hemma, på kontoret eller på resan. Perfekt för snabbladdning av iPhone och iPad.",
-    "bilder": ["bilder/testbild.png"],
+    "beskrivning_kort": "Apples originaladapter för snabb och effektiv laddning av dina enheter.",
+    "beskrivning_lang": "Denna strömadapter ger snabb och effektiv laddning hemma, på kontoret eller på resan. Den är kompatibel med alla enheter som har en USB-C-port och rekommenderas för optimal laddning av iPhone och iPad Pro.",
+    "media": [
+        { "typ": "bild", "url": "bilder/testbild-2.png" }
+    ],
     "specifikationer": [
       { "label": "Effekt", "value": "20 Watt" },
       { "label": "Anslutning", "value": "USB-C" },
