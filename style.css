@@ -1624,3 +1624,9 @@ nav ul.main-nav { display: flex; align-items: center; }
     color: var(--text-color); /* Svart, tydlig text för värdet */
     text-align: right;
 }
+
+/* --- HJÄLPKLASS FÖR ATT DÖLJA/VISA ELEMENT --- */
+.hidden {
+    display: none !important; /* Använder !important för att garantera att den vinner */
+}
+
