@@ -8,8 +8,11 @@
     "pris": 9500,
     "delbetalning_mojlig": true,
     "delbetalning_pris": "från 396 kr/mån",
-    "beskrivning": "Denna enhet är i nyskick utan repor och har 100% batterihälsa. Enheten är fullt testad, olåst och fungerar som ny. Originalkartong medföljer.",
-    "bilder": ["bilder/testbild.png"],
+    "beskrivning_kort": "Denna enhet är i nyskick utan repor och har 100% batterihälsa.",
+    "beskrivning_lang": "Enheten är fullt testad av våra certifierade tekniker, olåst och fungerar som ny. Den levereras med 12 månaders garanti för din trygghet. Originalkartong medföljer.",
+    "media": [
+        { "typ": "bild", "url": "bilder/testbild.png" }
+    ],
     "specifikationer": [
       { "label": "Skick", "value": "Nyskick" },
       { "label": "Färg", "value": "Rymdsvart" },
@@ -26,8 +29,12 @@
     "pris": 8500,
     "delbetalning_mojlig": true,
     "delbetalning_pris": "från 354 kr/mån",
-    "beskrivning": "En kraftfull och lätt laptop i mycket bra skick, perfekt för studier eller arbete. Fullt funktionstestad av våra certifierade tekniker.",
-    "bilder": ["bilder/testbild.png"],
+    "beskrivning_kort": "En kraftfull och lätt laptop i mycket bra skick, perfekt för studier eller arbete.",
+    "beskrivning_lang": "Denna MacBook Air har genomgått en fullständig funktionstest och är garanterad att fungera felfritt. Den har endast mindre kosmetiska spår av användning. Levereras med laddare och 12 månaders garanti.",
+    "media": [
+        { "typ": "bild", "url": "bilder/testbild-2.png" },
+        { "typ": "bild", "url": "bilder/testbild-3.png" }
+    ],
     "specifikationer": [
       { "label": "Skick", "value": "Mycket bra skick" },
       { "label": "Färg", "value": "Silver" },
