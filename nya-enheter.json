@@ -22,24 +22,54 @@
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
             { "label": "Chip", "value": "A17 Pro-chip" },
-            { "label": "Kamera", "value": "48 MP huvudkamera, ultravidvinkel, tele" }
+            { "label": "Lagringskapacitet", "value": "128 GB" }
         ]
       },
       {
         "id": "new-002",
+        "attribut": { "Färg": "Naturligt titan", "Lagring": "256 GB" },
+        "pris": 14990,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 625 kr/mån",
+        "media": [
+          { "typ": "bild", "url": "bilder/testbild.png" },
+          { "typ": "bild", "url": "bilder/testbild-2.png" }
+        ],
+        "specifikationer": [
+            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
+            { "label": "Chip", "value": "A17 Pro-chip" },
+            { "label": "Lagringskapacitet", "value": "256 GB" }
+        ]
+      },
+      {
+        "id": "new-003",
         "attribut": { "Färg": "Blått titan", "Lagring": "256 GB" },
         "pris": 14990,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 625 kr/mån",
         "media": [
           { "typ": "bild", "url": "bilder/testbild-3.png" },
-          { "typ": "bild", "url": "bilder/testbild-2.png" },
           { "typ": "video", "url": "bilder/test-video.mp4" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
             { "label": "Chip", "value": "A17 Pro-chip" },
-            { "label": "Kamera", "value": "48 MP huvudkamera, ultravidvinkel, tele" }
+            { "label": "Lagringskapacitet", "value": "256 GB" }
+        ]
+      },
+      {
+        "id": "new-004",
+        "attribut": { "Färg": "Vitt titan", "Lagring": "512 GB" },
+        "pris": 17990,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 750 kr/mån",
+        "media": [
+          { "typ": "bild", "url": "bilder/testbild.png" }
+        ],
+        "specifikationer": [
+            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
+            { "label": "Chip", "value": "A17 Pro-chip" },
+            { "label": "Lagringskapacitet", "value": "512 GB" }
         ]
       }
     ]
@@ -54,7 +84,7 @@
     "beskrivning_lang": "Galaxy S24 Ultra sätter en ny standard för vad en mobil kan göra. Med en ram i titan och en helt platt 6,8-tums skärm är den enastående. Den inbyggda S Pen fortsätter arvet från Note-serien och låter dig skriva, trycka och navigera med precision.",
     "varianter": [
       {
-        "id": "new-003",
+        "id": "new-005",
         "attribut": { "Färg": "Titanium Black", "Lagring": "256 GB" },
         "pris": 15990,
         "delbetalning_mojlig": true,
