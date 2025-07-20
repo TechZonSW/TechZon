@@ -1646,3 +1646,130 @@ nav ul.main-nav { display: flex; align-items: center; }
     display: none !important; /* Använder !important för att garantera att den vinner */
 }
 
+/* --- NYA STILAR FÖR VARUKORG & KASSA --- */
+
+/* Varukorgs-ikon i headern */
+.cart-icon-container {
+    position: relative;
+    margin-left: 20px;
+}
+.cart-icon-container a {
+    color: var(--text-color);
+    font-size: 1.8em;
+    position: relative;
+    display: block;
+}
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 0.6em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Kassasidan - "Hedonic" design */
+.checkout-body {
+    background-color: var(--section-bg-light); /* Ljus, mjuk bakgrund */
+}
+#checkout-page .container {
+    max-width: 1200px; /* Lite bredare för en luftigare layout */
+}
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: start;
+}
+.order-summary, .customer-details {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: var(--border-radius);
+}
+.order-summary h2, .customer-details h2 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Produkter i kassan */
+.checkout-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+.checkout-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: var(--section-bg-light);
+}
+.checkout-item-info {
+    flex-grow: 1;
+}
+.checkout-item-info h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.checkout-item-info p {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+.checkout-item-price {
+    font-weight: 600;
+}
+
+/* Sammanfattning */
+.summary-totals {
+    margin-top: 20px;
+}
+.summary-totals p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.summary-totals p.total {
+    font-size: 1.2em;
+    margin-top: 15px;
+}
+
+/* Kundinformation och betalning */
+#checkout-form {
+    display: grid;
+    gap: 15px;
+}
+#checkout-form input {
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+.payment-options {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.payment-option {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+}
+.checkout-submit-btn {
+    width: 100%;
+    margin-top: 30px;
+    padding: 20px;
+    font-size: 1.2em;
+}
+
