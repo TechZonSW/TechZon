@@ -1272,7 +1272,8 @@ if (productPage) {
         setupEventListeners();
     }
 
-// --- 3. UI-UPPDATERING (MED INAKTIVERINGSLOGIK) ---
+    // HELA DENNA FUNKTION SKA ERSÄTTAS
+// --- 3. UI-UPPDATERING (MED FÖRFINAD INAKTIVERINGSLOGIK) ---
 function updateUI() {
     const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
     
@@ -1287,7 +1288,7 @@ function updateUI() {
     displayMedia(media[0]);
     if (thumbsList.firstChild) thumbsList.firstChild.classList.add('active');
 
-    // Uppdatera pris
+    // Uppdatera pris, delbetalning och specifikationer
     contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
     const installmentP = contentWrapper.querySelector('.price-installment');
     if (installmentP) {
@@ -1296,42 +1297,49 @@ function updateUI() {
             installmentP.textContent = currentVariant.delbetalning_pris;
         }
     }
-    
-    // Uppdatera specifikationer
     const specsList = contentWrapper.querySelector('.pdp-specs-list');
     specsList.innerHTML = (currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
 
-    // ---- NY, INTELLIGENT LOGIK FÖR KNAPPAR ----
-    // Loopa igenom varje grupp av val (t.ex. Färg, Lagring)
-    document.querySelectorAll('.variant-options').forEach(group => {
-        const attributeKey = group.dataset.attribute;
+    // ---- NY, FÖRFINAD LOGIK FÖR KNAPPAR ----
+    
+    // 1. Hantera FÄRG-knapparna: Markera den valda, men inaktivera aldrig någon.
+    const colorGroup = document.querySelector('.variant-options[data-attribute="Färg"]');
+    if (colorGroup) {
+        const selectedColor = currentVariant.attribut["Färg"];
+        colorGroup.querySelectorAll('.variant-btn').forEach(btn => {
+            btn.classList.toggle('selected', btn.textContent === selectedColor);
+            btn.disabled = false; // Säkerställ att färgknappar aldrig är inaktiverade
+            btn.classList.remove('disabled');
+        });
+    }
+
+    // 2. Hantera LAGRING-knapparna: Markera den valda OCH inaktivera ogiltiga alternativ.
+    const storageGroup = document.querySelector('.variant-options[data-attribute="Lagring"]');
+    if (storageGroup) {
+        const selectedColor = currentVariant.attribut["Färg"];
+        const selectedStorage = currentVariant.attribut["Lagring"];
+
+        // Hitta alla lagringsalternativ som finns för den valda färgen
+        const availableStorages = new Set(
+            currentProductBase.varianter
+                .filter(variant => variant.attribut["Färg"] === selectedColor)
+                .map(variant => variant.attribut["Lagring"])
+        );
         
-        // Loopa igenom varje knapp i gruppen
-        group.querySelectorAll('.variant-btn').forEach(btn => {
-            const attributeValue = btn.textContent;
+        storageGroup.querySelectorAll('.variant-btn').forEach(btn => {
+            const storageValue = btn.textContent;
             
-            // 1. Markera den knapp som är aktiv
-            btn.classList.toggle('selected', currentVariant.attribut[attributeKey] === attributeValue);
+            // Markera den knapp som är aktiv
+            btn.classList.toggle('selected', storageValue === selectedStorage);
             
-            // 2. Kontrollera om denna knapp är en giltig kombination med de ANDRA valda attributen
-            const otherAttributes = { ...currentVariant.attribut };
-            delete otherAttributes[attributeKey]; // Ta bort den egenskap vi testar för att bara jämföra med de andra
+            // Kontrollera om denna lagringsknapp är ett giltigt val för den valda färgen
+            const isPossible = availableStorages.has(storageValue);
             
-            // Bygg en "test-mall" med det andra attributet och det vi nu undersöker
-            const testAttributes = { ...otherAttributes, [attributeKey]: attributeValue };
-            
-            // Finns det NÅGON variant i hela listan som matchar denna test-mall?
-            const isPossible = currentProductBase.varianter.some(variant => 
-                Object.entries(testAttributes).every(([key, value]) => 
-                    variant.attribut[key] === value
-                )
-            );
-            
-            // 3. Inaktivera knappen om kombinationen inte finns
+            // Inaktivera knappen om kombinationen inte finns
             btn.disabled = !isPossible;
             btn.classList.toggle('disabled', !isPossible);
         });
-    });
+    }
 }
     
     function displayMedia(mediaItem) {
