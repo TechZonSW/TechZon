@@ -1145,86 +1145,70 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-// --- 4. MODAL (SLUTGILTIG, KORRIGERAD CSS-FOKUSERAD METOD) ---
 
-// Håll koll på den aktiva modalens innehålls-element
-let activeModalContent = null;
+// --- 4. MODAL (BRUTE FORCE-METODEN - DENNA SKA FUNGERA) ---
+
+// Vi initierar Swiper EN GÅNG när sidan laddas, men utan några slides.
+// Den kommer att vara "vilande" tills vi ger den innehåll.
+let modalSwiper = new Swiper('.swiper', {
+    loop: true, // Vi kan ha loop true från start
+    pagination: { el: '.swiper-pagination', clickable: true },
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+});
 
 function openProductModal(productId) {
     const product = allProducts.find(p => String(p.id) === String(productId));
     if (!product) return;
-
-    // Förstör en gammal Swiper-instans för att undvika minnesläckor
-    if (modalSwiper) {
-        modalSwiper.destroy(true, true);
-        modalSwiper = null;
-    }
     
-    // Förbered data med säkra fallbacks
+    // Förbered data
     const bilder = product.bilder && product.bilder.length > 0 ? product.bilder : ['bilder/placeholder.png'];
+    const specifikationer = product.specifikationer || [];
+
+    // Hitta de permanenta elementen i DOM
+    const swiperWrapper = modal.querySelector('.swiper-wrapper');
+    const productInfoContainer = modal.querySelector('.product-detail-info');
     
-    // Injicera HTML-innehållet i modal-kroppen
-    modalBody.innerHTML = `
-        <div class="product-detail-layout">
-            <div class="product-detail-gallery">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        ${bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('')}
-                    </div>
-                    ${bilder.length > 1 ? `
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    ` : ''}
-                </div>
-            </div>
-            <div class="product-detail-info">
-                <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
-                <p class="price">${product.pris} kr</p>
-                ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
-                <p>${product.beskrivning || 'Detaljerad information kommer snart.'}</p>
-                ${(product.specifikationer || []).length > 0 ? `
-                    <ul class="product-detail-specs">
-                        ${product.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
-                    </ul>` : ''}
-                <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
-            </div>
-        </div>
+    // STEG 1: Radera gammalt innehåll och injicera nytt
+    
+    // Skapa HTML för de nya bilderna
+    const slidesHTML = bilder.map(img => `<div class="swiper-slide"><img src="${img}" alt="${product.namn}"></div>`).join('');
+    
+    // Skapa HTML för den nya produktinformationen
+    const infoHTML = `
+        <h2>${product.marke ? `${product.marke} ${product.namn}` : product.namn}</h2>
+        <p class="price">${product.pris} kr</p>
+        ${product.delbetalning_mojlig ? `<p class="price-installment">${product.delbetalning_pris}</p>` : ''}
+        <p>${product.beskrivning || 'Detaljerad information kommer snart.'}</p>
+        ${specifikationer.length > 0 ? `
+            <ul class="product-detail-specs">
+                ${specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
+            </ul>` : ''}
+        <button class="add-to-cart-btn" data-id="${product.id}">Lägg i varukorg</button>
     `;
+
+    // Uppdatera DOM
+    swiperWrapper.innerHTML = slidesHTML;
+    productInfoContainer.innerHTML = infoHTML;
     
-    // Gör modalens overlay redo att visas
-    modal.style.display = 'flex';
+    // STEG 2: Uppdatera Swiper och visa modalen
+    
+    // Säg åt den befintliga Swiper-instansen att upptäcka de nya slidesen
+    modalSwiper.update();
 
-    // Funktion som startar Swiper
-    function initializeSwiper() {
-        const swiperElement = modalBody.querySelector('.swiper');
-        if (swiperElement) {
-            modalSwiper = new Swiper(swiperElement, {
-                loop: bilder.length > 1,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            });
-            
-            // DEN AVGÖRANDE KORRIGERINGEN:
-            // Tvinga Swiper att uppdatera sina dimensioner och slides
-            // efter att animationen är klar.
-            setTimeout(() => {
-                if (modalSwiper) {
-                    modalSwiper.update();
-                }
-            }, 10); // En minimal fördröjning räcker
-        }
-        
-        // Ta bort lyssnaren så den inte körs igen av misstag
-        activeModalContent.removeEventListener('transitionend', initializeSwiper);
+    // Justera loop-inställningen baserat på antalet bilder
+    modalSwiper.loopDestroy(); // Nollställ loopen
+    if (bilder.length > 1) {
+        modalSwiper.loopCreate(); // Återskapa loopen
     }
+    
+    // Se till att den alltid startar på första bilden
+    modalSwiper.slideTo(0, 0); // Gå till slide 0 utan animation
 
-    activeModalContent = modal.querySelector('.modal-content');
-
-    // Lyssnar på när CSS-animationen (transform) är färdig
-    activeModalContent.addEventListener('transitionend', initializeSwiper, { once: true });
-
-    // Starta "tona in"-animationen
+    // Visa modalen
+    modal.style.display = 'flex';
     requestAnimationFrame(() => {
         modal.classList.add('visible');
     });
@@ -1233,20 +1217,22 @@ function openProductModal(productId) {
 function closeModal() {
     modal.classList.remove('visible');
     
-    // Lyssnar på när "tona ut"-animationen är färdig
-    function handleTransitionEnd() {
+    const handleTransitionEnd = () => {
         modal.style.display = 'none';
         modal.removeEventListener('transitionend', handleTransitionEnd);
-        
-        // Förstör Swiper-instansen helt när modalen är borta
-        if (modalSwiper) {
-            modalSwiper.destroy(true, true);
-            modalSwiper = null;
-        }
-    }
-    
+    };
     modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
-}  
+}
+
+// Se till att din CSS är inställd på att dölja modalen från start
+// (ta bort style="display: none;" från HTML-elementet)
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('productModal');
+    if(modal) modal.style.display = 'none';
+});
+
+
+        
         // --- 5. EVENT LISTENERS ---
         searchInput.addEventListener('input', applyFiltersAndSearch);
     
