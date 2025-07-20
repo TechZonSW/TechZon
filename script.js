@@ -1174,7 +1174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --------------------------------------------------------------------
-    // DEL 10: KOD FÖR PRODUKTSIDA (EGEN, ROBUST BILDVISARE)
+    // DEL 10: KOD FÖR PRODUKTSIDA (SLUTGILTIG, KORRIGERAD VERSION)
     // --------------------------------------------------------------------
     const productPage = document.getElementById('product-page');
     if (productPage) {
@@ -1259,9 +1259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h2>Beskrivning</h2>
                     <p>${currentProductBase.beskrivning_lang || currentProductBase.beskrivning || 'Mer information kommer snart.'}</p>
                     <h2>Specifikationer</h2>
-                    <ul class="pdp-specs-list">
-                        ${(currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
-                    </ul>
+                    <ul class="pdp-specs-list"></ul>
                 </div>
             `;
     
@@ -1269,16 +1267,25 @@ document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
         }
     
-        // HELA DENNA FUNKTION SKA ERSÄTTAS
+        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
         function updateVariantUI() {
+            // Hämta media-data på ett säkert sätt
             const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
             
-            // Uppdatera media (samma som innan)
             const mainMediaContainer = document.getElementById('main-media-container');
             const thumbsList = document.getElementById('thumbs-list');
-            thumbsList.innerHTML = media.map((item, index) => { /* ... din befintliga kod ... */ }).join('');
+            
+            // Fyll på thumbnail-listan
+            thumbsList.innerHTML = media.map((item, index) => {
+                const isActive = index === 0 ? 'class="active"' : '';
+                const imageUrl = item.typ === 'video' ? 'bilder/testbild.png' : item.url;
+                const videoIcon = item.typ === 'video' ? '<i class="ph-bold ph-play-circle thumb-video-icon"></i>' : '';
+                return `<li ${isActive} data-index="${index}"><img src="${imageUrl}" alt="Thumbnail">${videoIcon}</li>`;
+            }).join('');
+            
+            // Visa den första bilden/videon i huvudfönstret som standard
             displayMedia(media[0]);
-        
+    
             // Uppdatera pris och delbetalning
             contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
             const installmentP = contentWrapper.querySelector('.price-installment');
@@ -1291,10 +1298,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Uppdatera specifikationslistan
             const specsList = contentWrapper.querySelector('.pdp-specs-list');
-            if (specsList && currentVariant.specifikationer) {
-                specsList.innerHTML = currentVariant.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
-            }
-        
+            const specsData = currentVariant.specifikationer || [];
+            specsList.innerHTML = specsData.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
+    
             // Uppdatera de valda knapparna
             if (currentVariant.attribut) {
                 for (const [key, value] of Object.entries(currentVariant.attribut)) {
@@ -1306,8 +1312,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
         function displayMedia(mediaItem) {
             const mainMediaContainer = document.getElementById('main-media-container');
+            // Kontrollera att mediaItem faktiskt finns för att undvika fel
+            if (!mediaItem) {
+                mainMediaContainer.innerHTML = `<img src="bilder/testbild.png" alt="Ingen bild tillgänglig">`;
+                return;
+            }
+    
             if (mediaItem.typ === 'video') {
                 mainMediaContainer.innerHTML = `<video src="${mediaItem.url}" playsinline autoplay muted controls></video>`;
             } else {
@@ -1315,38 +1328,44 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     
-        // HELA DENNA FUNKTION SKA ERSÄTTAS
+        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
         function setupEventListeners() {
+            // Event listener för thumbnails (använder event delegation för bästa prestanda)
+            contentWrapper.addEventListener('click', (e) => {
+                const thumb = e.target.closest('.pdp-thumbs-list li');
+                if (thumb) {
+                    const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+                    const index = parseInt(thumb.dataset.index, 10);
+                    
+                    document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
+                    thumb.classList.add('active');
+                    
+                    displayMedia(media[index]);
+                }
+            });
+            
+            // Event listener för variant-knappar
             const selectors = document.getElementById('variant-selectors');
             if (selectors) {
                 selectors.addEventListener('click', (e) => {
-                    // Se till att vi bara reagerar på klick på en variant-knapp
-                    if (e.target.tagName !== 'BUTTON' || !e.target.classList.contains('variant-btn')) {
-                        return;
-                    }
-                    
-                    const attributeKey = e.target.parentElement.dataset.attribute;
-                    const attributeValue = e.target.textContent;
-                    
-                    // Bygg en "mall" för den nya varianten vi letar efter
-                    const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
-                    
-                    // Hitta en variant i produktens variant-lista som exakt matchar vår mall
-                    const newVariant = currentProductBase.varianter.find(variant => {
-                        // Jämför varje attribut i varianten mot vår mall
-                        return Object.entries(targetAttributes).every(([key, value]) => {
-                            return variant.attribut[key] === value;
+                    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('variant-btn')) {
+                        const attributeKey = e.target.parentElement.dataset.attribute;
+                        const attributeValue = e.target.textContent;
+                        
+                        const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+                        
+                        const newVariant = currentProductBase.varianter.find(variant => {
+                            return Object.entries(targetAttributes).every(([key, value]) => 
+                                variant.attribut[key] === value
+                            );
                         });
-                    });
-                    
-                    // Om vi hittade en exakt match...
-                    if (newVariant) {
-                        currentVariant = newVariant; // ...uppdatera den aktiva varianten...
-                        updateVariantUI(); // ...och rita om hela UI:t med den nya informationen.
-                    } else {
-                        // Om ingen exakt match finns (t.ex. "Blå" 256GB finns inte),
-                        // gör ingenting för tillfället, eller inaktivera knappen visuellt (mer avancerat).
-                        console.log("Ingen giltig variant hittades för den kombinationen.");
+                        
+                        if (newVariant) {
+                            currentVariant = newVariant;
+                            updateVariantUI();
+                        } else {
+                            console.log("Ingen giltig variant hittades för den kombinationen.");
+                        }
                     }
                 });
             }
@@ -1354,5 +1373,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
         initializeProductPage();
     }
-
 });
