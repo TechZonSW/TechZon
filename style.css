@@ -1600,34 +1600,27 @@ nav ul.main-nav { display: flex; align-items: center; }
     margin-bottom: 25px;
 }
 
-/* Stil för specifikationslistan */
+/* --- FÖRBÄTTRAD STIL FÖR SPECIFIKATIONSLISTAN --- */
 .pdp-specs-list {
     list-style: none;
     padding: 0;
-    margin: 0;
-    max-width: 800px; /* Begränsar bredden för optimal läsbarhet */
+    margin-top: 30px; /* Mer luft ovanför */
 }
-
 .pdp-specs-list li {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #f0f0f0;
+    align-items: center; /* Centrerar texten vertikalt */
+    padding: 18px 0; /* Mer luft mellan varje rad */
+    border-bottom: 1px solid #f0f0f0; /* Mjukare linje */
     font-size: 1em;
 }
-
 .pdp-specs-list li:first-child {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0; /* Lägger till en linje även överst */
 }
-
 .pdp-specs-list span {
-    color: var(--text-color-secondary);
-    padding-right: 20px; /* Ger lite extra utrymme */
+    color: var(--text-color-secondary); /* Grå text för etiketten */
 }
-
 .pdp-specs-list strong {
-    color: var(--text-color);
+    color: var(--text-color); /* Svart, tydlig text för värdet */
     text-align: right;
-    font-weight: 500; /* Något mindre fet stil för en elegantare look */
 }
