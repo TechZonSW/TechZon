@@ -1494,3 +1494,29 @@ nav ul.main-nav { display: flex; align-items: center; }
     background-color: rgba(0,0,0,0.3);
     border-radius: 50%;
 }
+
+/* --- FÖRBÄTTRAD STIL FÖR VARIANT-KNAPPAR --- */
+.variant-btn {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95em; /* Något större för bättre läsbarhet */
+    transition: all 0.2s ease;
+}
+.variant-btn:hover {
+    border-color: #aaa;
+}
+.variant-btn.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: #fff; /* Vit text när vald */
+    font-weight: 600;
+}
+.variant-btn.disabled { /* Stil för när en kombination inte är tillgänglig */
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #f5f5f7;
+}
