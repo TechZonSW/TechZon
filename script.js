@@ -1085,28 +1085,39 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // --- HUVUDFILTRERING (UPPDATERAD MED KORREKT FÄLTNAMN) ---
         function applyFiltersAndSearch() {
             const searchTerm = searchInput.value.toLowerCase();
-            const hasActiveCheckboxFilters = activeFilters.kategori.length > 0 || activeFilters.marke.length > 0 || activeFilters.typ.length > 0;
-    
+            
             const filteredProducts = allProducts.filter(p => {
-                const matchesSearch = !searchTerm || (p.namn && p.namn.toLowerCase().includes(searchTerm)) || (p.marke && p.marke.toLowerCase().includes(searchTerm)) || (p.typ && p.typ.toLowerCase().includes(searchTerm));
-    
-                let matchesFilters = !hasActiveCheckboxFilters;
-                if (hasActiveCheckboxFilters) {
-                    // KORRIGERING: Använder det korrekta fältnamnet 'kategori_slug'
-                    const matchesKategori = activeFilters.kategori.length === 0 || activeFilters.kategori.includes(p.kategori_slug);
-                    const matchesMarke = activeFilters.marke.length === 0 || (p.marke && activeFilters.marke.includes(p.marke.toLowerCase()));
-                    const matchesTyp = activeFilters.typ.length === 0 || (p.typ && activeFilters.typ.includes(p.typ.toLowerCase()));
-                    matchesFilters = matchesKategori && matchesMarke && matchesTyp;
-                }
-    
-                // KORRIGERING: Kollar priset på den FÖRSTA varianten
+                // Omvandla produktens attribut till gemener en gång för enkel jämförelse
+                const produktMarke = p.marke ? p.marke.toLowerCase() : '';
+                const produktTyp = p.typ ? p.typ.toLowerCase() : '';
+        
+                // SÖKFILTER
+                const matchesSearch = !searchTerm || 
+                                      (p.namn && p.namn.toLowerCase().includes(searchTerm)) ||
+                                      produktMarke.includes(searchTerm) ||
+                                      produktTyp.includes(searchTerm);
+        
+                // KATEGORIFILTER
+                const matchesKategori = activeFilters.kategori.length === 0 || 
+                                        activeFilters.kategori.includes(p.kategori_slug);
+        
+                // MÄRKESFILTER
+                const matchesMarke = activeFilters.marke.length === 0 || 
+                                     activeFilters.marke.includes(produktMarke);
+                
+                // TYP-FILTER (Smartare version)
+                // Kollar om produktens typ (t.ex. 'mobiltelefon') innehåller något av filterorden (t.ex. 'mobil')
+                const matchesTyp = activeFilters.typ.length === 0 || 
+                                   activeFilters.typ.some(filterTyp => produktTyp.includes(filterTyp));
+        
+                // PRISFILTER
                 const displayPrice = p.varianter[0].pris;
                 const matchesPrice = displayPrice >= activeFilters.price.min && displayPrice <= activeFilters.price.max;
                 
-                return matchesSearch && matchesFilters && matchesPrice;
+                // Returnera true bara om ALLA filter stämmer
+                return matchesSearch && matchesKategori && matchesMarke && matchesTyp && matchesPrice;
             });
             
             renderProducts(filteredProducts);
