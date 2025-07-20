@@ -1171,14 +1171,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     
-    // --- 4. EVENT LISTENERS ---
-        productGrid.addEventListener('click', (e) => {
-            if (e.target.classList.contains('add-to-cart-btn')) {
-                e.preventDefault(); // Förhindra att länken följs om man klickar på knappen
-                alert(`Produkt med ID ${e.target.dataset.id} lades till (logik ej implementerad).`);
-            }
-        });
-        
+        // --- 4. EVENT LISTENERS ---
         searchInput.addEventListener('input', applyFiltersAndSearch);
     
         filtersContainer.addEventListener('change', (e) => {
