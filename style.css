@@ -1313,87 +1313,57 @@ nav ul.main-nav { display: flex; align-items: center; }
 #searchInput { width: 100%; padding: 18px 25px 18px 55px; font-size: 1.1em; border-radius: 50px; border: 1px solid #ddd; font-family: var(--font-family); }
 .search-bar-container i { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); font-size: 1.4em; color: #aaa; }
 
-/* =================================================================
-   2. SIDLAYOUT & FILTER ("HEDONIC" VERSION)
-   ================================================================= */
-
-/* E-handelssida layout */
+/* E-handelssida layout (Justerad för mer utrymme) */
 .shop-layout {
     display: grid;
-    grid-template-columns: 260px 1fr; /* Något bredare panel för den nya designen */
-    gap: 50px; /* Mer luft mellan panel och produkter */
+    /* KORRIGERING: Filterpanelen är nu smalare */
+    grid-template-columns: 240px 1fr; 
+    gap: 40px;
 }
 .filter-panel {
+    /* Tar bort högerbården för en renare look */
     padding-right: 0;
 }
-.filter-panel h3 { /* Huvudrubriken "Filter" */
-    font-size: 1.8em;
-    padding-bottom: 15px;
+/* --- STIL FÖR "RENSA FILTER"-KNAPPEN --- */
+.clear-filters-btn {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--section-bg-light);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.clear-filters-btn:hover {
+    background-color: #e5e5e5;
+    border-color: #ccc;
+}
+.filter-group {
+    padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
 }
-
-/* Stil för varje filtergrupp (Kategori, Märke etc.) */
-.filter-group {
-    margin-bottom: 30px;
-}
 .filter-group h4 {
     margin-bottom: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
+    font-size: 1.1em; /* Något mindre rubrik för en kompaktare panel */
 }
 .filter-options {
     display: flex;
+    flex-direction: column;
+    gap: 12px; /* Lite tätare mellan filtervalen */
+}
+.filter-options label {
+    display: flex;
+    align-items: center;
     gap: 10px;
-    flex-wrap: wrap; /* Låter knapparna flöda snyggt */
+    font-size: 0.95em; /* Något mindre text */
 }
 
-/* Den nya stilen för filterknappar (ersätter checkboxar) */
-.filter-btn {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    border-radius: 50px; /* Piller-form */
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9em;
-    transition: all 0.2s ease;
-}
-.filter-btn:hover {
-    border-color: #aaa;
-    background-color: #f5f5f7;
-}
-.filter-btn.active {
-    background-color: var(--primary-color);
-    color: #fff;
-    border-color: var(--primary-color);
-}
-
-/* Förbättrad Pris-slider */
-#price-slider { 
-    margin: 20px 8px 30px; 
-    border: none;
-    box-shadow: none;
-}
-/* Anpassa noUiSlider-stilarna för en premiumkänsla */
-.noUi-target {
-    background: #f0f0f0;
-    border-radius: 5px;
-    height: 4px;
-}
-.noUi-connect {
-    background: var(--primary-color);
-}
-.noUi-handle {
-    border: 3px solid #fff;
-    border-radius: 50%;
-    background: var(--primary-color);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    cursor: pointer;
-}
-.noUi-handle:focus { outline: none; }
-.noUi-handle:after, .noUi-handle:before { display: none; } /* Ta bort standard-dekorationer */
-#price-values { display: flex; justify-content: space-between; font-size: 0.9em; font-weight: 500; }
+/* Pris-slider */
+#price-slider { margin: 20px 5px 30px; }
+#price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
 
 /* =================================================================
    3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
