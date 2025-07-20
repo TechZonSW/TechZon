@@ -1426,7 +1426,7 @@ nav ul.main-nav { display: flex; align-items: center; }
        Right: -(total handtags-bredd / 2) = -14px.
     */
     top: 0px;
-    right: -14px;
+    right: -24px;
 }
 
 .noUi-handle:active {
