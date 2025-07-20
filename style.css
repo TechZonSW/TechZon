@@ -1950,4 +1950,4 @@ nav ul.main-nav { display: flex; align-items: center; }
 /* Färger för olika skick */
 .condition-badge.nyskick { background-color: rgba(29, 185, 84, 0.8); } /* Grön */
 .condition-badge.mycket-bra-skick { background-color: rgba(0, 113, 227, 0.8); } /* Blå */
-.condition-badge.bra-skick { background-color: rgba(245, 166, 35, 0.9); } /* Orange */
+.condition-badge.bra-skick { background-color: rgba(142, 68, 173, 0.85); } /* Elegant lila */
