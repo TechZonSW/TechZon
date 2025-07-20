@@ -1676,6 +1676,89 @@ nav ul.main-nav { display: flex; align-items: center; }
     border: 2px solid #fff;
 }
 
+/* --- NYA, FÖRBÄTTRADE STILAR FÖR VARUKORG & KASSA --- */
+
+/* Varukorgs-ikon i headern */
+.cart-icon-container {
+    position: relative;
+    margin-left: 20px;
+}
+.cart-icon-container a {
+    color: var(--text-color);
+    font-size: 1.8em;
+    position: relative;
+    display: block;
+}
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 0.6em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Ny hover-vy för varukorgen */
+.cart-hover-view {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 320px;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    padding: 20px;
+    margin-top: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+}
+.cart-icon-container:hover .cart-hover-view {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.cart-hover-view h4 {
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+#cart-hover-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+.cart-hover-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+.cart-hover-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.cart-hover-item-info p { margin: 0; }
+.cart-hover-item-info .price { font-weight: 600; }
+.cart-hover-view .cta-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+}
+
 /* Kassasidan - "Hedonic" design */
 .checkout-body {
     background-color: var(--section-bg-light); /* Ljus, mjuk bakgrund */
@@ -1773,3 +1856,19 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-size: 1.2em;
 }
 
+/* Nytt för "ta bort"-knappen i kassan */
+.checkout-item-actions {
+    text-align: right;
+}
+.remove-from-cart-btn {
+    background: none;
+    border: none;
+    color: var(--text-color-secondary);
+    font-size: 0.8em;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 5px;
+}
+.remove-from-cart-btn:hover {
+    color: #dc3545; /* Röd färg vid hover */
+}
