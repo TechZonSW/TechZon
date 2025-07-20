@@ -1361,10 +1361,10 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-size: 0.95em; /* Något mindre text */
 }
 
-/* --- SLUTGILTIG, KORREKT STIL FÖR PRIS-SLIDER --- */
+/* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
 
 #price-slider { 
-    margin: 20px 8px 30px;
+    margin: 20px 8px 30px; /* Lite extra marginal för handtagen */
     border: none;
     box-shadow: none;
 }
@@ -1375,44 +1375,48 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-weight: 500; 
 }
 
-#price-slider .noUi-target {
-    background: #e9ecef;
+/* Anpassar noUiSlider-bibliotekets standardstilar */
+
+/* Huvudspåret */
+.noUi-target {
+    background: #e9ecef; /* Mjuk, ljusgrå färg */
     border-radius: 5px;
     border: none;
     box-shadow: none;
-    height: 6px;
+    height: 6px; /* Lite tjockare för ett mer substantiellt intryck */
 }
 
-#price-slider .noUi-connect {
+/* Den färgade delen som visar det valda intervallet */
+.noUi-connect {
     background: var(--primary-color);
 }
 
-/* KORRIGERAD CENTRERING FÖR CIRKULÄRA HANDTAG */
-#price-slider .noUi-handle {
-    border: 3px solid #fff;
-    border-radius: 50%;
-    background: var(--primary-color);
-    box-shadow: var(--shadow-soft);
-    cursor: pointer;
-    
-    height: 20px;
-    width: 20px;
-    
-    /* KORRIGERING: Tar bort 'right' och använder 'transform' för perfekt centrering */
-    top: -7px;
-    right: -10px; /* Denna behövs för det högra handtaget */
-    /* Vi behöver inte specificera 'left' för det vänstra, det hanteras av biblioteket.
-       Den visuella skillnaden var minimal och orsakades av andra faktorer som nu är korrigerade. */
+/* Cirkulära handtag */
+.noUi-handle {
+    border: 3px solid #fff;       /* Din design */
+    border-radius: 50%;          /* Din design */
+    background: var(--primary-color); /* Din design */
+    box-shadow: var(--shadow-soft); /* Din design */
+    cursor: pointer;             /* Din design */
+    height: 20px;                /* Din design */
+    width: 20px;                 /* Din design */
+    top: -7px;                   /* Din design */
+
+    /* KORRIGERING: Ersätter 'right: -10px' med en robust centreringsmetod */
+    transform: translate(-50%, 0); 
 }
 
-#price-slider .noUi-handle:after, 
-#price-slider .noUi-handle:before { 
+/* Tar bort onödiga pseudo-element från biblioteket */
+.noUi-handle:after, 
+.noUi-handle:before { 
     display: none; 
 }
 
-#price-slider .noUi-handle:focus {
+/* Ta bort den fula :focus-ringen */
+.noUi-handle:focus {
     outline: none;
 }
+
 /* =================================================================
    3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
    ================================================================= */
