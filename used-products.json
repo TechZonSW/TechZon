@@ -6,6 +6,7 @@
     "typ": "Mobiltelefon",
     "namn": "iPhone 14 Pro",
     "pris": 9500,
+    "skick": "Nyskick",
     "delbetalning_mojlig": true,
     "delbetalning_pris": "från 396 kr/mån",
     "beskrivning_kort": "Denna enhet är i nyskick utan repor och har 100% batterihälsa.",
@@ -27,6 +28,7 @@
     "typ": "Dator",
     "namn": "MacBook Air M1",
     "pris": 8500,
+    "skick": "Mycket bra skick",
     "delbetalning_mojlig": true,
     "delbetalning_pris": "från 354 kr/mån",
     "beskrivning_kort": "En kraftfull och lätt laptop i mycket bra skick, perfekt för studier eller arbete.",
@@ -39,6 +41,28 @@
       { "label": "Skick", "value": "Mycket bra skick" },
       { "label": "Färg", "value": "Silver" },
       { "label": "Lagring", "value": "256 GB SSD" },
+      { "label": "Garanti", "value": "12 månader" }
+    ]
+  },
+  {
+    "id": "used-003",
+    "kategori_slug": "andrahand",
+    "marke": "Samsung",
+    "typ": "Mobiltelefon",
+    "namn": "Galaxy S22",
+    "pris": 5500,
+    "skick": "Bra skick",
+    "delbetalning_mojlig": true,
+    "delbetalning_pris": "från 229 kr/mån",
+    "beskrivning_kort": "En fullt funktionell enhet i bra skick, med några mindre spår av användning.",
+    "beskrivning_lang": "Denna Galaxy S22 är ett utmärkt budgetval. Den har genomgått alla våra tester och fungerar perfekt. Notera att det kan finnas mindre, ytliga repor på ramen som inte påverkar funktionen. 12 månaders garanti ingår.",
+    "media": [
+        { "typ": "bild", "url": "bilder/testbild.png" }
+    ],
+    "specifikationer": [
+      { "label": "Skick", "value": "Bra skick" },
+      { "label": "Färg", "value": "Svart" },
+      { "label": "Lagring", "value": "128 GB" },
       { "label": "Garanti", "value": "12 månader" }
     ]
   }
