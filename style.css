@@ -1361,9 +1361,60 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-size: 0.95em; /* Något mindre text */
 }
 
-/* Pris-slider */
-#price-slider { margin: 20px 5px 30px; }
-#price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
+/* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
+
+#price-slider { 
+    margin: 20px 8px 30px; /* Lite extra marginal för handtagen */
+    border: none;
+    box-shadow: none;
+}
+#price-values { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 0.9em; 
+    font-weight: 500; 
+}
+
+/* Anpassar noUiSlider-bibliotekets standardstilar */
+
+/* Huvudspåret */
+.noUi-target {
+    background: #e9ecef; /* Mjuk, ljusgrå färg */
+    border-radius: 5px;
+    border: none;
+    box-shadow: none;
+    height: 6px; /* Lite tjockare för ett mer substantiellt intryck */
+}
+
+/* Den färgade delen som visar det valda intervallet */
+.noUi-connect {
+    background: var(--primary-color);
+}
+
+/* Cirkulära handtag */
+.noUi-handle {
+    border: 3px solid #fff; /* Vit kant för att separera från spåret */
+    border-radius: 50%;
+    background: var(--primary-color);
+    box-shadow: var(--shadow-soft); /* Subtil skugga för en "flytande" känsla */
+    cursor: pointer;
+    /* Tar bort standard-pilar/streck */
+    height: 20px;
+    width: 20px;
+    top: -7px;
+    right: -10px;
+}
+
+/* Tar bort onödiga pseudo-element från biblioteket */
+.noUi-handle:after, 
+.noUi-handle:before { 
+    display: none; 
+}
+
+/* Ta bort den fula :focus-ringen */
+.noUi-handle:focus {
+    outline: none;
+}
 
 /* =================================================================
    3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
