@@ -1088,7 +1088,6 @@ document.addEventListener('DOMContentLoaded', function() {
         function applyFiltersAndSearch() {
             const searchTerm = searchInput.value.toLowerCase();
             
-            // Kontrollera om några filter är aktiva för att visa "Rensa"-knappen
             const hasActiveFilters = activeFilters.kategori.length > 0 || 
                                      activeFilters.marke.length > 0 || 
                                      activeFilters.typ.length > 0 ||
@@ -1097,7 +1096,6 @@ document.addEventListener('DOMContentLoaded', function() {
             clearFiltersBtn.style.display = hasActiveFilters ? 'block' : 'none';
         
             const filteredProducts = allProducts.filter(p => {
-                // Omvandla produktens attribut till gemener en gång för enkel jämförelse
                 const produktMarke = (p.marke || '').toLowerCase();
                 const produktTyp = (p.typ || '').toLowerCase();
         
@@ -1106,21 +1104,25 @@ document.addEventListener('DOMContentLoaded', function() {
                                       (p.namn && p.namn.toLowerCase().includes(searchTerm)) ||
                                       produktMarke.includes(searchTerm) ||
                                       produktTyp.includes(searchTerm);
-        
-                // Om söktermen inte matchar, kan vi avsluta direkt
-                if (!matchesSearch) {
-                    return false;
-                }
+                if (!matchesSearch) return false;
                 
-                // CHECKBOX-FILTER (Returnera false direkt om ett filter inte matchar)
+                // KATEGORIFILTER
                 if (activeFilters.kategori.length > 0 && !activeFilters.kategori.includes(p.kategori_slug)) {
                     return false;
                 }
+                // MÄRKESFILTER
                 if (activeFilters.marke.length > 0 && !activeFilters.marke.includes(produktMarke)) {
                     return false;
                 }
-                if (activeFilters.typ.length > 0 && !activeFilters.typ.includes(produktTyp)) {
-                    return false;
+        
+                // TYP-FILTER (KORRIGERAD LOGIK)
+                // Använder .some() för att se om produktens typ innehåller något av filterorden.
+                // Detta gör att 'mobil' matchar 'mobiltelefon'.
+                if (activeFilters.typ.length > 0) {
+                    const typMatch = activeFilters.typ.some(filterTyp => produktTyp.includes(filterTyp));
+                    if (!typMatch) {
+                        return false;
+                    }
                 }
         
                 // PRISFILTER
