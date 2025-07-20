@@ -1425,7 +1425,7 @@ nav ul.main-nav { display: flex; align-items: center; }
        Top: (spår-höjd - total handtags-höjd) / 2 = (8px - 28px) / 2 = -10px.
        Right: -(total handtags-bredd / 2) = -14px.
     */
-    top: -10px;
+    top: -15px;
     right: -14px;
 }
 
