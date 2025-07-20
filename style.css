@@ -1756,7 +1756,21 @@ nav ul.main-nav { display: flex; align-items: center; }
 .cart-hover-view .cta-button {
     width: 100%;
     padding: 12px;
-    font-size: 1em;
+    font-size: 0.9em; /* Något mindre text */
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: block; /* Säkerställer att den tar upp hela bredden */
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: 10px; /* Något mindre rundning för en skarpare look */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cart-hover-view .cta-button:hover {
+    background-color: #000; /* Mörkare vid hover */
+    transform: scale(1.03); /* Subtil förstoring */
 }
 
 /* Kassasidan - "Hedonic" design */
