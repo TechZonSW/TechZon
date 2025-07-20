@@ -1271,7 +1271,7 @@ if (productPage) {
         setupEventListeners(); // Koppla på all interaktivitet
     }
 
-    // --- 3. UI-UPPDATERING (BILDER, PRIS, ETC.) ---
+    // --- 3. UI-UPPDATERING (ROBUST VERSION) ---
     function updateVariantUI() {
         const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
         
@@ -1284,24 +1284,30 @@ if (productPage) {
         }).join('');
         
         displayMedia(media[0]);
-
+    
         contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
         const installmentP = contentWrapper.querySelector('.price-installment');
         if (installmentP) {
             installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
-            installmentP.textContent = currentVariant.delbetalning_mojlig ? currentVariant.delbetalning_pris : '';
+            if (currentVariant.delbetalning_mojlig) {
+                installmentP.textContent = currentVariant.delbetalning_pris;
+            }
         }
         
         const specsList = contentWrapper.querySelector('.pdp-specs-list');
-        specsList.innerHTML = (currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
-
+        const specsData = currentVariant.specifikationer || [];
+        specsList.innerHTML = specsData.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
+    
+        // Uppdatera de valda knapparna
         if (currentVariant.attribut) {
-            for (const [key, value] of Object.entries(currentVariant.attribut)) {
-                const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
-                btns.forEach(btn => {
-                    btn.classList.toggle('selected', btn.textContent === value);
+            document.querySelectorAll('.variant-options').forEach(optionGroup => {
+                const attributeKey = optionGroup.dataset.attribute;
+                const selectedValue = currentVariant.attribut[attributeKey];
+                
+                optionGroup.querySelectorAll('.variant-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent === selectedValue);
                 });
-            }
+            });
         }
     }
     
@@ -1321,10 +1327,10 @@ if (productPage) {
 
     // --- 4. EVENT HANTERING (ROBUST VERSION) ---
     function setupEventListeners() {
-        // En enda, kraftfull event listener för hela innehållet
+        // Använd en enda, delegerad event listener för hela content-wrappern
         contentWrapper.addEventListener('click', (e) => {
             const target = e.target;
-            
+    
             // Hantera klick på thumbnails
             const thumb = target.closest('.pdp-thumbs-list li');
             if (thumb) {
@@ -1335,30 +1341,42 @@ if (productPage) {
                 thumb.classList.add('active');
                 
                 displayMedia(media[index]);
-                return; // Avsluta för att inte trigga andra klick
+                return; // Viktigt för att inte fortsätta
             }
-
+    
             // Hantera klick på variant-knappar
-            if (target.classList.contains('variant-btn')) {
-                const attributeKey = target.parentElement.dataset.attribute;
-                const attributeValue = target.textContent;
+            const variantBtn = target.closest('.variant-btn');
+            if (variantBtn) {
+                const attributeKey = variantBtn.parentElement.dataset.attribute;
+                const attributeValue = variantBtn.textContent;
                 
+                // Om knappen redan är vald, gör ingenting
+                if(variantBtn.classList.contains('selected')) {
+                    return;
+                }
+                
+                // Skapa en kopia av de nuvarande attributen och uppdatera med det nya valet
                 const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
                 
-                const newVariant = currentProductBase.varianter.find(variant => 
-                    JSON.stringify(variant.attribut) === JSON.stringify(targetAttributes)
-                );
+                // Hitta den variant som matchar den nya kombinationen
+                const newVariant = currentProductBase.varianter.find(variant => {
+                    // Returnerar true bara om alla attribut i varianten matchar vår målmall
+                    return Object.entries(targetAttributes).every(([key, value]) => 
+                        variant.attribut[key] === value
+                    );
+                });
                 
+                // Om vi hittade en giltig variant...
                 if (newVariant) {
-                    currentVariant = newVariant;
-                    updateVariantUI(); // Rita om UI med den nya variantens data
+                    currentVariant = newVariant; // ...uppdatera den globala state-variabeln...
+                    updateVariantUI(); // ...och rita om hela UI:t.
                 } else {
-                    console.log("Ingen giltig variant hittades.");
+                    // Detta scenario bör inte hända om datan är korrekt, men det är en bra felsökning
+                    console.warn("Ingen giltig produktvariant hittades för kombinationen:", targetAttributes);
                 }
             }
         });
     }
-
     // --- Starta allt ---
     initializeProductPage();
 }
