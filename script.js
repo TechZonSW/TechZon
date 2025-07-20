@@ -1269,24 +1269,17 @@ document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
         }
     
+        // HELA DENNA FUNKTION SKA ERSÄTTAS
         function updateVariantUI() {
             const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
             
+            // Uppdatera media (samma som innan)
             const mainMediaContainer = document.getElementById('main-media-container');
             const thumbsList = document.getElementById('thumbs-list');
-            
-            thumbsList.innerHTML = media.map((item, index) => {
-                const isActive = index === 0 ? 'class="active"' : '';
-                if (item.typ === 'video') {
-                    return `<li ${isActive} data-index="${index}"><img src="bilder/testbild.png" alt="Video thumbnail"><i class="ph-bold ph-play-circle thumb-video-icon"></i></li>`;
-                }
-                return `<li ${isActive} data-index="${index}"><img src="${item.url}" alt="${currentVariant.namn}"></li>`;
-            }).join('');
-            
-            // Visa första bilden/videon som standard
+            thumbsList.innerHTML = media.map((item, index) => { /* ... din befintliga kod ... */ }).join('');
             displayMedia(media[0]);
-    
-            // Uppdatera resten av UI:t
+        
+            // Uppdatera pris och delbetalning
             contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
             const installmentP = contentWrapper.querySelector('.price-installment');
             if (installmentP) {
@@ -1296,12 +1289,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-            document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('selected'));
+            // Uppdatera specifikationslistan
+            const specsList = contentWrapper.querySelector('.pdp-specs-list');
+            if (specsList && currentVariant.specifikationer) {
+                specsList.innerHTML = currentVariant.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
+            }
+        
+            // Uppdatera de valda knapparna
             if (currentVariant.attribut) {
                 for (const [key, value] of Object.entries(currentVariant.attribut)) {
                     const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
                     btns.forEach(btn => {
-                        if(btn.textContent === value) btn.classList.add('selected');
+                        btn.classList.toggle('selected', btn.textContent === value);
                     });
                 }
             }
@@ -1316,42 +1315,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     
+        // HELA DENNA FUNKTION SKA ERSÄTTAS
         function setupEventListeners() {
-            // Event listener för thumbnails (använder event delegation)
-            contentWrapper.addEventListener('click', (e) => {
-                const thumb = e.target.closest('.pdp-thumbs-list li');
-                if (thumb) {
-                    const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
-                    const index = parseInt(thumb.dataset.index, 10);
-                    
-                    // Ta bort 'active' från alla thumbnails och lägg till på den klickade
-                    document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
-                    thumb.classList.add('active');
-                    
-                    displayMedia(media[index]);
-                }
-            });
-            
-            // Event listener för variant-knappar
             const selectors = document.getElementById('variant-selectors');
             if (selectors) {
                 selectors.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('variant-btn')) {
-                        const attribute = e.target.parentElement.dataset.attribute;
-                        const value = e.target.textContent;
-                        
-                        const currentAttributes = { ...currentVariant.attribut };
-                        currentAttributes[attribute] = value;
-                        
-                        // Hitta den bästa matchande varianten
-                        let newVariant = currentProductBase.varianter.find(v => {
-                            return Object.entries(currentAttributes).every(([key, val]) => v.attribut[key] === val);
+                    // Se till att vi bara reagerar på klick på en variant-knapp
+                    if (e.target.tagName !== 'BUTTON' || !e.target.classList.contains('variant-btn')) {
+                        return;
+                    }
+                    
+                    const attributeKey = e.target.parentElement.dataset.attribute;
+                    const attributeValue = e.target.textContent;
+                    
+                    // Bygg en "mall" för den nya varianten vi letar efter
+                    const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+                    
+                    // Hitta en variant i produktens variant-lista som exakt matchar vår mall
+                    const newVariant = currentProductBase.varianter.find(variant => {
+                        // Jämför varje attribut i varianten mot vår mall
+                        return Object.entries(targetAttributes).every(([key, value]) => {
+                            return variant.attribut[key] === value;
                         });
-                        
-                        if (newVariant) {
-                            currentVariant = newVariant;
-                            updateVariantUI(); // Rita om hela UI:t med den nya variantens data
-                        }
+                    });
+                    
+                    // Om vi hittade en exakt match...
+                    if (newVariant) {
+                        currentVariant = newVariant; // ...uppdatera den aktiva varianten...
+                        updateVariantUI(); // ...och rita om hela UI:t med den nya informationen.
+                    } else {
+                        // Om ingen exakt match finns (t.ex. "Blå" 256GB finns inte),
+                        // gör ingenting för tillfället, eller inaktivera knappen visuellt (mer avancerat).
+                        console.log("Ingen giltig variant hittades för den kombinationen.");
                     }
                 });
             }
