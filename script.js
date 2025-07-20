@@ -1514,11 +1514,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Lägger till en produkt i varukorgen
         async addToCart(productId) {
             if (!this.allProductsData) await this.fetchAllProducts();
-    
+        
             const productToAdd = this.allProductsData.find(p => p.id === productId);
-    
+        
             if (productToAdd) {
-                this.cart.push(productToAdd);
+                // KORRIGERING: Skapa ett nytt objekt och lägg till det unika cart_id
+                const cartItem = { ...productToAdd, cart_id: Date.now() };
+                this.cart.push(cartItem);
                 this.saveAndRender();
                 
                 const cartIcon = document.querySelector('.cart-icon-container i');
@@ -1533,8 +1535,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         // Tar bort en produkt från varukorgen
-        removeFromCart(productId) {
-            this.cart = this.cart.filter(item => item.id !== productId);
+        removeFromCart(cartId) {
+            this.cart = this.cart.filter(item => item.cart_id !== cartId);
             this.saveAndRender();
         }
     
