@@ -1013,62 +1013,62 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
      // --- 2. FILTERS ---
-        function populateFilters() {
-            const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
-            const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
-            const typer = [...new Set(allProducts.map(p => p.typ).filter(Boolean))];
+    function populateFilters() {
+        const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
+        const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
+        const typer = [...new Set(allProducts.map(p => p.typ).filter(Boolean))];
     
-            filtersContainer.innerHTML = `
-                <div class="filter-group">
-                    <h4>Kategori</h4>
-                    <div class="filter-options">
-                        ${Object.entries(kategorier).map(([slug, name]) => `
-                            <label><input type="checkbox" data-filter="kategori" value="${slug}"> ${name}</label>
-                        `).join('')}
-                    </div>
+        filtersContainer.innerHTML = `
+            <div class="filter-group">
+                <h4>Kategori</h4>
+                <div class="filter-options">
+                    ${Object.entries(kategorier).map(([slug, name]) => `
+                        <button class="filter-btn" data-filter="kategori" data-value="${slug}">${name}</button>
+                    `).join('')}
                 </div>
-                <div class="filter-group">
-                    <h4>Märke</h4>
-                    <div class="filter-options">
-                        ${marken.map(m => `
-                            <label><input type="checkbox" data-filter="marke" value="${m.toLowerCase()}"> ${m}</label>
-                        `).join('')}
-                    </div>
+            </div>
+            <div class="filter-group">
+                <h4>Märke</h4>
+                <div class="filter-options">
+                    ${marken.map(m => `
+                        <button class="filter-btn" data-filter="marke" data-value="${m.toLowerCase()}">${m}</button>
+                    `).join('')}
                 </div>
-                <div class="filter-group">
-                    <h4>Produkttyp</h4>
-                    <div class="filter-options">
-                        ${typer.map(t => `
-                            <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase()}"> ${t}</label>
-                        `).join('')}
-                    </div>
+            </div>
+            <div class="filter-group">
+                <h4>Produkttyp</h4>
+                <div class="filter-options">
+                    ${typer.map(t => `
+                        <button class="filter-btn" data-filter="typ" data-value="${t.toLowerCase()}">${t}</button>
+                    `).join('')}
                 </div>
-                <div class="filter-group">
-                    <h4>Pris</h4>
-                    <div id="price-slider"></div>
-                    <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
-                </div>
-            `;
+            </div>
+            <div class="filter-group">
+                <h4>Pris</h4>
+                <div id="price-slider"></div>
+                <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
+            </div>
+        `;
             
-            const priceSliderElement = document.getElementById('price-slider');
-            const minPriceLabel = document.getElementById('min-price');
-            const maxPriceLabel = document.getElementById('max-price');
-    
-            // Kontrollera att noUiSlider är laddat
-            if (typeof noUiSlider !== 'undefined') {
-                priceSlider = noUiSlider.create(priceSliderElement, {
-                    start: [0, 20000], connect: true, range: { min: 0, max: 20000 }, step: 100,
-                    format: { to: value => Math.round(value) + ' kr', from: value => Number(value.replace(' kr', '')) }
-                });
-                
-                priceSlider.on('update', ([min, max]) => { minPriceLabel.textContent = min; maxPriceLabel.textContent = max; });
-                priceSlider.on('change', ([min, max]) => {
-                    activeFilters.price.min = Number(min.replace(' kr', ''));
-                    activeFilters.price.max = Number(max.replace(' kr', ''));
-                    applyFiltersAndSearch();
-                });
-            }
+        const priceSliderElement = document.getElementById('price-slider');
+        const minPriceLabel = document.getElementById('min-price');
+        const maxPriceLabel = document.getElementById('max-price');
+
+        // Kontrollera att noUiSlider är laddat
+        if (typeof noUiSlider !== 'undefined') {
+            priceSlider = noUiSlider.create(priceSliderElement, {
+                start: [0, 20000], connect: true, range: { min: 0, max: 20000 }, step: 100,
+                format: { to: value => Math.round(value) + ' kr', from: value => Number(value.replace(' kr', '')) }
+            });
+            
+            priceSlider.on('update', ([min, max]) => { minPriceLabel.textContent = min; maxPriceLabel.textContent = max; });
+            priceSlider.on('change', ([min, max]) => {
+                activeFilters.price.min = Number(min.replace(' kr', ''));
+                activeFilters.price.max = Number(max.replace(' kr', ''));
+                applyFiltersAndSearch();
+            });
         }
+    }
         
          function parseUrlParams() {
             const params = new URLSearchParams(window.location.search);
