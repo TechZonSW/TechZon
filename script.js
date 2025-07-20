@@ -1106,27 +1106,28 @@ if (shopPage) {
         renderProducts(filteredProducts);
     }
     
-    // --- 3. RENDERING (Uppdaterad) ---
+    // --- 3. RENDERING (KORRIGERAD MED TVÅ KNAPPAR) ---
     function renderProducts(products) {
         productGrid.innerHTML = '';
         noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
-
+    
         products.forEach(p => {
+            const displayProduct = p.varianter ? p.varianter[0] : p;
+            const imageUrl = (displayProduct.media && displayProduct.media[0]?.url) || (displayProduct.bilder && displayProduct.bilder[0]) || 'bilder/testbild.png';
+    
             const card = document.createElement('div');
             card.className = 'product-card';
-            
-            // Använd första bilden från media-arrayen om den finns, annars en fallback
-            const imageUrl = (p.media && p.media[0]?.url) || (p.bilder && p.bilder[0]) || 'bilder/testbild.png';
-
             card.innerHTML = `
-                <img src="${imageUrl}" alt="${p.namn}">
+                <a href="produkt.html?id=${displayProduct.id}" class="product-card-link">
+                    <img src="${imageUrl}" alt="${p.namn}">
+                </a>
                 <div class="product-card-content">
                     <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
-                    <p class="price">${p.pris} kr</p>
-                    ${p.delbetalning_mojlig ? `<p class="price-installment">${p.delbetalning_pris}</p>` : ''}
+                    <p class="price">${displayProduct.pris} kr</p>
+                    ${displayProduct.delbetalning_mojlig ? `<p class="price-installment">${displayProduct.delbetalning_pris}</p>` : ''}
                     <div class="product-card-buttons">
-                        <a href="produkt.html?id=${p.id}" class="details-btn">Se detaljer</a>
-                        <button class="add-to-cart-btn" data-id="${p.id}">Lägg i korg</button>
+                        <a href="produkt.html?id=${displayProduct.id}"><button class="details-btn">Se detaljer</button></a>
+                        <button class="add-to-cart-btn" data-id="${displayProduct.id}">Lägg i korg</button>
                     </div>
                 </div>
             `;
@@ -1180,7 +1181,8 @@ if (shopPage) {
         let allProductBases = [];
         let currentProductBase = null;
         let currentVariant = null;
-        let swiperInstance = null;
+        let swiperMain = null;
+        let swiperThumbs = null;
         
         async function initializeProductPage() {
             try {
@@ -1234,7 +1236,8 @@ if (shopPage) {
             contentWrapper.innerHTML = `
                 <div class="product-page-layout">
                     <div class="pdp-gallery">
-                        <div class="swiper"><div class="swiper-wrapper"></div></div>
+                        <div class="swiper swiper-main"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
+                        <div class="swiper swiper-thumbs"><div class="swiper-wrapper"></div></div>
                     </div>
                     <div class="pdp-details">
                         <h1>${currentProductBase.namn}</h1>
@@ -1267,31 +1270,61 @@ if (shopPage) {
             updateVariantUI();
             setupEventListeners();
         }
-    
+
         function updateVariantUI() {
-            if (swiperInstance) swiperInstance.destroy(true, true);
+            // Förstör gamla Swiper-instanser för att undvika konflikter
+            if (swiperMain) swiperMain.destroy(true, true);
+            if (swiperThumbs) swiperThumbs.destroy(true, true);
+    
+            const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
             
-            const swiperWrapper = contentWrapper.querySelector('.swiper-wrapper');
-            swiperWrapper.innerHTML = (currentVariant.media || currentVariant.bilder).map(item => {
+            const mainSwiperWrapper = contentWrapper.querySelector('.swiper-main .swiper-wrapper');
+            const thumbsSwiperWrapper = contentWrapper.querySelector('.swiper-thumbs .swiper-wrapper');
+    
+            // Fyll på med media
+            mainSwiperWrapper.innerHTML = media.map(item => {
                 if (item.typ === 'video') {
                     return `<div class="swiper-slide"><video src="${item.url}" playsinline muted controls></video></div>`;
                 }
-                return `<div class="swiper-slide"><img src="${item.url || item}" alt="${currentVariant.namn}"></div>`;
+                return `<div class="swiper-slide"><img src="${item.url}" alt="${currentVariant.namn}"></div>`;
             }).join('');
             
-            swiperInstance = new Swiper('.swiper', {
-                loop: (currentVariant.media || currentVariant.bilder).length > 1,
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+            thumbsSwiperWrapper.innerHTML = media.map(item => {
+                 if (item.typ === 'video') {
+                    return `<div class="swiper-slide"><img src="bilder/testbild.png" alt="Video thumbnail"><i class="ph-bold ph-play-circle thumb-video-icon"></i></div>`;
+                }
+                return `<div class="swiper-slide"><img src="${item.url}" alt="${currentVariant.namn}"></div>`;
+            }).join('');
+    
+            // Initiera båda karusellerna och länka dem
+            swiperThumbs = new Swiper(".swiper-thumbs", {
+                spaceBetween: 10,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
             });
-            
+    
+            swiperMain = new Swiper(".swiper-main", {
+                spaceBetween: 10,
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                thumbs: { swiper: swiperThumbs },
+            });
+    
+            // Uppdatera resten av UI:t (priser, knappar, etc.)
             contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
+            const installmentP = contentWrapper.querySelector('.price-installment');
+            if (installmentP) {
+                installmentP.textContent = currentVariant.delbetalning_mojlig ? currentVariant.delbetalning_pris : '';
+            }
             
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('selected'));
             if (currentVariant.attribut) {
                 for (const [key, value] of Object.entries(currentVariant.attribut)) {
-                    const btn = document.querySelector(`.variant-options[data-attribute="${key}"] button`);
-                    if(btn && btn.textContent === value) btn.classList.add('selected');
+                    // Hitta rätt knapp och markera den
+                    const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
+                    btns.forEach(btn => {
+                        if(btn.textContent === value) btn.classList.add('selected');
+                    });
                 }
             }
         }
