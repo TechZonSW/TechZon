@@ -1397,6 +1397,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.classList.toggle('disabled', !isPossible);
             });
         }
+        window.currentVariantForCart = currentVariant;
     }
         
         function displayMedia(mediaItem) {
@@ -1641,29 +1642,19 @@ if (checkoutPage) {
         }
     });
     
-    document.getElementById('checkout-form').addEventListener('submit', (e) => { /* ... oförändrad ... */ });
+    document.getElementById('checkout-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
+        if (cart.length === 0) {
+            alert("Din varukorg är tom!");
+            return;
+        }
+        alert('Tack för din beställning! (Här skulle betalningslogik köras)');
+        window.updateCart([]);
+        window.location.href = 'index.html';
+    });
 
     renderCheckoutPage();
-}
-
-// Liten justering i DEL 10 för att göra produkt-ID tillgängligt för varukorgen
-const productPage = document.getElementById('product-page');
-if (productPage) {
-    // Lägg till detta i updateUI-funktionen i DEL 10, efter att currentVariant har uppdaterats:
-    // window.currentVariantForCart = currentVariant;
-}```
-
-**Sista lilla justeringen i `DEL 10`:**
-För att knappen på produktsidan (`pdp-buy-button`) ska veta vilken produkt den ska lägga till, måste vi göra en liten justering.
-
-Öppna din `script.js`, gå till **DEL 10**, och hitta funktionen **`updateUI()`**. Lägg till denna rad sist i den funktionen:
-
-```javascript
-function updateUI() {
-    // ... all befintlig kod i funktionen ...
-
-    // LÄGG TILL DENNA RAD SIST:
-    window.currentVariantForCart = currentVariant;
 }
     
 });
