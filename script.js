@@ -989,38 +989,23 @@ if (shopPage) {
         price: { min: 0, max: 20000 }
     };
 
-    // =================================================================
-    // SWIPER-INITIERING - Körs EN gång när sidan laddas.
-    // =================================================================
-    let modalSwiper = new Swiper('.swiper', {
-        loop: false, // Starta utan loop, den aktiveras vid behov
-        pagination: { el: '.swiper-pagination', clickable: true },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
-
     // --- 1. INITIALISERING ---
     async function initializeShop() {
         try {
-            const [newDevicesRes, usedDevicesRes, accessoriesRes] = await Promise.all([
-                fetch('./nya-enheter.json'),
-                fetch('./used-products.json'),
-                fetch('./accessories.json')
+            const [newDevices, usedDevices, accessories] = await Promise.all([
+                fetch('./nya-enheter.json').then(res => res.json()),
+                fetch('./used-products.json').then(res => res.json()),
+                fetch('./accessories.json').then(res => res.json())
             ]);
             
-            if (!newDevicesRes.ok || !usedDevicesRes.ok || !accessoriesRes.ok) {
-                throw new Error('En eller flera produktfiler kunde inte laddas.');
-            }
+            // Flatta ut "nya"-produkter så varje variant blir en egen produkt i listan
+            const newProductsFlat = newDevices.flatMap(p => 
+                p.varianter.map(v => ({ ...p, ...v }))
+            );
+
+            allProducts = [ ...newProductsFlat, ...usedDevices, ...accessories ];
             
-            const newDevices = await newDevicesRes.json();
-            const usedDevices = await usedDevicesRes.json();
-            const accessories = await accessoriesRes.json();
-            
-            // Slå ihop all data
-            allProducts = [ ...newDevices, ...usedDevices, ...accessories ];
-            
+            // ... (resten av initializeShop, oförändrat)
             populateFilters();
             parseUrlParams();
             applyFiltersAndSearch();
@@ -1125,29 +1110,39 @@ if (shopPage) {
     function renderProducts(products) {
         productGrid.innerHTML = '';
         noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
-    
+
         products.forEach(p => {
-            // För varianter, visa den första varianten i listan
-            const displayProduct = p.varianter ? p.varianter[0] : p;
-            
             const card = document.createElement('div');
             card.className = 'product-card';
-            // Hela kortet länkar nu till produktsidan
+            
+            // Använd första bilden från media-arrayen om den finns, annars en fallback
+            const imageUrl = (p.media && p.media[0]?.url) || (p.bilder && p.bilder[0]) || 'bilder/testbild.png';
+
             card.innerHTML = `
-                <a href="produkt.html?id=${displayProduct.id}" class="product-card-link">
-                    <img src="${displayProduct.bilder[0]}" alt="${p.namn}">
-                    <div class="product-card-content">
-                        <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
-                        <p class="price">${displayProduct.pris} kr</p>
-                        ${displayProduct.delbetalning_mojlig ? `<p class="price-installment">${displayProduct.delbetalning_pris}</p>` : ''}
+                <img src="${imageUrl}" alt="${p.namn}">
+                <div class="product-card-content">
+                    <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
+                    <p class="price">${p.pris} kr</p>
+                    ${p.delbetalning_mojlig ? `<p class="price-installment">${p.delbetalning_pris}</p>` : ''}
+                    <div class="product-card-buttons">
+                        <a href="produkt.html?id=${p.id}" class="details-btn">Se detaljer</a>
+                        <button class="add-to-cart-btn" data-id="${p.id}">Lägg i korg</button>
                     </div>
-                </a>
+                </div>
             `;
             productGrid.appendChild(card);
         });
     }
-    
+
+
     // --- 4. EVENT LISTENERS ---
+    productGrid.addEventListener('click', (e) => {
+        if (e.target.classList.contains('add-to-cart-btn')) {
+            e.preventDefault(); // Förhindra att länken följs om man klickar på knappen
+            alert(`Produkt med ID ${e.target.dataset.id} lades till (logik ej implementerad).`);
+        }
+    });
+    
     searchInput.addEventListener('input', applyFiltersAndSearch);
 
     filtersContainer.addEventListener('change', (e) => {
@@ -1177,12 +1172,12 @@ if (shopPage) {
 }
 
     // --------------------------------------------------------------------
-    // DEL 10: KOD FÖR DEDIKERAD PRODUKTSIDA (/produkt.html)
+    // DEL 10: KOD FÖR DEDIKERAD PRODUKTSIDA (/produkt.html) - SLUTGILTIG
     // --------------------------------------------------------------------
     const productPage = document.getElementById('product-page');
     if (productPage) {
         const contentWrapper = document.getElementById('product-content-wrapper');
-        let allProducts = [];
+        let allProductBases = [];
         let currentProductBase = null;
         let currentVariant = null;
         let swiperInstance = null;
@@ -1193,15 +1188,20 @@ if (shopPage) {
                 const variantId = params.get('id');
                 if (!variantId) throw new Error('Produkt-ID saknas.');
     
-                // Ladda all produktdata
                 const [newDevices, usedDevices, accessories] = await Promise.all([
                     fetch('./nya-enheter.json').then(res => res.json()),
                     fetch('./used-products.json').then(res => res.json()),
                     fetch('./accessories.json').then(res => res.json())
                 ]);
                 
-                // Hitta rätt produkt och variant
-                for (const p of newDevices) {
+                // Förbered all data för enkel sökning
+                allProductBases = [
+                    ...newDevices,
+                    ...usedDevices.map(p => ({...p, varianter: [p] })), // Gör om till variant-struktur
+                    ...accessories.map(p => ({...p, varianter: [p] }))
+                ];
+                
+                for (const p of allProductBases) {
                     const foundVariant = p.varianter.find(v => v.id === variantId);
                     if (foundVariant) {
                         currentProductBase = p;
@@ -1209,7 +1209,6 @@ if (shopPage) {
                         break;
                     }
                 }
-                // (Lägg till liknande logik för usedDevices och accessories här)
     
                 if (!currentProductBase) throw new Error('Produkten kunde inte hittas.');
                 
@@ -1223,12 +1222,14 @@ if (shopPage) {
             document.title = `${currentProductBase.namn} - TechZon Kalmar`;
     
             const variantOptions = {};
-            currentProductBase.varianter.forEach(v => {
-                for (const [key, value] of Object.entries(v.attribut)) {
-                    if (!variantOptions[key]) variantOptions[key] = new Set();
-                    variantOptions[key].add(value);
-                }
-            });
+            if (currentProductBase.varianter.length > 1) {
+                currentProductBase.varianter.forEach(v => {
+                    for (const [key, value] of Object.entries(v.attribut)) {
+                        if (!variantOptions[key]) variantOptions[key] = new Set();
+                        variantOptions[key].add(value);
+                    }
+                });
+            }
     
             contentWrapper.innerHTML = `
                 <div class="product-page-layout">
@@ -1237,7 +1238,7 @@ if (shopPage) {
                     </div>
                     <div class="pdp-details">
                         <h1>${currentProductBase.namn}</h1>
-                        <p class="description-short">${currentProductBase.beskrivning_kort}</p>
+                        <p class="description-short">${currentProductBase.beskrivning_kort || ''}</p>
                         <div id="variant-selectors">
                             ${Object.entries(variantOptions).map(([key, values]) => `
                                 <div class="variant-selector">
@@ -1249,15 +1250,16 @@ if (shopPage) {
                             `).join('')}
                         </div>
                         <p class="price">${currentVariant.pris} kr</p>
+                        ${currentVariant.delbetalning_mojlig ? `<p class="price-installment">${currentVariant.delbetalning_pris}</p>` : ''}
                         <button class="pdp-buy-button">Lägg i varukorg</button>
                     </div>
                 </div>
                 <div class="pdp-long-info">
                     <h2>Beskrivning</h2>
-                    <p>${currentProductBase.beskrivning_lang}</p>
+                    <p>${currentProductBase.beskrivning_lang || currentProductBase.beskrivning || 'Mer information kommer snart.'}</p>
                     <h2>Specifikationer</h2>
                     <ul class="pdp-specs-list">
-                        ${currentVariant.specifikationer.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
+                        ${(currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('')}
                     </ul>
                 </div>
             `;
@@ -1267,25 +1269,54 @@ if (shopPage) {
         }
     
         function updateVariantUI() {
-            // Uppdatera Swiper-galleriet
-            const swiperWrapper = contentWrapper.querySelector('.swiper-wrapper');
-            swiperWrapper.innerHTML = currentVariant.bilder.map(img => `<div class="swiper-slide"><img src="${img}"></div>`).join('');
             if (swiperInstance) swiperInstance.destroy(true, true);
-            swiperInstance = new Swiper('.swiper', { loop: currentVariant.bilder.length > 1 });
-    
-            // Uppdatera pris, specifikationer etc.
+            
+            const swiperWrapper = contentWrapper.querySelector('.swiper-wrapper');
+            swiperWrapper.innerHTML = (currentVariant.media || currentVariant.bilder).map(item => {
+                if (item.typ === 'video') {
+                    return `<div class="swiper-slide"><video src="${item.url}" playsinline muted controls></video></div>`;
+                }
+                return `<div class="swiper-slide"><img src="${item.url || item}" alt="${currentVariant.namn}"></div>`;
+            }).join('');
+            
+            swiperInstance = new Swiper('.swiper', {
+                loop: (currentVariant.media || currentVariant.bilder).length > 1,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+            });
+            
             contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
             
-            // Markera valda variantknappar
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('selected'));
-            for (const [key, value] of Object.entries(currentVariant.attribut)) {
-                const btn = document.querySelector(`.variant-options[data-attribute="${key}"] button:not(:disabled)`);
-                if(btn && btn.textContent === value) btn.classList.add('selected');
+            if (currentVariant.attribut) {
+                for (const [key, value] of Object.entries(currentVariant.attribut)) {
+                    const btn = document.querySelector(`.variant-options[data-attribute="${key}"] button`);
+                    if(btn && btn.textContent === value) btn.classList.add('selected');
+                }
             }
         }
         
         function setupEventListeners() {
-            // Lyssna på klick på variantknappar
+            const selectors = document.getElementById('variant-selectors');
+            if (selectors) {
+                selectors.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('variant-btn')) {
+                        const attribute = e.target.parentElement.dataset.attribute;
+                        const value = e.target.textContent;
+                        
+                        const newAttributes = { ...currentVariant.attribut, [attribute]: value };
+                        
+                        let newVariant = currentProductBase.varianter.find(v => 
+                            JSON.stringify(v.attribut) === JSON.stringify(newAttributes)
+                        );
+                        
+                        if (newVariant) {
+                            currentVariant = newVariant;
+                            updateVariantUI();
+                        }
+                    }
+                });
+            }
         }
     
         initializeProductPage();
