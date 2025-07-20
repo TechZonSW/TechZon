@@ -1465,7 +1465,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-// DEL 11: KOD FÖR VARUKORG & KASSA (SLUTGILTIG, KORREKT VERSION)
+// DEL 11: KOD FÖR VARUKORG & KASSA (SLUTGILTIG, KORRIGERAD VERSION)
 // --------------------------------------------------------------------
 
 // Körs på alla sidor för att hantera varukorgs-data
@@ -1512,6 +1512,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Global funktion för att lägga till en produkt i varukorgen
     window.addToCart = async (productId) => {
         const products = await fetchAllProducts();
+        // Hitta den fullständiga produktinformationen baserat på ID
         const productToAdd = products.find(p => p.id === productId);
 
         if (productToAdd) {
@@ -1520,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Visuell feedback
             const cartIcon = document.querySelector('.cart-icon-container i');
             if (cartIcon) {
-                cartIcon.style.transform = 'scale(1.2)';
+                cartIcon.style.transform = 'scale(1.3)';
                 setTimeout(() => { cartIcon.style.transform = 'scale(1)'; }, 300);
             }
         } else {
@@ -1550,11 +1551,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cart.length > 0) {
                 cartHoverItems.innerHTML = cart.slice(0, 3).map(item => { // Visa max 3 produkter
                     const imageUrl = (item.media && item.media[0]?.url) || (item.bilder && item.bilder[0]) || 'bilder/testbild.png';
+                    const fullName = item.marke ? `${item.marke} ${item.namn}` : item.namn;
                     return `
                     <div class="cart-hover-item">
-                        <img src="${imageUrl}" alt="${item.namn}">
+                        <img src="${imageUrl}" alt="${fullName}">
                         <div class="cart-hover-item-info">
-                            <p>${item.namn}</p>
+                            <p>${fullName}</p>
                             <p class="price">${item.pris} kr</p>
                         </div>
                     </div>`;
@@ -1575,12 +1577,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // En enda, kraftfull event listener för hela sidan
     document.body.addEventListener('click', (e) => {
-        // Hitta den närmaste "lägg i korg"-knappen, oavsett var den är
+        // Hitta den närmaste "lägg i korg"-knappen
         const button = e.target.closest('.add-to-cart-btn, .pdp-buy-button');
         if (button) {
             e.preventDefault();
-            // För .pdp-buy-button hämtar vi ID från en annan källa (t.ex. en global variabel)
-            // Detta är en förenkling - i en fullständig app skulle vi hämta det aktiva produktens ID
+            // ID:t hämtas antingen från knappens data-id eller från den globala variabeln
             const productId = button.dataset.id || (window.currentVariantForCart && window.currentVariantForCart.id);
             if (productId) {
                 window.addToCart(productId);
@@ -1601,11 +1602,12 @@ if (checkoutPage) {
     const subtotalEl = document.getElementById('summary-subtotal');
     const totalEl = document.getElementById('summary-total');
     
+    // Denna funktion är nu tillgänglig globalt så updateCartUI kan anropa den
     window.renderCheckoutPage = () => {
         const cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
         
         if (cart.length === 0) {
-            itemsContainer.innerHTML = '<p>Din varukorg är tom.</p>';
+            itemsContainer.innerHTML = '<p style="margin: 20px 0;">Din varukorg är tom.</p>';
             subtotalEl.textContent = '0 kr';
             totalEl.textContent = '0 kr';
             return;
@@ -1654,6 +1656,7 @@ if (checkoutPage) {
         window.location.href = 'index.html';
     });
 
+    // Rendera sidan vid första laddning
     renderCheckoutPage();
 }
     
