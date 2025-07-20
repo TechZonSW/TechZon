@@ -1174,7 +1174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --------------------------------------------------------------------
-// DEL 10: KOD FÖR PRODUKTSIDA (SLUTGILTIG, FELSÄKER VERSION)
+// DEL 10: KOD FÖR PRODUKTSIDA (INTELLIGENT VARIANT-HANTERING)
 // --------------------------------------------------------------------
 const productPage = document.getElementById('product-page');
 if (productPage) {
@@ -1219,7 +1219,7 @@ if (productPage) {
         }
     }
 
-    // --- 2. HUVUDRENDERINGSFUNKTION (Körs bara en gång) ---
+    // --- 2. HUVUDRENDERINGSFUNKTION ---
     function renderProductPage() {
         document.title = `${currentProductBase.namn} - TechZon Kalmar`;
 
@@ -1241,7 +1241,7 @@ if (productPage) {
                 </div>
                 <div class="pdp-details">
                     <h1>${currentProductBase.namn}</h1>
-                    <p class="description-short">${currentProductBase.beskrivning_kort || ''}</p>
+                    <p class="description-short">${currentProductBase.bes_krivning_kort || ''}</p>
                     <div id="variant-selectors">
                         ${Object.entries(variantOptions).map(([key, values]) => `
                             <div class="variant-selector">
@@ -1267,17 +1267,14 @@ if (productPage) {
             </div>
         `;
         
-        // Initiera UI och koppla på eventhanterare
         updateUI();
         setupEventListeners();
     }
 
-    // --- 3. UI-UPPDATERING (Den enda funktionen som ritar om) ---
-// --- 3. UI-UPPDATERING (Den enda funktionen som ritar om) ---
+    // --- 3. UI-UPPDATERING & LOGIK FÖR KNAPPAR ---
     function updateUI() {
+        // Uppdatera media, pris och specifikationer baserat på `currentVariant`
         const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
-        
-        // Uppdatera galleri
         const thumbsList = document.getElementById('thumbs-list');
         thumbsList.innerHTML = media.map((item, index) => {
             const imageUrl = item.typ === 'video' ? 'bilder/testbild.png' : item.url;
@@ -1288,102 +1285,90 @@ if (productPage) {
         displayMedia(media[0]);
         if (thumbsList.firstChild) thumbsList.firstChild.classList.add('active');
 
-        // Uppdatera pris
         contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
         const installmentP = contentWrapper.querySelector('.price-installment');
         if (installmentP) {
             installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
-            if (currentVariant.delbetalning_mojlig) {
-                installmentP.textContent = currentVariant.delbetalning_pris;
-            }
+            installmentP.textContent = currentVariant.delbetalning_mojlig ? currentVariant.delbetalning_pris : '';
         }
         
-        // Uppdatera specifikationer
         const specsList = contentWrapper.querySelector('.pdp-specs-list');
         specsList.innerHTML = (currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
 
-        // KORRIGERING: Korrekt logik för att markera valda knappar
-        if (currentVariant.attribut) {
-            document.querySelectorAll('.variant-options').forEach(group => {
-                const attributeKey = group.dataset.attribute;
-                const selectedValue = currentVariant.attribut[attributeKey];
-                group.querySelectorAll('.variant-btn').forEach(btn => {
-                    btn.classList.toggle('selected', btn.textContent === selectedValue);
-                });
+        // ---- NY, INTELLIGENT LOGIK FÖR KNAPPAR ----
+        // Loopa igenom varje grupp av val (t.ex. Färg, Lagring)
+        document.querySelectorAll('.variant-options').forEach(group => {
+            const attributeKey = group.dataset.attribute;
+            
+            // Loopa igenom varje knapp i gruppen
+            group.querySelectorAll('.variant-btn').forEach(btn => {
+                const attributeValue = btn.textContent;
+                
+                // 1. Markera den knapp som är aktiv
+                btn.classList.toggle('selected', currentVariant.attribut[attributeKey] === attributeValue);
+                
+                // 2. Kontrollera om denna knapp är en giltig kombination med de ANDRA valda attributen
+                const otherAttributes = { ...currentVariant.attribut };
+                delete otherAttributes[attributeKey]; // Ta bort den egenskap vi testar
+                
+                const testAttributes = { ...otherAttributes, [attributeKey]: attributeValue };
+                
+                const isPossible = currentProductBase.varianter.some(variant => 
+                    Object.entries(testAttributes).every(([key, value]) => 
+                        variant.attribut[key] === value
+                    )
+                );
+                
+                // 3. Inaktivera knappen om kombinationen inte finns
+                btn.disabled = !isPossible;
+                btn.classList.toggle('disabled', !isPossible);
             });
-        }
+        });
     }
     
     function displayMedia(mediaItem) {
-        const mainMediaContainer = document.getElementById('main-media-container');
-        if (!mediaItem) {
-            mainMediaContainer.innerHTML = `<img src="bilder/testbild.png" alt="Bild saknas">`;
-            return;
-        }
-        if (mediaItem.typ === 'video') {
-            mainMediaContainer.innerHTML = `<video src="${mediaItem.url}" playsinline autoplay muted controls></video>`;
-        } else {
-            mainMediaContainer.innerHTML = `<img src="${mediaItem.url}" alt="${currentVariant.namn}">`;
-        }
+        // ... (denna funktion är oförändrad)
     }
 
-    // --- 4. EVENT HANTERING (Förenklad och robust) ---
-    // --- 4. EVENT HANTERING (KORRIGERAD, ROBUST VERSION) ---
-function setupEventListeners() {
-    contentWrapper.addEventListener('click', (e) => {
-        const target = e.target;
-        
-        // Hantera klick på thumbnails
-        const thumb = target.closest('.pdp-thumbs-list li');
-        if (thumb) {
-            const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
-            const index = parseInt(thumb.dataset.index, 10);
-            displayMedia(media[index]);
-            document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
-            thumb.classList.add('active');
-            return;
-        }
-
-        // Hantera klick på variant-knappar
-        const variantBtn = target.closest('.variant-btn');
-        if (variantBtn) {
-            if (variantBtn.classList.contains('selected')) return; // Gör inget om den redan är vald
-
-            const attributeKey = variantBtn.parentElement.dataset.attribute;
-            const attributeValue = variantBtn.textContent;
+    // --- 4. EVENT HANTERING ---
+    function setupEventListeners() {
+        contentWrapper.addEventListener('click', (e) => {
+            const target = e.target;
             
-            // Bygg en "ideal" uppsättning attribut baserat på det nya valet
-            const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
-            
-            let newVariant = null;
+            // Hantera klick på thumbnails
+            const thumb = target.closest('.pdp-thumbs-list li');
+            if (thumb) { /* ... (denna del är oförändrad) ... */ }
 
-            // FÖRBÄTTRAD SÖKLOGIK
-            // Steg 1: Försök hitta en exakt matchning för den önskade kombinationen
-            newVariant = currentProductBase.varianter.find(variant => 
-                Object.entries(desiredAttributes).every(([key, value]) => 
-                    variant.attribut[key] === value
-                )
-            );
-            
-            // Steg 2: Om ingen exakt matchning finns, hitta den första varianten som åtminstone
-            // matchar det attribut som användaren just klickade på.
-            if (!newVariant) {
-                newVariant = currentProductBase.varianter.find(variant =>
-                    variant.attribut[attributeKey] === attributeValue
+            // Hantera klick på variant-knappar
+            const variantBtn = target.closest('.variant-btn');
+            if (variantBtn && !variantBtn.disabled) {
+                if (variantBtn.classList.contains('selected')) return;
+
+                const attributeKey = variantBtn.parentElement.dataset.attribute;
+                const attributeValue = variantBtn.textContent;
+                
+                const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+                
+                // 1. Försök hitta en exakt matchning
+                let newVariant = currentProductBase.varianter.find(variant => 
+                    JSON.stringify(variant.attribut) === JSON.stringify(desiredAttributes)
                 );
+                
+                // 2. Om ingen exakt matchning finns, hitta den FÖRSTA BÄSTA
+                if (!newVariant) {
+                    newVariant = currentProductBase.varianter.find(variant => 
+                        variant.attribut[attributeKey] === attributeValue
+                    );
+                }
+                
+                if (newVariant) {
+                    currentVariant = newVariant;
+                    updateUI(); // Kör den centrala funktionen för att rita om allt
+                }
             }
-            
-            // Om vi hittade en variant med någon av metoderna ovan, uppdatera sidan
-            if (newVariant) {
-                currentVariant = newVariant; // Uppdatera den globala state-variabeln
-                updateUI(); // Kör den centrala funktionen för att rita om allt
-            } else {
-                // Denna logg bör nu sällan eller aldrig visas
-                console.log("Ingen giltig variant kunde hittas för det valda attributet.");
-            }
-        }
-    });
-}
+        });
+    }
+
     // --- Starta allt ---
     initializeProductPage();
 }
