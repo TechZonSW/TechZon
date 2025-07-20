@@ -1361,10 +1361,10 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-size: 0.95em; /* Något mindre text */
 }
 
-/* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER (MED HÖGRE SPECIFICITET) --- */
+/* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
 
 #price-slider { 
-    margin: 20px 8px 30px;
+    margin: 20px 8px 30px; /* Lite extra marginal för handtagen */
     border: none;
     box-shadow: none;
 }
@@ -1375,21 +1375,24 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-weight: 500; 
 }
 
-/* Anpassar noUiSlider genom att använda ett ID för att öka specificiteten */
+/* Anpassar noUiSlider-bibliotekets standardstilar */
 
-#price-slider .noUi-target {
-    background: #e9ecef;
+/* Huvudspåret */
+.noUi-target {
+    background: #e9ecef; /* Mjuk, ljusgrå färg */
     border-radius: 5px;
     border: none;
     box-shadow: none;
-    height: 6px;
+    height: 6px; /* Lite tjockare för ett mer substantiellt intryck */
 }
 
-#price-slider .noUi-connect {
+/* Den färgade delen som visar det valda intervallet */
+.noUi-connect {
     background: var(--primary-color);
 }
 
-#price-slider .noUi-handle {
+/* Cirkulära handtag */
+..noUi-handle {
     border: 3px solid #fff;
     border-radius: 50%;
     background: var(--primary-color);
@@ -1397,16 +1400,20 @@ nav ul.main-nav { display: flex; align-items: center; }
     cursor: pointer;
     height: 20px;
     width: 20px;
-    top: -7px;
-    right: -10px;
+    top: -7px; /* Positionerar vertikalt */
+    right: auto; /* Nollställer standardpositionen */
+    left: 50%;   /* Placerar vänstra kanten i mitten av sin "slot" */
+    transform: translateX(-50%); /* Drar tillbaka handtaget med halva sin egen bredd */
 }
 
-#price-slider .noUi-handle:after, 
-#price-slider .noUi-handle:before { 
+/* Tar bort onödiga pseudo-element från biblioteket */
+.noUi-handle:after, 
+.noUi-handle:before { 
     display: none; 
 }
 
-#price-slider .noUi-handle:focus {
+/* Ta bort den fula :focus-ringen */
+.noUi-handle:focus {
     outline: none;
 }
 
