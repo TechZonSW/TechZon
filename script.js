@@ -1645,10 +1645,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const itemsContainer = document.getElementById('checkout-items-container');
                 itemsContainer.addEventListener('click', (e) => {
                     if (e.target.classList.contains('remove-from-cart-btn')) {
-                        this.removeFromCart(e.target.dataset.id);
+                        const productId = e.target.dataset.id;
+                        
+                        // NY KOD: Lägg till en bekräftelsedialog
+                        const productName = e.target.closest('.checkout-item').querySelector('h4').textContent;
+                        const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${productName}" från varukorgen?`);
+                        
+                        // Ta bara bort produkten om användaren klickar "OK"
+                        if (wantsToRemove) {
+                            this.removeFromCart(productId);
+                        }
                     }
                 });
-    
+                    
                 document.getElementById('checkout-form').addEventListener('submit', (e) => {
                     e.preventDefault();
                     if (this.cart.length === 0) {
