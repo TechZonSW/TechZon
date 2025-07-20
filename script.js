@@ -1465,24 +1465,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-// DEL 11: KOD FÖR VARUKORG & KASSA (SLUTGILTIG, KORRIGERAD VERSION)
+// DEL 11: VARUKORG & KASSA (TOTAL Omskrivning)
 // --------------------------------------------------------------------
 
-// Körs på alla sidor för att hantera varukorgs-data
-(function initializeCart() {
-    // --- REFERENSER ---
-    const cartIconCount = document.getElementById('cart-count');
-    const cartHoverItems = document.getElementById('cart-hover-items');
-    
-    // --- STATE ---
-    let cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
-    let allProductsData = null; // Lagrar all produktdata för att undvika onödiga fetch-anrop
+class CartManager {
+    constructor() {
+        // Referenser till DOM-element
+        this.cartIconCount = document.getElementById('cart-count');
+        this.cartHoverItems = document.getElementById('cart-hover-items');
+        this.checkoutPage = document.getElementById('checkout-page');
 
-    // --- FUNKTIONER ---
+        // Appens state
+        this.cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
+        this.allProductsData = null;
+
+        // Initiera allt
+        this.initialize();
+    }
+
+    async initialize() {
+        await this.fetchAllProducts(); // Ladda all produktdata
+        this.updateCartUI();           // Rita ut UI baserat på sparad varukorg
+        this.setupEventListeners();    // Koppla på lyssnare
+    }
 
     // Hämtar och förbereder all produktdata från JSON-filerna en enda gång.
-    async function fetchAllProducts() {
-        if (allProductsData) return allProductsData; // Returnera cachad data om den redan finns
+    async fetchAllProducts() {
+        if (this.allProductsData) return this.allProductsData;
         try {
             const [newDevices, usedDevices, accessories] = await Promise.all([
                 fetch('./nya-enheter.json').then(res => res.json()),
@@ -1494,31 +1503,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 p.varianter.map(v => ({ ...p, ...v, id_base: p.id_base, varianter: undefined }))
             );
             
-            allProductsData = [...newProductsFlat, ...usedDevices, ...accessories];
-            return allProductsData;
+            this.allProductsData = [...newProductsFlat, ...usedDevices, ...accessories];
+            return this.allProductsData;
         } catch (error) {
             console.error("Kunde inte ladda all produktdata för varukorgen:", error);
             return [];
         }
     }
 
-    // Global funktion för att uppdatera varukorgen och spara till localStorage
-    window.updateCart = (newCart) => {
-        cart = newCart;
-        localStorage.setItem('techzon_cart', JSON.stringify(cart));
-        updateCartUI(); // Anropa alltid UI-uppdateringen
-    };
-    
-    // Global funktion för att lägga till en produkt i varukorgen
-    window.addToCart = async (productId) => {
-        const products = await fetchAllProducts();
-        // Hitta den fullständiga produktinformationen baserat på ID
-        const productToAdd = products.find(p => p.id === productId);
+    // Lägger till en produkt i varukorgen
+    async addToCart(productId) {
+        if (!this.allProductsData) await this.fetchAllProducts();
+
+        const productToAdd = this.allProductsData.find(p => p.id === productId);
 
         if (productToAdd) {
-            const newCart = [...cart, productToAdd];
-            window.updateCart(newCart);
-            // Visuell feedback
+            this.cart.push(productToAdd);
+            this.saveAndRender();
+            
             const cartIcon = document.querySelector('.cart-icon-container i');
             if (cartIcon) {
                 cartIcon.style.transform = 'scale(1.3)';
@@ -1528,28 +1530,40 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(`Produkt med ID ${productId} kunde inte hittas.`);
             alert('Ett fel uppstod, produkten kunde inte läggas till.');
         }
-    };
-    
-    // Global funktion för att ta bort en produkt från varukorgen
-    window.removeFromCart = (productId) => {
-        const newCart = cart.filter(item => item.id !== productId);
-        window.updateCart(newCart);
-    };
+    }
 
-    // Uppdaterar ALL UI relaterad till varukorgen (ikon, hover, kassa)
-    function updateCartUI() {
+    // Tar bort en produkt från varukorgen
+    removeFromCart(productId) {
+        this.cart = this.cart.filter(item => item.id !== productId);
+        this.saveAndRender();
+    }
+
+    // Tömmer hela varukorgen
+    clearCart() {
+        this.cart = [];
+        this.saveAndRender();
+    }
+
+    // Sparar till localStorage och ritar om hela UI:t
+    saveAndRender() {
+        localStorage.setItem('techzon_cart', JSON.stringify(this.cart));
+        this.updateCartUI();
+    }
+
+    // Uppdaterar ALL UI relaterad till varukorgen
+    updateCartUI() {
         // 1. Uppdatera ikonen
-        if (cart.length > 0) {
-            cartIconCount.textContent = cart.length;
-            cartIconCount.style.display = 'flex';
+        if (this.cart.length > 0) {
+            this.cartIconCount.textContent = this.cart.length;
+            this.cartIconCount.style.display = 'flex';
         } else {
-            cartIconCount.style.display = 'none';
+            this.cartIconCount.style.display = 'none';
         }
 
         // 2. Uppdatera hover-vyn
-        if (cartHoverItems) {
-            if (cart.length > 0) {
-                cartHoverItems.innerHTML = cart.slice(0, 3).map(item => { // Visa max 3 produkter
+        if (this.cartHoverItems) {
+            if (this.cart.length > 0) {
+                this.cartHoverItems.innerHTML = this.cart.slice(0, 3).map(item => {
                     const imageUrl = (item.media && item.media[0]?.url) || (item.bilder && item.bilder[0]) || 'bilder/testbild.png';
                     const fullName = item.marke ? `${item.marke} ${item.namn}` : item.namn;
                     return `
@@ -1561,59 +1575,34 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>`;
                 }).join('');
-                if (cart.length > 3) {
-                    cartHoverItems.innerHTML += `<p style="text-align:center; font-size: 0.9em; margin-top: 10px;">... och ${cart.length - 3} till.</p>`;
+                if (this.cart.length > 3) {
+                    this.cartHoverItems.innerHTML += `<p style="text-align:center; font-size: 0.9em; margin-top: 10px;">... och ${this.cart.length - 3} till.</p>`;
                 }
             } else {
-                cartHoverItems.innerHTML = '<p style="text-align: center; color: #888;">Din varukorg är tom.</p>';
+                this.cartHoverItems.innerHTML = '<p style="text-align: center; color: #888;">Din varukorg är tom.</p>';
             }
         }
 
-        // 3. Om vi är på kassasidan, rita om den också
-        if (document.getElementById('checkout-page')) {
-            renderCheckoutPage();
+        // 3. Om vi är på kassasidan, rita om den
+        if (this.checkoutPage) {
+            this.renderCheckoutPage();
         }
     }
-
-    // En enda, kraftfull event listener för hela sidan
-    document.body.addEventListener('click', (e) => {
-        // Hitta den närmaste "lägg i korg"-knappen
-        const button = e.target.closest('.add-to-cart-btn, .pdp-buy-button');
-        if (button) {
-            e.preventDefault();
-            // ID:t hämtas antingen från knappens data-id eller från den globala variabeln
-            const productId = button.dataset.id || (window.currentVariantForCart && window.currentVariantForCart.id);
-            if (productId) {
-                window.addToCart(productId);
-            }
-        }
-    });
-
-    // Initiera allt vid sidladdning
-    fetchAllProducts(); // Ladda all produktdata i bakgrunden
-    updateCartUI();
-})();
-
-
-// Kod som bara körs på kassasidan
-const checkoutPage = document.getElementById('checkout-page');
-if (checkoutPage) {
-    const itemsContainer = document.getElementById('checkout-items-container');
-    const subtotalEl = document.getElementById('summary-subtotal');
-    const totalEl = document.getElementById('summary-total');
     
-    // Denna funktion är nu tillgänglig globalt så updateCartUI kan anropa den
-    window.renderCheckoutPage = () => {
-        const cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
-        
-        if (cart.length === 0) {
+    // Ritar om innehållet på kassasidan
+    renderCheckoutPage() {
+        const itemsContainer = document.getElementById('checkout-items-container');
+        const subtotalEl = document.getElementById('summary-subtotal');
+        const totalEl = document.getElementById('summary-total');
+
+        if (this.cart.length === 0) {
             itemsContainer.innerHTML = '<p style="margin: 20px 0;">Din varukorg är tom.</p>';
             subtotalEl.textContent = '0 kr';
             totalEl.textContent = '0 kr';
             return;
         }
 
-        itemsContainer.innerHTML = cart.map(item => {
+        itemsContainer.innerHTML = this.cart.map(item => {
             const imageUrl = (item.media && item.media[0]?.url) || (item.bilder && item.bilder[0]) || 'bilder/testbild.png';
             const fullName = item.marke ? `${item.marke} ${item.namn}` : item.namn;
             return `
@@ -1632,32 +1621,49 @@ if (checkoutPage) {
             </div>`;
         }).join('');
 
-        const subtotal = cart.reduce((sum, item) => sum + item.pris, 0);
+        const subtotal = this.cart.reduce((sum, item) => sum + item.pris, 0);
         subtotalEl.textContent = `${subtotal} kr`;
         totalEl.textContent = `${subtotal} kr`;
     }
-    
-    itemsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-from-cart-btn')) {
-            const productId = e.target.dataset.id;
-            window.removeFromCart(productId);
-        }
-    });
-    
-    document.getElementById('checkout-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
-        if (cart.length === 0) {
-            alert("Din varukorg är tom!");
-            return;
-        }
-        alert('Tack för din beställning! (Här skulle betalningslogik köras)');
-        window.updateCart([]);
-        window.location.href = 'index.html';
-    });
 
-    // Rendera sidan vid första laddning
-    renderCheckoutPage();
+    // Sätter upp alla event listeners
+    setupEventListeners() {
+        // En enda, kraftfull event listener för hela sidan
+        document.body.addEventListener('click', (e) => {
+            const button = e.target.closest('.add-to-cart-btn, .pdp-buy-button');
+            if (button) {
+                e.preventDefault();
+                const productId = button.dataset.id || (window.currentVariantForCart && window.currentVariantForCart.id);
+                if (productId) {
+                    this.addToCart(productId);
+                }
+            }
+        });
+
+        // Event listener för kassasidan
+        if (this.checkoutPage) {
+            const itemsContainer = document.getElementById('checkout-items-container');
+            itemsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-from-cart-btn')) {
+                    this.removeFromCart(e.target.dataset.id);
+                }
+            });
+
+            document.getElementById('checkout-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (this.cart.length === 0) {
+                    alert("Din varukorg är tom!");
+                    return;
+                }
+                alert('Tack för din beställning!');
+                this.clearCart();
+                window.location.href = 'index.html';
+            });
+        }
+    }
 }
+
+// Starta varukorgshanteraren på varje sida
+new CartManager();
     
 });
