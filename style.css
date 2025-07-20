@@ -1498,21 +1498,21 @@ nav ul.main-nav { display: flex; align-items: center; }
 /* --- NY, FÖRBÄTTRAD STYLING FÖR PRODUKTINFORMATION --- */
 
 .pdp-details h1 {
-    font-size: 3em; /* Större och mer imponerande */
-    font-weight: 800;
+    font-size: 2.5em; /* Justerad för en kompaktare layout */
+    font-weight: 700; /* Behåller en stark vikt */
     margin-bottom: 15px;
-    line-height: 1.1;
+    line-height: 1.15;
 }
 .pdp-details .description-short {
-    font-size: 1.2em; /* Mer framträdande introduktion */
+    font-size: 1.1em; 
     line-height: 1.6;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     color: var(--text-color-secondary);
 }
 
 /* Variantväljare */
 .variant-selector {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 .variant-selector label {
     display: block;
@@ -1526,13 +1526,13 @@ nav ul.main-nav { display: flex; align-items: center; }
     flex-wrap: wrap;
 }
 .variant-btn {
-    padding: 12px 24px;
+    padding: 8px 18px; /* Minskad padding för mindre knappar */
     border: 2px solid #ddd;
     background-color: #fff;
     border-radius: var(--border-radius);
     cursor: pointer;
-    font-weight: 600;
-    font-size: 1em;
+    font-weight: 600; /* Ökad vikt för tydlighet */
+    font-size: 0.9em; /* Något mindre text */
     transition: all 0.2s ease;
 }
 .variant-btn:hover:not(.selected) {
@@ -1549,8 +1549,8 @@ nav ul.main-nav { display: flex; align-items: center; }
 .pdp-price-section {
     background-color: var(--section-bg-light);
     border-radius: var(--border-radius);
-    padding: 25px;
-    margin: 35px 0;
+    padding: 20px; /* Minskad padding */
+    margin: 25px 0; /* Minskad marginal */
     text-align: center;
 }
 .pdp-price-section .price {
