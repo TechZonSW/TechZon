@@ -1361,89 +1361,9 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-size: 0.95em; /* Något mindre text */
 }
 
-/* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
-/* 
-   Definierar en hedonisk färgpalett med inspiration från lugnande,
-   blå-gröna (teal/turkos) toner.
-*/
-:root {
-    --hedonic-main-color: #38b2ac; /* En mjuk, modern blå-grön färg */
-    --hedonic-light-bg: #e6fffa; /* En mycket ljus, nästan vit ton av huvudfärgen */
-    --hedonic-white: #f7fafc;      /* En mjuk, benvit färg */
-    --hedonic-text: #2c7a7b;       /* En mörkare, dämpad blå-grön för text */
-    --hedonic-focus-glow: rgba(56, 178, 172, 0.5); /* Genomskinlig färg för fokus-effekt */
-    --soft-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08); /* Mjuk, subtil skugga */
-}
-
-#price-slider {
-    margin: 25px 15px;
-    border: none;
-    box-shadow: none;
-}
-
-#price-values {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.95em;
-    font-weight: 500;
-    color: var(--hedonic-text);
-    padding: 0 5px; 
-}
-
-/* Huvudspåret – ljust och diskret */
-.noUi-target {
-    background: var(--hedonic-light-bg);
-    border-radius: 10px;
-    border: none;
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.04);
-    height: 8px; /* Spårets tjocklek */
-}
-
-/* Den färgade delen som visar det valda intervallet */
-.noUi-connect {
-    background: var(--hedonic-main-color);
-    border-radius: 10px;
-}
-
-/* Cirkulära handtag – designade för att vara perfekt centrerade */
-.noUi-handle {
-    border: 3px solid var(--hedonic-white); /* Vit kant för separation */
-    border-radius: 50%;
-    background: var(--hedonic-main-color);
-    box-shadow: var(--soft-shadow);
-    cursor: grab;
-
-    /* Mått på själva handtaget (utan kantlinje) */
-    height: 22px; 
-    width: 22px;
-    
-    /* 
-       Korrekt positionering för perfekt centrering.
-       Beräkningen tar hänsyn till handtagets totala storlek (inklusive kantlinje)
-       och spårets tjocklek.
-       Total handtags-höjd = 22px + (2 * 3px) = 28px.
-       Top: (spår-höjd - total handtags-höjd) / 2 = (8px - 28px) / 2 = -10px.
-       Right: -(total handtags-bredd / 2) = -14px.
-    */
-    top: 0px;
-    right: -24px;
-}
-
-.noUi-handle:active {
-    cursor: grabbing;
-}
-
-/* Tar bort onödiga pseudo-element */
-.noUi-handle:after,
-.noUi-handle:before {
-    display: none;
-}
-
-/* Ersätter standard :focus-ring med en mjuk "glow" */
-.noUi-handle:focus {
-    outline: none;
-    box-shadow: 0px 0px 0px 4px var(--hedonic-focus-glow);
-}
+/* Pris-slider */
+#price-slider { margin: 20px 5px 30px; }
+#price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
 
 /* =================================================================
    3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
