@@ -1297,6 +1297,22 @@ nav ul.main-nav { display: flex; align-items: center; }
     /* Tar bort högerbården för en renare look */
     padding-right: 0;
 }
+/* --- STIL FÖR "RENSA FILTER"-KNAPPEN --- */
+.clear-filters-btn {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--section-bg-light);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.clear-filters-btn:hover {
+    background-color: #e5e5e5;
+    border-color: #ccc;
+}
 .filter-group {
     padding-bottom: 20px;
     margin-bottom: 20px;
