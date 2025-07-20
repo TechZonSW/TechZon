@@ -1273,45 +1273,45 @@ if (productPage) {
     }
 
     // --- 3. UI-UPPDATERING (Den enda funktionen som ritar om) ---
-    // --- 3. UI-UPPDATERING (ROBUST VERSION) ---
+// --- 3. UI-UPPDATERING (Den enda funktionen som ritar om) ---
     function updateUI() {
-        // Media, pris och specifikationer (samma som din befintliga kod)
         const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+        
+        // Uppdatera galleri
         const thumbsList = document.getElementById('thumbs-list');
-        thumbsList.innerHTML = media.map((item, index) => { /* ... din befintliga kod här ... */ }).join('');
+        thumbsList.innerHTML = media.map((item, index) => {
+            const imageUrl = item.typ === 'video' ? 'bilder/testbild.png' : item.url;
+            const videoIcon = item.typ === 'video' ? '<i class="ph-bold ph-play-circle thumb-video-icon"></i>' : '';
+            return `<li data-index="${index}"><img src="${imageUrl}" alt="Thumbnail">${videoIcon}</li>`;
+        }).join('');
+        
         displayMedia(media[0]);
         if (thumbsList.firstChild) thumbsList.firstChild.classList.add('active');
+
+        // Uppdatera pris
         contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
         const installmentP = contentWrapper.querySelector('.price-installment');
-        if (installmentP) { /* ... din befintliga kod här ... */ }
+        if (installmentP) {
+            installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
+            if (currentVariant.delbetalning_mojlig) {
+                installmentP.textContent = currentVariant.delbetalning_pris;
+            }
+        }
+        
+        // Uppdatera specifikationer
         const specsList = contentWrapper.querySelector('.pdp-specs-list');
         specsList.innerHTML = (currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
-    
-        // --- NY OCH FÖRBÄTTRAD LOGIK FÖR VARIANT-KNAPPAR ---
-        // Gå igenom alla valgrupper (Färg, Lagring etc.)
-        document.querySelectorAll('.variant-options').forEach(group => {
-            const attributeKey = group.dataset.attribute;
-            
-            // Gå igenom varje knapp i gruppen
-            group.querySelectorAll('.variant-btn').forEach(btn => {
-                const buttonValue = btn.textContent;
-                
-                // 1. Markera den för närvarande valda knappen
-                btn.classList.toggle('selected', currentVariant.attribut[attributeKey] === buttonValue);
-    
-                // 2. Kontrollera om denna knapp representerar en giltig variant
-                // baserat på de ANDRA valen som redan är gjorda.
-                const potentialAttributes = { ...currentVariant.attribut, [attributeKey]: buttonValue };
-                const isPossible = currentProductBase.varianter.some(variant => 
-                    Object.entries(potentialAttributes).every(([key, value]) => 
-                        variant.attribut[key] === value
-                    )
-                );
-    
-                // 3. Inaktivera knappen om kombinationen inte finns
-                btn.disabled = !isPossible;
+
+        // KORRIGERING: Korrekt logik för att markera valda knappar
+        if (currentVariant.attribut) {
+            document.querySelectorAll('.variant-options').forEach(group => {
+                const attributeKey = group.dataset.attribute;
+                const selectedValue = currentVariant.attribut[attributeKey];
+                group.querySelectorAll('.variant-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent === selectedValue);
+                });
             });
-        });
+        }
     }
     
     function displayMedia(mediaItem) {
@@ -1328,51 +1328,62 @@ if (productPage) {
     }
 
     // --- 4. EVENT HANTERING (Förenklad och robust) ---
-    // --- 4. EVENT HANTERING (ROBUST VERSION) ---
-    function setupEventListeners() {
-        contentWrapper.addEventListener('click', (e) => {
-            const target = e.target;
-            
-            // Hantera klick på thumbnails (oförändrad)
-            const thumb = target.closest('.pdp-thumbs-list li');
-            if (thumb) {
-                // ... (din befintliga kod för thumbnails här) ...
-                return;
-            }
-    
-            // --- NY OCH FÖRBÄTTRAD LOGIK FÖR VARIANT-KNAPPAR ---
-            const variantBtn = target.closest('.variant-btn');
-            if (variantBtn && !variantBtn.disabled && !variantBtn.classList.contains('selected')) {
-                const attributeKey = variantBtn.parentElement.dataset.attribute;
-                const attributeValue = variantBtn.textContent;
-                
-                // Skapa en önskelista av attribut baserat på det nya valet
-                const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
-    
-                // Hitta den BÄSTA matchningen.
-                // Först, en exakt matchning.
-                let newVariant = currentProductBase.varianter.find(variant => 
-                    Object.entries(desiredAttributes).every(([key, value]) => 
-                        variant.attribut[key] === value
-                    )
-                );
-    
-                // Om ingen exakt matchning finns (t.ex. blå 256GB existerar inte),
-                // hitta den FÖRSTA varianten som har det attribut vi just klickade på.
-                if (!newVariant) {
-                    newVariant = currentProductBase.varianter.find(variant => 
-                        variant.attribut[attributeKey] === attributeValue
-                    );
-                }
-                
-                if (newVariant) {
-                    currentVariant = newVariant; // Uppdatera state
-                    updateUI(); // Rita om allt baserat på det nya state:t
-                }
-            }
-        });
-    }
+    // --- 4. EVENT HANTERING (KORRIGERAD, ROBUST VERSION) ---
+function setupEventListeners() {
+    contentWrapper.addEventListener('click', (e) => {
+        const target = e.target;
+        
+        // Hantera klick på thumbnails
+        const thumb = target.closest('.pdp-thumbs-list li');
+        if (thumb) {
+            const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+            const index = parseInt(thumb.dataset.index, 10);
+            displayMedia(media[index]);
+            document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
+            thumb.classList.add('active');
+            return;
+        }
 
+        // Hantera klick på variant-knappar
+        const variantBtn = target.closest('.variant-btn');
+        if (variantBtn) {
+            if (variantBtn.classList.contains('selected')) return; // Gör inget om den redan är vald
+
+            const attributeKey = variantBtn.parentElement.dataset.attribute;
+            const attributeValue = variantBtn.textContent;
+            
+            // Bygg en "ideal" uppsättning attribut baserat på det nya valet
+            const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+            
+            let newVariant = null;
+
+            // FÖRBÄTTRAD SÖKLOGIK
+            // Steg 1: Försök hitta en exakt matchning för den önskade kombinationen
+            newVariant = currentProductBase.varianter.find(variant => 
+                Object.entries(desiredAttributes).every(([key, value]) => 
+                    variant.attribut[key] === value
+                )
+            );
+            
+            // Steg 2: Om ingen exakt matchning finns, hitta den första varianten som åtminstone
+            // matchar det attribut som användaren just klickade på.
+            if (!newVariant) {
+                newVariant = currentProductBase.varianter.find(variant =>
+                    variant.attribut[attributeKey] === attributeValue
+                );
+            }
+            
+            // Om vi hittade en variant med någon av metoderna ovan, uppdatera sidan
+            if (newVariant) {
+                currentVariant = newVariant; // Uppdatera den globala state-variabeln
+                updateUI(); // Kör den centrala funktionen för att rita om allt
+            } else {
+                // Denna logg bör nu sällan eller aldrig visas
+                console.log("Ingen giltig variant kunde hittas för det valda attributet.");
+            }
+        }
+    });
+}
     // --- Starta allt ---
     initializeProductPage();
 }
