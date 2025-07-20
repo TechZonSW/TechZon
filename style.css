@@ -1872,3 +1872,14 @@ nav ul.main-nav { display: flex; align-items: center; }
 .remove-from-cart-btn:hover {
     color: #dc3545; /* Röd färg vid hover */
 }
+
+/* Tar bort den blå färgen och understrykningen från produktlänken i kassan */
+.checkout-item-info a {
+    text-decoration: none;
+    color: inherit; /* Ärv färgen från föräldern (h4), vilket gör den svart */
+}
+
+/* Lägger till en subtil hover-effekt för att visa att den är klickbar */
+.checkout-item-info a:hover h4 {
+    color: var(--primary-color); /* Ändrar textfärgen till blå vid hover */
+}
