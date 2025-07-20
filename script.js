@@ -1614,7 +1614,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="produkt.html?id=${item.id}"><h4>${fullName}</h4></a>
                         <p>Art.nr: ${item.id}</p>
                         <div class="checkout-item-actions">
-                            <button class="remove-from-cart-btn" data-cart-id="${item.cart_id}">Ta bort</button>
+                            <button class="remove-from-cart-btn" data-id="${item.id}">Ta bort</button>
                         </div>
                     </div>
                     <div class="checkout-item-price">${item.pris} kr</div>
@@ -1639,22 +1639,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
-
-            itemsContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('remove-from-cart-btn')) {
-                    const productId = e.target.dataset.id;
-                    
-                    // NY KOD: Lägg till en bekräftelsedialog
-                    const productName = e.target.closest('.checkout-item').querySelector('h4').textContent;
-                    const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${productName}" från varukorgen?`);
-                    
-                    // Ta bara bort produkten om användaren klickar "OK"
-                    if (wantsToRemove) {
-                        this.removeFromCart(productId);
+    
+            // Event listener för kassasidan
+            if (this.checkoutPage) {
+                const itemsContainer = document.getElementById('checkout-items-container');
+                itemsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-from-cart-btn')) {
+                        const productId = e.target.dataset.id;
+                        
+                        // NY KOD: Lägg till en bekräftelsedialog
+                        const productName = e.target.closest('.checkout-item').querySelector('h4').textContent;
+                        const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${productName}" från varukorgen?`);
+                        
+                        // Ta bara bort produkten om användaren klickar "OK"
+                        if (wantsToRemove) {
+                            this.removeFromCart(productId);
+                        }
                     }
-                }
-            });
-                                
+                });
+                    
                 document.getElementById('checkout-form').addEventListener('submit', (e) => {
                     e.preventDefault();
                     if (this.cart.length === 0) {
