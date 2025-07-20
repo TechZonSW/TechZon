@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kassa - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="checkout-body">
+    <header>
+        <!-- Din nya, uppdaterade header här -->
+    </header>
+
+    <main id="checkout-page" class="content-section">
+        <div class="container">
+            <div class="checkout-layout">
+                <!-- Vänsterkolumn: Orderöversikt -->
+                <div class="order-summary">
+                    <h2>Din Beställning</h2>
+                    <div id="checkout-items-container">
+                        <!-- Produkter i varukorgen renderas här -->
+                    </div>
+                    <div class="summary-totals">
+                        <p><span>Delsumma:</span> <span id="summary-subtotal">0 kr</span></p>
+                        <p><span>Frakt:</span> <span id="summary-shipping">Gratis</span></p>
+                        <hr>
+                        <p class="total"><span>Totalt:</span> <strong id="summary-total">0 kr</strong></p>
+                    </div>
+                </div>
+
+                <!-- Högerkolumn: Kundinformation & Betalning -->
+                <div class="customer-details">
+                    <h2>Dina uppgifter</h2>
+                    <form id="checkout-form">
+                        <input type="email" placeholder="E-postadress" required>
+                        <input type="text" placeholder="För- och efternamn" required>
+                        <input type="text" placeholder="Gatuadress" required>
+                        <input type="text" placeholder="Postnummer" required>
+                        <input type="text" placeholder="Stad" required>
+                        <input type="tel" placeholder="Mobilnummer" required>
+                    </form>
+
+                    <h2>Betalning</h2>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <p><strong>Betala direkt (Kort, Swish, etc.)</strong></p>
+                            <p>Slutför ditt köp säkert med vår betalpartner.</p>
+                        </div>
+                        <div class="payment-option">
+                            <p><strong>Delbetala med Klarna</strong></p>
+                            <p>Dela upp betalningen över tid. Välj detta i nästa steg.</p>
+                        </div>
+                    </div>
+                    <button type="submit" form="checkout-form" class="cta-button checkout-submit-btn">Slutför köp</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Din vanliga footer här -->
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
