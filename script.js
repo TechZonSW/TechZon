@@ -1462,5 +1462,101 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- Starta allt ---
         initializeProductPage();
     }
+
+    // --------------------------------------------------------------------
+    // DEL 11: KOD FÖR VARUKORG & KASSA
+    // --------------------------------------------------------------------
+    
+    // Körs på alla sidor för att hantera varukorgs-data
+    (function initializeCart() {
+        const cartIconCount = document.getElementById('cart-count');
+        let cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
+    
+        // Global funktion för att uppdatera varukorgen
+        window.updateCart = (newCart) => {
+            cart = newCart;
+            localStorage.setItem('techzon_cart', JSON.stringify(cart));
+            updateCartIcon();
+        };
+        
+        // Global funktion för att lägga till i varukorgen
+        window.addToCart = (product) => {
+            const newCart = [...cart, product];
+            window.updateCart(newCart);
+        };
+    
+        function updateCartIcon() {
+            if (cart.length > 0) {
+                cartIconCount.textContent = cart.length;
+                cartIconCount.style.display = 'flex';
+            } else {
+                cartIconCount.style.display = 'none';
+            }
+        }
+    
+        // Uppdatera ikonen vid sidladdning
+        updateCartIcon();
+    
+        // Lyssna efter klick på "Lägg i korg"-knappar över hela sidan
+        document.body.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart-btn')) {
+                const productId = e.target.dataset.id;
+                // Här skulle vi normalt hämta hela produktobjektet från 'allProducts'
+                // För detta exempel, lägger vi bara till ett simpelt objekt
+                const productToAdd = {
+                    id: productId,
+                    namn: `Produkt ${productId}`, // Hämta riktigt namn i en fullständig implementation
+                    pris: 999, // Hämta riktigt pris
+                    bild: 'bilder/testbild.png' // Hämta riktig bild
+                };
+                window.addToCart(productToAdd);
+                alert(`${productToAdd.namn} har lagts till i varukorgen!`);
+            }
+        });
+    })();
+    
+    
+    // Kod som bara körs på kassasidan
+    const checkoutPage = document.getElementById('checkout-page');
+    if (checkoutPage) {
+        const itemsContainer = document.getElementById('checkout-items-container');
+        const subtotalEl = document.getElementById('summary-subtotal');
+        const totalEl = document.getElementById('summary-total');
+        
+        function renderCheckoutPage() {
+            const cart = JSON.parse(localStorage.getItem('techzon_cart')) || [];
+            
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = '<p>Din varukorg är tom.</p>';
+                subtotalEl.textContent = '0 kr';
+                totalEl.textContent = '0 kr';
+                return;
+            }
+    
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="checkout-item">
+                    <img src="${item.bild}" alt="${item.namn}">
+                    <div class="checkout-item-info">
+                        <h4>${item.namn}</h4>
+                        <p>Art.nr: ${item.id}</p>
+                    </div>
+                    <div class="checkout-item-price">${item.pris} kr</div>
+                </div>
+            `).join('');
+    
+            const subtotal = cart.reduce((sum, item) => sum + item.pris, 0);
+            subtotalEl.textContent = `${subtotal} kr`;
+            totalEl.textContent = `${subtotal} kr`; // Anta gratis frakt
+        }
+        
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Tack för din beställning! (Här skulle betalningslogik köras)');
+            window.updateCart([]); // Töm varukorgen
+            window.location.href = 'index.html'; // Skicka till startsidan
+        });
+    
+        renderCheckoutPage();
+    }
     
 });
