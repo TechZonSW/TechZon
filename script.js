@@ -1088,10 +1088,18 @@ document.addEventListener('DOMContentLoaded', function() {
         function applyFiltersAndSearch() {
             const searchTerm = searchInput.value.toLowerCase();
             
+            // Kontrollera om några filter är aktiva för att visa "Rensa"-knappen
+            const hasActiveFilters = activeFilters.kategori.length > 0 || 
+                                     activeFilters.marke.length > 0 || 
+                                     activeFilters.typ.length > 0 ||
+                                     activeFilters.price.min > 0 ||
+                                     activeFilters.price.max < 20000;
+            clearFiltersBtn.style.display = hasActiveFilters ? 'block' : 'none';
+        
             const filteredProducts = allProducts.filter(p => {
                 // Omvandla produktens attribut till gemener en gång för enkel jämförelse
-                const produktMarke = p.marke ? p.marke.toLowerCase() : '';
-                const produktTyp = p.typ ? p.typ.toLowerCase() : '';
+                const produktMarke = (p.marke || '').toLowerCase();
+                const produktTyp = (p.typ || '').toLowerCase();
         
                 // SÖKFILTER
                 const matchesSearch = !searchTerm || 
@@ -1099,25 +1107,30 @@ document.addEventListener('DOMContentLoaded', function() {
                                       produktMarke.includes(searchTerm) ||
                                       produktTyp.includes(searchTerm);
         
-                // KATEGORIFILTER
-                const matchesKategori = activeFilters.kategori.length === 0 || 
-                                        activeFilters.kategori.includes(p.kategori_slug);
-        
-                // MÄRKESFILTER
-                const matchesMarke = activeFilters.marke.length === 0 || 
-                                     activeFilters.marke.includes(produktMarke);
+                // Om söktermen inte matchar, kan vi avsluta direkt
+                if (!matchesSearch) {
+                    return false;
+                }
                 
-                // TYP-FILTER (Smartare version)
-                // Kollar om produktens typ (t.ex. 'mobiltelefon') innehåller något av filterorden (t.ex. 'mobil')
-                const matchesTyp = activeFilters.typ.length === 0 || 
-                                   activeFilters.typ.some(filterTyp => produktTyp.includes(filterTyp));
+                // CHECKBOX-FILTER (Returnera false direkt om ett filter inte matchar)
+                if (activeFilters.kategori.length > 0 && !activeFilters.kategori.includes(p.kategori_slug)) {
+                    return false;
+                }
+                if (activeFilters.marke.length > 0 && !activeFilters.marke.includes(produktMarke)) {
+                    return false;
+                }
+                if (activeFilters.typ.length > 0 && !activeFilters.typ.includes(produktTyp)) {
+                    return false;
+                }
         
                 // PRISFILTER
                 const displayPrice = p.varianter[0].pris;
-                const matchesPrice = displayPrice >= activeFilters.price.min && displayPrice <= activeFilters.price.max;
+                if (displayPrice < activeFilters.price.min || displayPrice > activeFilters.price.max) {
+                    return false;
+                }
                 
-                // Returnera true bara om ALLA filter stämmer
-                return matchesSearch && matchesKategori && matchesMarke && matchesTyp && matchesPrice;
+                // Om produkten klarade alla filter, inkludera den
+                return true;
             });
             
             renderProducts(filteredProducts);
@@ -1169,17 +1182,39 @@ document.addEventListener('DOMContentLoaded', function() {
         filtersContainer.addEventListener('change', (e) => {
             if (e.target.type === 'checkbox') {
                 const filterType = e.target.dataset.filter;
-                const value = e.target.value;
                 
-                if (e.target.checked) {
-                    activeFilters[filterType].push(value);
-                } else {
-                    activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
-                }
+                // Uppdatera state-objektet baserat på alla ikryssade boxar av den typen
+                activeFilters[filterType] = Array.from(
+                    document.querySelectorAll(`input[data-filter="${filterType}"]:checked`)
+                ).map(cb => cb.value);
+                
                 applyFiltersAndSearch();
             }
         });
+
+        // Funktion för att nollställa alla filter
+        function clearAllFilters() {
+            // Nollställ state-objektet
+            activeFilters = { kategori: [], marke: [], typ: [], price: { min: 0, max: 20000 } };
+            
+            // Avmarkera alla checkboxar
+            document.querySelectorAll('#filters-container input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            // Nollställ sökfältet
+            searchInput.value = '';
         
+            // Nollställ pris-slidern
+            if (priceSlider) {
+                priceSlider.set([0, 20000]);
+            }
+            
+            // Kör en ny sökning med de nollställda filtren
+            applyFiltersAndSearch();
+        }
+
+        // Koppla funktionen till knappen
+        clearFiltersBtn.addEventListener('click', clearAllFilters);
+                
         productGrid.addEventListener('click', (e) => {
             const button = e.target.closest('button.details-btn');
             if (button) {
