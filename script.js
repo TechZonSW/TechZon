@@ -1174,203 +1174,192 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --------------------------------------------------------------------
-    // DEL 10: KOD FÖR PRODUKTSIDA (SLUTGILTIG, KORRIGERAD VERSION)
-    // --------------------------------------------------------------------
-    const productPage = document.getElementById('product-page');
-    if (productPage) {
-        const contentWrapper = document.getElementById('product-content-wrapper');
-        let allProductBases = [];
-        let currentProductBase = null;
-        let currentVariant = null;
-        
-        async function initializeProductPage() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const variantId = params.get('id');
-                if (!variantId) throw new Error('Produkt-ID saknas.');
+// DEL 10: KOD FÖR PRODUKTSIDA (SLUTGILTIG, ROBUST VERSION)
+// --------------------------------------------------------------------
+const productPage = document.getElementById('product-page');
+if (productPage) {
+    const contentWrapper = document.getElementById('product-content-wrapper');
+    let allProductBases = [];
+    let currentProductBase = null;
+    let currentVariant = null;
     
-                const [newDevices, usedDevices, accessories] = await Promise.all([
-                    fetch('./nya-enheter.json').then(res => res.json()),
-                    fetch('./used-products.json').then(res => res.json()),
-                    fetch('./accessories.json').then(res => res.json())
-                ]);
-                
-                allProductBases = [
-                    ...newDevices,
-                    ...usedDevices.map(p => ({...p, id_base: p.id, varianter: [p] })),
-                    ...accessories.map(p => ({...p, id_base: p.id, varianter: [p] }))
-                ];
-                
-                for (const p of allProductBases) {
-                    const foundVariant = p.varianter.find(v => v.id === variantId);
-                    if (foundVariant) {
-                        currentProductBase = p;
-                        currentVariant = foundVariant;
-                        break;
-                    }
-                }
-    
-                if (!currentProductBase) throw new Error('Produkten kunde inte hittas.');
-                
-                renderProductPage();
-            } catch (error) {
-                contentWrapper.innerHTML = `<p class="error-message">${error.message}</p>`;
-            }
-        }
-    
-        function renderProductPage() {
-            document.title = `${currentProductBase.namn} - TechZon Kalmar`;
-    
-            const variantOptions = {};
-            if (currentProductBase.varianter.length > 1) {
-                currentProductBase.varianter.forEach(v => {
-                    for (const [key, value] of Object.entries(v.attribut)) {
-                        if (!variantOptions[key]) variantOptions[key] = new Set();
-                        variantOptions[key].add(value);
-                    }
-                });
-            }
+    // --- 1. INITIALISERING ---
+    async function initializeProductPage() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const variantId = params.get('id');
+            if (!variantId) throw new Error('Produkt-ID saknas.');
+
+            const [newDevices, usedDevices, accessories] = await Promise.all([
+                fetch('./nya-enheter.json').then(res => res.json()),
+                fetch('./used-products.json').then(res => res.json()),
+                fetch('./accessories.json').then(res => res.json())
+            ]);
             
-            contentWrapper.innerHTML = `
-                <div class="product-page-layout">
-                    <div class="pdp-gallery">
-                        <div id="main-media-container"></div>
-                        <ul class="pdp-thumbs-list" id="thumbs-list"></ul>
-                    </div>
-                    <div class="pdp-details">
-                        <h1>${currentProductBase.namn}</h1>
-                        <p class="description-short">${currentProductBase.beskrivning_kort || ''}</p>
-                        <div id="variant-selectors">
-                            ${Object.entries(variantOptions).map(([key, values]) => `
-                                <div class="variant-selector">
-                                    <label>${key}</label>
-                                    <div class="variant-options" data-attribute="${key}">
-                                        ${[...values].map(v => `<button class="variant-btn">${v}</button>`).join('')}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <p class="price">${currentVariant.pris} kr</p>
-                        ${currentVariant.delbetalning_mojlig ? `<p class="price-installment">${currentVariant.delbetalning_pris}</p>` : ''}
-                        <button class="pdp-buy-button">Lägg i varukorg</button>
-                    </div>
-                </div>
-                <div class="pdp-long-info">
-                    <h2>Beskrivning</h2>
-                    <p>${currentProductBase.beskrivning_lang || currentProductBase.beskrivning || 'Mer information kommer snart.'}</p>
-                    <h2>Specifikationer</h2>
-                    <ul class="pdp-specs-list"></ul>
-                </div>
-            `;
-    
-            updateVariantUI();
-            setupEventListeners();
-        }
-    
-        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
-        function updateVariantUI() {
-            // Hämta media-data på ett säkert sätt
-            const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+            allProductBases = [
+                ...newDevices,
+                ...usedDevices.map(p => ({...p, id_base: p.id, varianter: [p] })),
+                ...accessories.map(p => ({...p, id_base: p.id, varianter: [p] }))
+            ];
             
-            const mainMediaContainer = document.getElementById('main-media-container');
-            const thumbsList = document.getElementById('thumbs-list');
-            
-            // Fyll på thumbnail-listan
-            thumbsList.innerHTML = media.map((item, index) => {
-                const isActive = index === 0 ? 'class="active"' : '';
-                const imageUrl = item.typ === 'video' ? 'bilder/testbild.png' : item.url;
-                const videoIcon = item.typ === 'video' ? '<i class="ph-bold ph-play-circle thumb-video-icon"></i>' : '';
-                return `<li ${isActive} data-index="${index}"><img src="${imageUrl}" alt="Thumbnail">${videoIcon}</li>`;
-            }).join('');
-            
-            // Visa den första bilden/videon i huvudfönstret som standard
-            displayMedia(media[0]);
-    
-            // Uppdatera pris och delbetalning
-            contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
-            const installmentP = contentWrapper.querySelector('.price-installment');
-            if (installmentP) {
-                installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
-                if (currentVariant.delbetalning_mojlig) {
-                    installmentP.textContent = currentVariant.delbetalning_pris;
+            for (const p of allProductBases) {
+                const foundVariant = p.varianter.find(v => v.id === variantId);
+                if (foundVariant) {
+                    currentProductBase = p;
+                    currentVariant = foundVariant;
+                    break;
                 }
             }
+
+            if (!currentProductBase) throw new Error('Produkten kunde inte hittas.');
             
-            // Uppdatera specifikationslistan
-            const specsList = contentWrapper.querySelector('.pdp-specs-list');
-            const specsData = currentVariant.specifikationer || [];
-            specsList.innerHTML = specsData.map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
-    
-            // Uppdatera de valda knapparna
-            if (currentVariant.attribut) {
-                for (const [key, value] of Object.entries(currentVariant.attribut)) {
-                    const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
-                    btns.forEach(btn => {
-                        btn.classList.toggle('selected', btn.textContent === value);
-                    });
-                }
-            }
+            renderProductPage();
+        } catch (error) {
+            contentWrapper.innerHTML = `<p class="error-message">${error.message}</p>`;
         }
-        
-        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
-        function displayMedia(mediaItem) {
-            const mainMediaContainer = document.getElementById('main-media-container');
-            // Kontrollera att mediaItem faktiskt finns för att undvika fel
-            if (!mediaItem) {
-                mainMediaContainer.innerHTML = `<img src="bilder/testbild.png" alt="Ingen bild tillgänglig">`;
-                return;
-            }
-    
-            if (mediaItem.typ === 'video') {
-                mainMediaContainer.innerHTML = `<video src="${mediaItem.url}" playsinline autoplay muted controls></video>`;
-            } else {
-                mainMediaContainer.innerHTML = `<img src="${mediaItem.url}" alt="${currentVariant.namn}">`;
-            }
-        }
-    
-        // HELA DENNA FUNKTION ÄR NU KOMPLETT OCH KORREKT
-        function setupEventListeners() {
-            // Event listener för thumbnails (använder event delegation för bästa prestanda)
-            contentWrapper.addEventListener('click', (e) => {
-                const thumb = e.target.closest('.pdp-thumbs-list li');
-                if (thumb) {
-                    const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
-                    const index = parseInt(thumb.dataset.index, 10);
-                    
-                    document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
-                    thumb.classList.add('active');
-                    
-                    displayMedia(media[index]);
+    }
+
+    // --- 2. HUVUDRENDERINGSFUNKTION ---
+    function renderProductPage() {
+        document.title = `${currentProductBase.namn} - TechZon Kalmar`;
+
+        const variantOptions = {};
+        if (currentProductBase.varianter.length > 1) {
+            currentProductBase.varianter.forEach(v => {
+                for (const [key, value] of Object.entries(v.attribut)) {
+                    if (!variantOptions[key]) variantOptions[key] = new Set();
+                    variantOptions[key].add(value);
                 }
             });
-            
-            // Event listener för variant-knappar
-            const selectors = document.getElementById('variant-selectors');
-            if (selectors) {
-                selectors.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('variant-btn')) {
-                        const attributeKey = e.target.parentElement.dataset.attribute;
-                        const attributeValue = e.target.textContent;
-                        
-                        const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
-                        
-                        const newVariant = currentProductBase.varianter.find(variant => {
-                            return Object.entries(targetAttributes).every(([key, value]) => 
-                                variant.attribut[key] === value
-                            );
-                        });
-                        
-                        if (newVariant) {
-                            currentVariant = newVariant;
-                            updateVariantUI();
-                        } else {
-                            console.log("Ingen giltig variant hittades för den kombinationen.");
-                        }
-                    }
+        }
+        
+        contentWrapper.innerHTML = `
+            <div class="product-page-layout">
+                <div class="pdp-gallery">
+                    <div id="main-media-container"></div>
+                    <ul class="pdp-thumbs-list" id="thumbs-list"></ul>
+                </div>
+                <div class="pdp-details">
+                    <h1>${currentProductBase.namn}</h1>
+                    <p class="description-short">${currentProductBase.beskrivning_kort || ''}</p>
+                    <div id="variant-selectors">
+                        ${Object.entries(variantOptions).map(([key, values]) => `
+                            <div class="variant-selector">
+                                <label>${key}</label>
+                                <div class="variant-options" data-attribute="${key}">
+                                    ${[...values].map(v => `<button type="button" class="variant-btn">${v}</button>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="pdp-price-section">
+                        <p class="price">${currentVariant.pris} kr</p>
+                        ${currentVariant.delbetalning_mojlig ? `<p class="price-installment">${currentVariant.delbetalning_pris}</p>` : ''}
+                    </div>
+                    <button class="pdp-buy-button">Lägg i varukorg</button>
+                </div>
+            </div>
+            <div class="pdp-long-info">
+                <h2>Beskrivning</h2>
+                <p>${currentProductBase.beskrivning_lang || currentProductBase.beskrivning || 'Mer information kommer snart.'}</p>
+                <h2>Specifikationer</h2>
+                <ul class="pdp-specs-list"></ul>
+            </div>
+        `;
+
+        updateVariantUI(); // Fyll på med dynamisk data
+        setupEventListeners(); // Koppla på all interaktivitet
+    }
+
+    // --- 3. UI-UPPDATERING (BILDER, PRIS, ETC.) ---
+    function updateVariantUI() {
+        const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+        
+        const thumbsList = document.getElementById('thumbs-list');
+        thumbsList.innerHTML = media.map((item, index) => {
+            const isActive = index === 0 ? 'class="active"' : '';
+            const imageUrl = item.typ === 'video' ? 'bilder/testbild.png' : item.url;
+            const videoIcon = item.typ === 'video' ? '<i class="ph-bold ph-play-circle thumb-video-icon"></i>' : '';
+            return `<li ${isActive} data-index="${index}"><img src="${imageUrl}" alt="Thumbnail">${videoIcon}</li>`;
+        }).join('');
+        
+        displayMedia(media[0]);
+
+        contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
+        const installmentP = contentWrapper.querySelector('.price-installment');
+        if (installmentP) {
+            installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
+            installmentP.textContent = currentVariant.delbetalning_mojlig ? currentVariant.delbetalning_pris : '';
+        }
+        
+        const specsList = contentWrapper.querySelector('.pdp-specs-list');
+        specsList.innerHTML = (currentVariant.specifikationer || []).map(spec => `<li><span>${spec.label}</span><strong>${spec.value}</strong></li>`).join('');
+
+        if (currentVariant.attribut) {
+            for (const [key, value] of Object.entries(currentVariant.attribut)) {
+                const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
+                btns.forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent === value);
                 });
             }
         }
-    
-        initializeProductPage();
     }
+    
+    function displayMedia(mediaItem) {
+        const mainMediaContainer = document.getElementById('main-media-container');
+        if (!mediaItem) {
+            mainMediaContainer.innerHTML = `<img src="bilder/testbild.png" alt="Ingen bild tillgänglig">`;
+            return;
+        }
+
+        if (mediaItem.typ === 'video') {
+            mainMediaContainer.innerHTML = `<video src="${mediaItem.url}" playsinline autoplay muted controls></video>`;
+        } else {
+            mainMediaContainer.innerHTML = `<img src="${mediaItem.url}" alt="${currentVariant.namn}">`;
+        }
+    }
+
+    // --- 4. EVENT HANTERING (ROBUST VERSION) ---
+    function setupEventListeners() {
+        // En enda, kraftfull event listener för hela innehållet
+        contentWrapper.addEventListener('click', (e) => {
+            const target = e.target;
+            
+            // Hantera klick på thumbnails
+            const thumb = target.closest('.pdp-thumbs-list li');
+            if (thumb) {
+                const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+                const index = parseInt(thumb.dataset.index, 10);
+                
+                document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
+                thumb.classList.add('active');
+                
+                displayMedia(media[index]);
+                return; // Avsluta för att inte trigga andra klick
+            }
+
+            // Hantera klick på variant-knappar
+            if (target.classList.contains('variant-btn')) {
+                const attributeKey = target.parentElement.dataset.attribute;
+                const attributeValue = target.textContent;
+                
+                const targetAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+                
+                const newVariant = currentProductBase.varianter.find(variant => 
+                    JSON.stringify(variant.attribut) === JSON.stringify(targetAttributes)
+                );
+                
+                if (newVariant) {
+                    currentVariant = newVariant;
+                    updateVariantUI(); // Rita om UI med den nya variantens data
+                } else {
+                    console.log("Ingen giltig variant hittades.");
+                }
+            }
+        });
+    }
+
+    // --- Starta allt ---
+    initializeProductPage();
+}
 });
