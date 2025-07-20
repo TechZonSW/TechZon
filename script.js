@@ -966,214 +966,215 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------------------------
-// DEL 9: KOD FÖR E-HANDELSSIDAN (KOMPLETT OCH KORRIGERAD VERSION)
-// --------------------------------------------------------------------
-const shopPage = document.getElementById('shop-page');
-if (shopPage) {
-    // --- Referenser ---
-    const searchInput = document.getElementById('searchInput');
-    const filtersContainer = document.getElementById('filters-container');
-    const productGrid = document.getElementById('product-grid');
-    const noResultsMessage = document.getElementById('no-results-message');
-    const modal = document.getElementById('productModal');
-    const modalBody = document.getElementById('modalBody');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-
-    // --- State ---
-    let allProducts = [];
-    let priceSlider = null;
-    let activeFilters = {
-        kategori: [],
-        marke: [],
-        typ: [],
-        price: { min: 0, max: 20000 }
-    };
-
-    // --- 1. INITIALISERING ---
-    async function initializeShop() {
-        try {
-            const [newDevices, usedDevices, accessories] = await Promise.all([
-                fetch('./nya-enheter.json').then(res => res.json()),
-                fetch('./used-products.json').then(res => res.json()),
-                fetch('./accessories.json').then(res => res.json())
-            ]);
-            
-            // Flatta ut "nya"-produkter så varje variant blir en egen produkt i listan
-            const newProductsFlat = newDevices.flatMap(p => 
-                p.varianter.map(v => ({ ...p, ...v }))
-            );
-
-            allProducts = [ ...newProductsFlat, ...usedDevices, ...accessories ];
-            
-            // ... (resten av initializeShop, oförändrat)
-            populateFilters();
-            parseUrlParams();
-            applyFiltersAndSearch();
-        } catch (error) {
-            console.error("Kunde inte ladda produkter:", error);
-            productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter. Försök igen senare.</p>';
-        }
-    }
-
-    // --- 2. FILTERS ---
-    function populateFilters() {
-        const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
-        const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
-        const typer = [...new Set(allProducts.map(p => p.typ).filter(Boolean))];
-
-        filtersContainer.innerHTML = `
-            <div class="filter-group">
-                <h4>Kategori</h4>
-                <div class="filter-options">
-                    ${Object.entries(kategorier).map(([slug, name]) => `
-                        <label><input type="checkbox" data-filter="kategori" value="${slug}"> ${name}</label>
-                    `).join('')}
-                </div>
-            </div>
-            <div class="filter-group">
-                <h4>Märke</h4>
-                <div class="filter-options">
-                    ${marken.map(m => `
-                        <label><input type="checkbox" data-filter="marke" value="${m.toLowerCase()}"> ${m}</label>
-                    `).join('')}
-                </div>
-            </div>
-            <div class="filter-group">
-                <h4>Produkttyp</h4>
-                <div class="filter-options">
-                    ${typer.map(t => `
-                        <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase()}"> ${t}</label>
-                    `).join('')}
-                </div>
-            </div>
-            <div class="filter-group">
-                <h4>Pris</h4>
-                <div id="price-slider"></div>
-                <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
-            </div>
-        `;
-        
-        const priceSliderElement = document.getElementById('price-slider');
-        const minPriceLabel = document.getElementById('min-price');
-        const maxPriceLabel = document.getElementById('max-price');
-
-        // Kontrollera att noUiSlider är laddat
-        if (typeof noUiSlider !== 'undefined') {
-            priceSlider = noUiSlider.create(priceSliderElement, {
-                start: [0, 20000], connect: true, range: { min: 0, max: 20000 }, step: 100,
-                format: { to: value => Math.round(value) + ' kr', from: value => Number(value.replace(' kr', '')) }
-            });
-            
-            priceSlider.on('update', ([min, max]) => { minPriceLabel.textContent = min; maxPriceLabel.textContent = max; });
-            priceSlider.on('change', ([min, max]) => {
-                activeFilters.price.min = Number(min.replace(' kr', ''));
-                activeFilters.price.max = Number(max.replace(' kr', ''));
-                applyFiltersAndSearch();
-            });
-        }
-    }
+    // DEL 9: KOD FÖR E-HANDELSSIDAN (KOMPLETT OCH KORRIGERAD VERSION)
+    // --------------------------------------------------------------------
+    const shopPage = document.getElementById('shop-page');
+    if (shopPage) {
+        // --- Referenser ---
+        const searchInput = document.getElementById('searchInput');
+        const filtersContainer = document.getElementById('filters-container');
+        const productGrid = document.getElementById('product-grid');
+        const noResultsMessage = document.getElementById('no-results-message');
+        const modal = document.getElementById('productModal');
+        const modalBody = document.getElementById('modalBody');
+        const closeModalBtn = document.getElementById('closeModalBtn');
     
-     function parseUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        params.forEach((value, key) => {
-            if (activeFilters[key] !== undefined && Array.isArray(activeFilters[key])) {
-                const values = value.split(',');
-                activeFilters[key] = values;
+        // --- State ---
+        let allProducts = [];
+        let priceSlider = null;
+        let activeFilters = {
+            kategori: [],
+            marke: [],
+            typ: [],
+            price: { min: 0, max: 20000 }
+        };
+    
+        // --- 1. INITIALISERING ---
+        async function initializeShop() {
+            try {
+                const [newDevices, usedDevices, accessories] = await Promise.all([
+                    fetch('./nya-enheter.json').then(res => res.json()),
+                    fetch('./used-products.json').then(res => res.json()),
+                    fetch('./accessories.json').then(res => res.json())
+                ]);
                 
-                values.forEach(val => {
-                    const checkbox = document.querySelector(`input[data-filter="${key}"][value="${val}"]`);
-                    if (checkbox) checkbox.checked = true;
-                });
+                // Flatta ut "nya"-produkter så varje variant blir en egen produkt i listan
+                const newProductsFlat = newDevices.flatMap(p => 
+                    p.varianter.map(v => ({ ...p, ...v }))
+                );
+    
+                allProducts = [ ...newProductsFlat, ...usedDevices, ...accessories ];
+                
+                // ... (resten av initializeShop, oförändrat)
+                populateFilters();
+                parseUrlParams();
+                applyFiltersAndSearch();
+            } catch (error) {
+                console.error("Kunde inte ladda produkter:", error);
+                productGrid.innerHTML = '<p class="error-message">Ett fel uppstod vid laddning av produkter. Försök igen senare.</p>';
             }
-        });
-    }
-
-    function applyFiltersAndSearch() {
-        const searchTerm = searchInput.value.toLowerCase();
-        
-        const filteredProducts = allProducts.filter(p => {
-            const matchesSearch = !searchTerm || (p.namn && p.namn.toLowerCase().includes(searchTerm)) || (p.marke && p.marke.toLowerCase().includes(searchTerm));
-            
-            const matchesKategori = activeFilters.kategori.length === 0 || activeFilters.kategori.includes(p.kategori);
-            const matchesMarke = activeFilters.marke.length === 0 || (p.marke && activeFilters.marke.includes(p.marke.toLowerCase()));
-            const matchesTyp = activeFilters.typ.length === 0 || (p.typ && activeFilters.typ.includes(p.typ.toLowerCase()));
-
-            const matchesPrice = p.pris >= activeFilters.price.min && p.pris <= activeFilters.price.max;
-            
-            return matchesSearch && matchesKategori && matchesMarke && matchesTyp && matchesPrice;
-        });
-        
-        renderProducts(filteredProducts);
-    }
+        }
     
-    // --- 3. RENDERING (KORRIGERAD MED TVÅ KNAPPAR) ---
-    function renderProducts(products) {
-        productGrid.innerHTML = '';
-        noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
+        // --- 2. FILTERS ---
+        function populateFilters() {
+            const kategorier = { 'nytt': 'Nya Enheter', 'andrahand': 'Andrahands Enheter', 'tillbehor': 'Tillbehör' };
+            const marken = [...new Set(allProducts.map(p => p.marke).filter(Boolean))];
+            const typer = [...new Set(allProducts.map(p => p.typ).filter(Boolean))];
     
-        products.forEach(p => {
-            const displayProduct = p.varianter ? p.varianter[0] : p;
-            const imageUrl = (displayProduct.media && displayProduct.media[0]?.url) || (displayProduct.bilder && displayProduct.bilder[0]) || 'bilder/testbild.png';
-    
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <a href="produkt.html?id=${displayProduct.id}" class="product-card-link">
-                    <img src="${imageUrl}" alt="${p.namn}">
-                </a>
-                <div class="product-card-content">
-                    <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
-                    <p class="price">${displayProduct.pris} kr</p>
-                    ${displayProduct.delbetalning_mojlig ? `<p class="price-installment">${displayProduct.delbetalning_pris}</p>` : ''}
-                    <div class="product-card-buttons">
-                        <a href="produkt.html?id=${displayProduct.id}"><button class="details-btn">Se detaljer</button></a>
-                        <button class="add-to-cart-btn" data-id="${displayProduct.id}">Lägg i korg</button>
+            filtersContainer.innerHTML = `
+                <div class="filter-group">
+                    <h4>Kategori</h4>
+                    <div class="filter-options">
+                        ${Object.entries(kategorier).map(([slug, name]) => `
+                            <label><input type="checkbox" data-filter="kategori" value="${slug}"> ${name}</label>
+                        `).join('')}
                     </div>
                 </div>
+                <div class="filter-group">
+                    <h4>Märke</h4>
+                    <div class="filter-options">
+                        ${marken.map(m => `
+                            <label><input type="checkbox" data-filter="marke" value="${m.toLowerCase()}"> ${m}</label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Produkttyp</h4>
+                    <div class="filter-options">
+                        ${typer.map(t => `
+                            <label><input type="checkbox" data-filter="typ" value="${t.toLowerCase()}"> ${t}</label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Pris</h4>
+                    <div id="price-slider"></div>
+                    <div id="price-values"><span id="min-price"></span><span id="max-price"></span></div>
+                </div>
             `;
-            productGrid.appendChild(card);
+            
+            const priceSliderElement = document.getElementById('price-slider');
+            const minPriceLabel = document.getElementById('min-price');
+            const maxPriceLabel = document.getElementById('max-price');
+    
+            // Kontrollera att noUiSlider är laddat
+            if (typeof noUiSlider !== 'undefined') {
+                priceSlider = noUiSlider.create(priceSliderElement, {
+                    start: [0, 20000], connect: true, range: { min: 0, max: 20000 }, step: 100,
+                    format: { to: value => Math.round(value) + ' kr', from: value => Number(value.replace(' kr', '')) }
+                });
+                
+                priceSlider.on('update', ([min, max]) => { minPriceLabel.textContent = min; maxPriceLabel.textContent = max; });
+                priceSlider.on('change', ([min, max]) => {
+                    activeFilters.price.min = Number(min.replace(' kr', ''));
+                    activeFilters.price.max = Number(max.replace(' kr', ''));
+                    applyFiltersAndSearch();
+                });
+            }
+        }
+        
+         function parseUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            params.forEach((value, key) => {
+                if (activeFilters[key] !== undefined && Array.isArray(activeFilters[key])) {
+                    const values = value.split(',');
+                    activeFilters[key] = values;
+                    
+                    values.forEach(val => {
+                        const checkbox = document.querySelector(`input[data-filter="${key}"][value="${val}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            });
+        }
+    
+        function applyFiltersAndSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filteredProducts = allProducts.filter(p => {
+                const matchesSearch = !searchTerm || (p.namn && p.namn.toLowerCase().includes(searchTerm)) || (p.marke && p.marke.toLowerCase().includes(searchTerm));
+                
+                const matchesKategori = activeFilters.kategori.length === 0 || activeFilters.kategori.includes(p.kategori);
+                const matchesMarke = activeFilters.marke.length === 0 || (p.marke && activeFilters.marke.includes(p.marke.toLowerCase()));
+                const matchesTyp = activeFilters.typ.length === 0 || (p.typ && activeFilters.typ.includes(p.typ.toLowerCase()));
+    
+                const matchesPrice = p.pris >= activeFilters.price.min && p.pris <= activeFilters.price.max;
+                
+                return matchesSearch && matchesKategori && matchesMarke && matchesTyp && matchesPrice;
+            });
+            
+            renderProducts(filteredProducts);
+        }
+        
+        // --- 3. RENDERING (KORRIGERAD MED TVÅ KNAPPAR) ---
+        function renderProducts(products) {
+            productGrid.innerHTML = '';
+            noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
+        
+            products.forEach(p => {
+                const displayProduct = p.varianter ? p.varianter[0] : p;
+                const imageUrl = (displayProduct.media && displayProduct.media[0]?.url) || (displayProduct.bilder && displayProduct.bilder[0]) || 'bilder/testbild.png';
+        
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <a href="produkt.html?id=${displayProduct.id}" class="product-card-link">
+                        <img src="${imageUrl}" alt="${p.namn}">
+                    </a>
+                    <div class="product-card-content">
+                        <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
+                        <p class="price">${displayProduct.pris} kr</p>
+                        ${displayProduct.delbetalning_mojlig ? `<p class="price-installment">${displayProduct.delbetalning_pris}</p>` : ''}
+                        <div class="product-card-buttons">
+                            <a href="produkt.html?id=${displayProduct.id}"><button class="details-btn">Se detaljer</button></a>
+                            <button class="add-to-cart-btn" data-id="${displayProduct.id}">Lägg i korg</button>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+    
+    
+        // --- 4. EVENT LISTENERS ---
+        productGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart-btn')) {
+                e.preventDefault(); // Förhindra att länken följs om man klickar på knappen
+                alert(`Produkt med ID ${e.target.dataset.id} lades till (logik ej implementerad).`);
+            }
         });
+        
+        searchInput.addEventListener('input', applyFiltersAndSearch);
+    
+        filtersContainer.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                const filterType = e.target.dataset.filter;
+                const value = e.target.value;
+                
+                if (e.target.checked) {
+                    activeFilters[filterType].push(value);
+                } else {
+                    activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
+                }
+                applyFiltersAndSearch();
+            }
+        });
+        
+        productGrid.addEventListener('click', (e) => {
+            const button = e.target.closest('button.details-btn');
+            if (button) {
+                openProductModal(button.dataset.id);
+            }
+            // Lägg till logik för 'add-to-cart-btn' här om du vill
+        });
+        
+        // Starta allt
+        initializeShop();
     }
 
 
-    // --- 4. EVENT LISTENERS ---
-    productGrid.addEventListener('click', (e) => {
-        if (e.target.classList.contains('add-to-cart-btn')) {
-            e.preventDefault(); // Förhindra att länken följs om man klickar på knappen
-            alert(`Produkt med ID ${e.target.dataset.id} lades till (logik ej implementerad).`);
-        }
-    });
-    
-    searchInput.addEventListener('input', applyFiltersAndSearch);
-
-    filtersContainer.addEventListener('change', (e) => {
-        if (e.target.type === 'checkbox') {
-            const filterType = e.target.dataset.filter;
-            const value = e.target.value;
-            
-            if (e.target.checked) {
-                activeFilters[filterType].push(value);
-            } else {
-                activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
-            }
-            applyFiltersAndSearch();
-        }
-    });
-    
-    productGrid.addEventListener('click', (e) => {
-        const button = e.target.closest('button.details-btn');
-        if (button) {
-            openProductModal(button.dataset.id);
-        }
-        // Lägg till logik för 'add-to-cart-btn' här om du vill
-    });
-    
-    // Starta allt
-    initializeShop();
-}
-
     // --------------------------------------------------------------------
-    // DEL 10: KOD FÖR DEDIKERAD PRODUKTSIDA (/produkt.html) - SLUTGILTIG
+    // DEL 10: KOD FÖR PRODUKTSIDA (EGEN, ROBUST BILDVISARE)
     // --------------------------------------------------------------------
     const productPage = document.getElementById('product-page');
     if (productPage) {
@@ -1181,8 +1182,6 @@ if (shopPage) {
         let allProductBases = [];
         let currentProductBase = null;
         let currentVariant = null;
-        let swiperMain = null;
-        let swiperThumbs = null;
         
         async function initializeProductPage() {
             try {
@@ -1196,11 +1195,10 @@ if (shopPage) {
                     fetch('./accessories.json').then(res => res.json())
                 ]);
                 
-                // Förbered all data för enkel sökning
                 allProductBases = [
                     ...newDevices,
-                    ...usedDevices.map(p => ({...p, varianter: [p] })), // Gör om till variant-struktur
-                    ...accessories.map(p => ({...p, varianter: [p] }))
+                    ...usedDevices.map(p => ({...p, id_base: p.id, varianter: [p] })),
+                    ...accessories.map(p => ({...p, id_base: p.id, varianter: [p] }))
                 ];
                 
                 for (const p of allProductBases) {
@@ -1214,13 +1212,13 @@ if (shopPage) {
     
                 if (!currentProductBase) throw new Error('Produkten kunde inte hittas.');
                 
-                renderProduct();
+                renderProductPage();
             } catch (error) {
                 contentWrapper.innerHTML = `<p class="error-message">${error.message}</p>`;
             }
         }
     
-        function renderProduct() {
+        function renderProductPage() {
             document.title = `${currentProductBase.namn} - TechZon Kalmar`;
     
             const variantOptions = {};
@@ -1232,12 +1230,12 @@ if (shopPage) {
                     }
                 });
             }
-    
+            
             contentWrapper.innerHTML = `
                 <div class="product-page-layout">
                     <div class="pdp-gallery">
-                        <div class="swiper swiper-main"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
-                        <div class="swiper swiper-thumbs"><div class="swiper-wrapper"></div></div>
+                        <div id="main-media-container"></div>
+                        <ul class="pdp-thumbs-list" id="thumbs-list"></ul>
                     </div>
                     <div class="pdp-details">
                         <h1>${currentProductBase.namn}</h1>
@@ -1270,57 +1268,37 @@ if (shopPage) {
             updateVariantUI();
             setupEventListeners();
         }
-
-        function updateVariantUI() {
-            // Förstör gamla Swiper-instanser för att undvika konflikter
-            if (swiperMain) swiperMain.destroy(true, true);
-            if (swiperThumbs) swiperThumbs.destroy(true, true);
     
+        function updateVariantUI() {
             const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
             
-            const mainSwiperWrapper = contentWrapper.querySelector('.swiper-main .swiper-wrapper');
-            const thumbsSwiperWrapper = contentWrapper.querySelector('.swiper-thumbs .swiper-wrapper');
-    
-            // Fyll på med media
-            mainSwiperWrapper.innerHTML = media.map(item => {
+            const mainMediaContainer = document.getElementById('main-media-container');
+            const thumbsList = document.getElementById('thumbs-list');
+            
+            thumbsList.innerHTML = media.map((item, index) => {
+                const isActive = index === 0 ? 'class="active"' : '';
                 if (item.typ === 'video') {
-                    return `<div class="swiper-slide"><video src="${item.url}" playsinline muted controls></video></div>`;
+                    return `<li ${isActive} data-index="${index}"><img src="bilder/testbild.png" alt="Video thumbnail"><i class="ph-bold ph-play-circle thumb-video-icon"></i></li>`;
                 }
-                return `<div class="swiper-slide"><img src="${item.url}" alt="${currentVariant.namn}"></div>`;
+                return `<li ${isActive} data-index="${index}"><img src="${item.url}" alt="${currentVariant.namn}"></li>`;
             }).join('');
             
-            thumbsSwiperWrapper.innerHTML = media.map(item => {
-                 if (item.typ === 'video') {
-                    return `<div class="swiper-slide"><img src="bilder/testbild.png" alt="Video thumbnail"><i class="ph-bold ph-play-circle thumb-video-icon"></i></div>`;
-                }
-                return `<div class="swiper-slide"><img src="${item.url}" alt="${currentVariant.namn}"></div>`;
-            }).join('');
+            // Visa första bilden/videon som standard
+            displayMedia(media[0]);
     
-            // Initiera båda karusellerna och länka dem
-            swiperThumbs = new Swiper(".swiper-thumbs", {
-                spaceBetween: 10,
-                slidesPerView: 4,
-                freeMode: true,
-                watchSlidesProgress: true,
-            });
-    
-            swiperMain = new Swiper(".swiper-main", {
-                spaceBetween: 10,
-                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-                thumbs: { swiper: swiperThumbs },
-            });
-    
-            // Uppdatera resten av UI:t (priser, knappar, etc.)
+            // Uppdatera resten av UI:t
             contentWrapper.querySelector('.price').textContent = `${currentVariant.pris} kr`;
             const installmentP = contentWrapper.querySelector('.price-installment');
             if (installmentP) {
-                installmentP.textContent = currentVariant.delbetalning_mojlig ? currentVariant.delbetalning_pris : '';
+                installmentP.style.display = currentVariant.delbetalning_mojlig ? 'block' : 'none';
+                if (currentVariant.delbetalning_mojlig) {
+                    installmentP.textContent = currentVariant.delbetalning_pris;
+                }
             }
             
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('selected'));
             if (currentVariant.attribut) {
                 for (const [key, value] of Object.entries(currentVariant.attribut)) {
-                    // Hitta rätt knapp och markera den
                     const btns = document.querySelectorAll(`.variant-options[data-attribute="${key}"] button`);
                     btns.forEach(btn => {
                         if(btn.textContent === value) btn.classList.add('selected');
@@ -1329,23 +1307,50 @@ if (shopPage) {
             }
         }
         
+        function displayMedia(mediaItem) {
+            const mainMediaContainer = document.getElementById('main-media-container');
+            if (mediaItem.typ === 'video') {
+                mainMediaContainer.innerHTML = `<video src="${mediaItem.url}" playsinline autoplay muted controls></video>`;
+            } else {
+                mainMediaContainer.innerHTML = `<img src="${mediaItem.url}" alt="${currentVariant.namn}">`;
+            }
+        }
+    
         function setupEventListeners() {
+            // Event listener för thumbnails (använder event delegation)
+            contentWrapper.addEventListener('click', (e) => {
+                const thumb = e.target.closest('.pdp-thumbs-list li');
+                if (thumb) {
+                    const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+                    const index = parseInt(thumb.dataset.index, 10);
+                    
+                    // Ta bort 'active' från alla thumbnails och lägg till på den klickade
+                    document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
+                    thumb.classList.add('active');
+                    
+                    displayMedia(media[index]);
+                }
+            });
+            
+            // Event listener för variant-knappar
             const selectors = document.getElementById('variant-selectors');
             if (selectors) {
                 selectors.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('variant-btn')) {
+                    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('variant-btn')) {
                         const attribute = e.target.parentElement.dataset.attribute;
                         const value = e.target.textContent;
                         
-                        const newAttributes = { ...currentVariant.attribut, [attribute]: value };
+                        const currentAttributes = { ...currentVariant.attribut };
+                        currentAttributes[attribute] = value;
                         
-                        let newVariant = currentProductBase.varianter.find(v => 
-                            JSON.stringify(v.attribut) === JSON.stringify(newAttributes)
-                        );
+                        // Hitta den bästa matchande varianten
+                        let newVariant = currentProductBase.varianter.find(v => {
+                            return Object.entries(currentAttributes).every(([key, val]) => v.attribut[key] === val);
+                        });
                         
                         if (newVariant) {
                             currentVariant = newVariant;
-                            updateVariantUI();
+                            updateVariantUI(); // Rita om hela UI:t med den nya variantens data
                         }
                     }
                 });
@@ -1354,6 +1359,5 @@ if (shopPage) {
     
         initializeProductPage();
     }
-    
 
 });
