@@ -1330,44 +1330,62 @@ if (productPage) {
         // ... (denna funktion är oförändrad)
     }
 
-    // --- 4. EVENT HANTERING ---
-    function setupEventListeners() {
-        contentWrapper.addEventListener('click', (e) => {
-            const target = e.target;
+    // --- 4. EVENT HANTERING (KORRIGERAD, ROBUST VERSION) ---
+function setupEventListeners() {
+    contentWrapper.addEventListener('click', (e) => {
+        const target = e.target;
+        
+        // Hantera klick på thumbnails
+        const thumb = target.closest('.pdp-thumbs-list li');
+        if (thumb) {
+            const media = currentVariant.media || (currentVariant.bilder ? currentVariant.bilder.map(url => ({ typ: 'bild', url })) : []);
+            const index = parseInt(thumb.dataset.index, 10);
+            displayMedia(media[index]);
+            document.querySelectorAll('.pdp-thumbs-list li').forEach(li => li.classList.remove('active'));
+            thumb.classList.add('active');
+            return;
+        }
+
+        // Hantera klick på variant-knappar
+        const variantBtn = target.closest('.variant-btn');
+        if (variantBtn) {
+            if (variantBtn.classList.contains('selected')) return; // Gör inget om den redan är vald
+
+            const attributeKey = variantBtn.parentElement.dataset.attribute;
+            const attributeValue = variantBtn.textContent;
             
-            // Hantera klick på thumbnails
-            const thumb = target.closest('.pdp-thumbs-list li');
-            if (thumb) { /* ... (denna del är oförändrad) ... */ }
+            // Bygg en "ideal" uppsättning attribut baserat på det nya valet
+            const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
+            
+            let newVariant = null;
 
-            // Hantera klick på variant-knappar
-            const variantBtn = target.closest('.variant-btn');
-            if (variantBtn && !variantBtn.disabled) {
-                if (variantBtn.classList.contains('selected')) return;
-
-                const attributeKey = variantBtn.parentElement.dataset.attribute;
-                const attributeValue = variantBtn.textContent;
-                
-                const desiredAttributes = { ...currentVariant.attribut, [attributeKey]: attributeValue };
-                
-                // 1. Försök hitta en exakt matchning
-                let newVariant = currentProductBase.varianter.find(variant => 
-                    JSON.stringify(variant.attribut) === JSON.stringify(desiredAttributes)
+            // FÖRBÄTTRAD SÖKLOGIK
+            // Steg 1: Försök hitta en exakt matchning för den önskade kombinationen
+            newVariant = currentProductBase.varianter.find(variant => 
+                Object.entries(desiredAttributes).every(([key, value]) => 
+                    variant.attribut[key] === value
+                )
+            );
+            
+            // Steg 2: Om ingen exakt matchning finns, hitta den första varianten som åtminstone
+            // matchar det attribut som användaren just klickade på.
+            if (!newVariant) {
+                newVariant = currentProductBase.varianter.find(variant =>
+                    variant.attribut[attributeKey] === attributeValue
                 );
-                
-                // 2. Om ingen exakt matchning finns, hitta den FÖRSTA BÄSTA
-                if (!newVariant) {
-                    newVariant = currentProductBase.varianter.find(variant => 
-                        variant.attribut[attributeKey] === attributeValue
-                    );
-                }
-                
-                if (newVariant) {
-                    currentVariant = newVariant;
-                    updateUI(); // Kör den centrala funktionen för att rita om allt
-                }
             }
-        });
-    }
+            
+            // Om vi hittade en variant med någon av metoderna ovan, uppdatera sidan
+            if (newVariant) {
+                currentVariant = newVariant; // Uppdatera den globala state-variabeln
+                updateUI(); // Kör den centrala funktionen för att rita om allt
+            } else {
+                // Denna logg bör nu sällan eller aldrig visas
+                console.log("Ingen giltig variant kunde hittas för det valda attributet.");
+            }
+        }
+    });
+}
 
     // --- Starta allt ---
     initializeProductPage();
