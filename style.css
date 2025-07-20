@@ -107,7 +107,7 @@ nav ul li a {
     text-decoration: none;
     color: var(--text-color); /* Använder huvudtextfärgen för bättre kontrast */
     font-weight: 500; /* Något djärvare än normalt, men inte tungt */
-    font-size: 0.95em; /* Något mindre för en mer delikat känsla */
+    font-size: 1em; /* Något mindre för en mer delikat känsla */
     padding: 8px 4px; /* Lite mer klickyta */
     border-radius: 6px; /* Mjuk rundning för hover-effekten */
     transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
