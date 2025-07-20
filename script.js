@@ -1006,8 +1006,8 @@ if (shopPage) {
         try {
             const [newDevicesRes, usedDevicesRes, accessoriesRes] = await Promise.all([
                 fetch('./nya-enheter.json'),
-                fetch('./andrahands-enheter.json'),
-                fetch('./tillbehor.json')
+                fetch('./used-products.json'),
+                fetch('./accessories.json')
             ]);
             
             if (!newDevicesRes.ok || !usedDevicesRes.ok || !accessoriesRes.ok) {
