@@ -1640,27 +1640,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-                itemsContainer.addEventListener('click', (e) => {
-                    // Se till att vi bara reagerar på klick på en "ta bort"-knapp
-                    if (e.target.classList.contains('remove-from-cart-btn')) {
-                        // Hämta det UNIKA cart_id från knappen (inte det generella produkt-id)
-                        // parseInt konverterar texten "167888..." till ett nummer
-                        const cartIdToRemove = parseInt(e.target.dataset.cartId, 10);
-                        
-                        // Hitta hela produktobjektet för att kunna visa namnet i dialogen
-                        const itemToRemove = this.cart.find(item => item.cart_id === cartIdToRemove);
-                        
-                        if (itemToRemove) {
-                            const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${itemToRemove.namn}" från varukorgen?`);
-                            
-                            if (wantsToRemove) {
-                                // Anropa removeFromCart med det UNIKA cart_id
-                                this.removeFromCart(cartIdToRemove);
-                            }
-                        }
-                    }
-                });
+            itemsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-from-cart-btn')) {
+                    const productId = e.target.dataset.id;
                     
+                    // NY KOD: Lägg till en bekräftelsedialog
+                    const productName = e.target.closest('.checkout-item').querySelector('h4').textContent;
+                    const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${productName}" från varukorgen?`);
+                    
+                    // Ta bara bort produkten om användaren klickar "OK"
+                    if (wantsToRemove) {
+                        this.removeFromCart(productId);
+                    }
+                }
+            });
+                                
                 document.getElementById('checkout-form').addEventListener('submit', (e) => {
                     e.preventDefault();
                     if (this.cart.length === 0) {
