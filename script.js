@@ -1614,7 +1614,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="produkt.html?id=${item.id}"><h4>${fullName}</h4></a>
                         <p>Art.nr: ${item.id}</p>
                         <div class="checkout-item-actions">
-                            <button class="remove-from-cart-btn" data-id="${item.id}">Ta bort</button>
+                            <button class="remove-from-cart-btn" data-cart-id="${item.cart_id}">Ta bort</button>
                         </div>
                     </div>
                     <div class="checkout-item-price">${item.pris} kr</div>
@@ -1644,16 +1644,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.checkoutPage) {
                 const itemsContainer = document.getElementById('checkout-items-container');
                 itemsContainer.addEventListener('click', (e) => {
+                    // Se till att vi bara reagerar på klick på en "ta bort"-knapp
                     if (e.target.classList.contains('remove-from-cart-btn')) {
-                        const productId = e.target.dataset.id;
+                        // Hämta det UNIKA cart_id från knappen (inte det generella produkt-id)
+                        // parseInt konverterar texten "167888..." till ett nummer
+                        const cartIdToRemove = parseInt(e.target.dataset.cartId, 10);
                         
-                        // NY KOD: Lägg till en bekräftelsedialog
-                        const productName = e.target.closest('.checkout-item').querySelector('h4').textContent;
-                        const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${productName}" från varukorgen?`);
+                        // Hitta hela produktobjektet för att kunna visa namnet i dialogen
+                        const itemToRemove = this.cart.find(item => item.cart_id === cartIdToRemove);
                         
-                        // Ta bara bort produkten om användaren klickar "OK"
-                        if (wantsToRemove) {
-                            this.removeFromCart(productId);
+                        if (itemToRemove) {
+                            const wantsToRemove = confirm(`Är du säker på att du vill ta bort "${itemToRemove.namn}" från varukorgen?`);
+                            
+                            if (wantsToRemove) {
+                                // Anropa removeFromCart med det UNIKA cart_id
+                                this.removeFromCart(cartIdToRemove);
+                            }
                         }
                     }
                 });
