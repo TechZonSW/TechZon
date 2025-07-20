@@ -86,9 +86,10 @@ header .container {
     width: auto;
 }
 
+/* --- MER RAFFINERAD LOGOTYP-TEXT --- */
 .logo span {
-    font-size: 1.5em; 
-    font-weight: 700;
+    font-size: 1.4em; /* Något mindre för en mer elegant look */
+    font-weight: 600; /* Lite lättare än den tyngsta vikten */
     line-height: 1;
 }
 
@@ -98,21 +99,30 @@ nav ul {
 }
 
 nav ul li {
-    margin-left: 35px;
+    margin-left: 40px;
 }
 
+/* --- MER "HEDONIC" STIL FÖR NAV-LÄNKAR --- */
 nav ul li a {
     text-decoration: none;
-    color: var(--secondary-color);
-    font-weight: 500;
-    font-size: 1em;
-    transition: color 0.3s ease;
-    padding: 5px 2px;
+    color: var(--text-color); /* Använder huvudtextfärgen för bättre kontrast */
+    font-weight: 500; /* Något djärvare än normalt, men inte tungt */
+    font-size: 0.95em; /* Något mindre för en mer delikat känsla */
+    padding: 8px 4px; /* Lite mer klickyta */
+    border-radius: 6px; /* Mjuk rundning för hover-effekten */
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
 }
 
-nav ul li a:hover,
+nav ul li a:hover {
+    color: var(--primary-color);
+    background-color: rgba(0, 0, 0, 0.04); /* Subtil grå bakgrund vid hover */
+    transform: translateY(-2px); /* Liten "lyft"-effekt */
+}
+
+/* Behåll den aktiva stilen som den är, men se till att den har en starkare färg */
 nav ul li a.active {
     color: var(--primary-color);
+    font-weight: 600; /* Gör den aktiva länken lite djärvare */
 }
 
 main {
