@@ -75,12 +75,27 @@
         </section>
     </main>
 
-    <!-- Modal/Popup för produktdetaljer -->
-    <div id="productModal" class="modal-overlay" style="display: none;">
+    <!-- EFTER ÄNDRINGEN -->
+    <div id="productModal" class="modal-overlay">
         <div class="modal-content">
             <button id="closeModalBtn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
             <div id="modalBody">
-                <!-- Innehållet fylls på här av JS -->
+                <div class="product-detail-layout">
+                    <div class="product-detail-gallery">
+                        <!-- Swiper-grundstrukturen bor nu permanent i HTML:en -->
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                <!-- Slides kommer att injiceras här av JS -->
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <!-- Info-innehållet kommer att injiceras här av JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
