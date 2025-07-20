@@ -1258,7 +1258,7 @@ hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
     .view-header { flex-direction: column; align-items: flex-start; gap: 15px; }
 }
 
-/* --- NYA, FÖRBÄTTRADE STILAR FÖR /KOP.HTML (VERSION 4 - TVÅKOLUMNSLAYOUT) --- */
+/* --- NYA, FÖRBÄTTRADE STILAR FÖR /e-butik.HTML (VERSION 4 - TVÅKOLUMNSLAYOUT) --- */
 
 /* =================================================================
    1. HEADER & NAVIGATION (Oförändrad)
@@ -1411,135 +1411,120 @@ nav ul.main-nav { display: flex; align-items: center; }
 .product-card-buttons .add-to-cart-btn:hover { background-color: #005bb5; }
 
 /* =================================================================
-   4. MODAL FÖR PRODUKTDETALJER (UPPDATERAD OCH ROBUST VERSION)
+   4. DEDIKERAD PRODUKTSIDA (/produkt.html)
    ================================================================= */
 
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex; /* Ska alltid vara flex för att kunna centrera */
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    
-    /* Dölj med opacity och visibility istället för display:none */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Denna klass styr när modalen är synlig */
-.modal-overlay.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background-color: #fff;
-    border-radius: var(--border-radius);
-    width: 90%;
-    max-width: 900px;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    padding: 40px;
-
-    /* Startposition för animationen */
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
-}
-
-/* När modalen är synlig, animera innehållet till sin slutposition */
-.modal-overlay.visible .modal-content {
-    transform: scale(1);
-}
-
-.modal-close-btn {
-    position: absolute;
-    top: 20px; right: 20px;
-    background: none; border: none; font-size: 1.8em; cursor: pointer;
-    color: #888;
-    transition: color 0.2s ease;
-}
-.modal-close-btn:hover {
-    color: #000;
-}
-
-.product-detail-layout {
+.product-page-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: 60px;
 }
-.product-detail-gallery .swiper {
-    /* Viktigt att ge Swiper en definierad bredd */
-    width: 100%;
+
+/* Bildgalleri */
+.pdp-gallery {
+    position: sticky; /* Gör så att galleriet "följer med" när man scrollar */
+    top: 120px;
+}
+.pdp-gallery .swiper {
     border-radius: var(--border-radius);
-    overflow: hidden; /* Döljer pilar utanför om det behövs */
 }
-.product-detail-gallery .swiper-slide {
+.pdp-gallery .swiper-slide {
     background-color: var(--section-bg-light);
+    border-radius: var(--border-radius);
+    aspect-ratio: 1 / 1; /* Säkerställer att bilden alltid är kvadratisk */
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.product-detail-gallery img { 
-    width: 100%; 
-    height: auto;
+.pdp-gallery .swiper-slide img {
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
 }
 
-/* Stilar för Swiper-knappar och pagination kan behövas här */
-/* Exempel: */
-.swiper-button-next, .swiper-button-prev {
-    color: var(--primary-color);
+/* Produktinformation och val */
+.pdp-details h1 {
+    font-size: 2.8em;
+    margin-bottom: 15px;
 }
-.swiper-pagination-bullet-active {
-    background: var(--primary-color);
+.pdp-details .price {
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.pdp-details .price-installment {
+    color: var(--text-color-secondary);
+    margin-bottom: 25px;
+}
+.pdp-details .description-short {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 30px;
 }
 
-
-.product-detail-info h2 { font-size: 2em; }
-.product-detail-specs {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
+/* Stil för varianter (färg, lagring) */
+.variant-selector {
+    margin-bottom: 20px;
 }
-.product-detail-specs li {
+.variant-selector label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.variant-options {
     display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-.product-detail-info .add-to-cart-btn {
-    display: inline-block;
+.variant-btn {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.variant-btn:hover {
+    border-color: #aaa;
+}
+.variant-btn.selected {
+    border-color: var(--primary-color);
+    background-color: #e3f2fd;
+}
+
+/* Köp-knapp */
+.pdp-buy-button {
+    width: 100%;
+    padding: 18px;
+    margin-top: 20px;
+    /* Återanvänder .cta-button stilen */
     background-color: var(--primary-color);
     color: #fff;
-    padding: 16px 32px;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 1em;
     border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1em;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 20px; 
-}
-.product-detail-info .add-to-cart-btn:hover {
-    background-color: #005bb5;
-    transform: scale(1.05);
 }
 
-/* Responsivitet för modalen */
-@media (max-width: 768px) {
-    .product-detail-layout {
-        grid-template-columns: 1fr; /* Stapla på mindre skärmar */
-    }
-    .modal-content {
-        padding: 20px;
-    }
-    .modal-close-btn {
-        top: 10px;
-        right: 10px;
-    }
+/* Detaljerad information längre ner */
+.pdp-long-info {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+}
+.pdp-long-info h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.pdp-specs-list {
+    list-style: none;
+    padding: 0;
+}
+.pdp-specs-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
 }
