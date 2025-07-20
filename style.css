@@ -1362,17 +1362,21 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
-/* Definierar en hedonisk färgpalett med inspiration från himmel och moln */
+/* 
+   Definierar en hedonisk färgpalett med inspiration från lugnande,
+   blå-gröna (teal/turkos) toner.
+*/
 :root {
-    --hedonic-blue: #a_d8_f0; /* En mjuk, ljus himmelsblå */
-    --hedonic-white: #f_ff_ff_f; /* En ren, mjuk vit */
-    --hedonic-text: #5_a6_c7_c; /* En något mörkare, dämpad blå för text */
-    --hedonic-background: #f0f8ff; /* En mycket svag blå ton (AliceBlue) */
-    --soft-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05); /* Mjuk, subtil skugga */
+    --hedonic-main-color: #38b2ac; /* En mjuk, modern blå-grön färg */
+    --hedonic-light-bg: #e6fffa; /* En mycket ljus, nästan vit ton av huvudfärgen */
+    --hedonic-white: #f7fafc;      /* En mjuk, benvit färg */
+    --hedonic-text: #2c7a7b;       /* En mörkare, dämpad blå-grön för text */
+    --hedonic-focus-glow: rgba(56, 178, 172, 0.5); /* Genomskinlig färg för fokus-effekt */
+    --soft-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08); /* Mjuk, subtil skugga */
 }
 
 #price-slider {
-    margin: 25px 15px; /* Ökad marginal för ett luftigare intryck */
+    margin: 25px 15px;
     border: none;
     box-shadow: none;
 }
@@ -1382,54 +1386,63 @@ nav ul.main-nav { display: flex; align-items: center; }
     justify-content: space-between;
     font-size: 0.95em;
     font-weight: 500;
-    color: var(--hedonic-text); /* Använder den dämpade blå textfärgen */
-    padding: 0 5px; /* Lite extra padding för att linjera med slidern */
+    color: var(--hedonic-text);
+    padding: 0 5px; 
 }
 
-/* Huvudspåret - designat för att vara ljust och diskret */
+/* Huvudspåret – ljust och diskret */
 .noUi-target {
-    background: #e_af_0f_6; /* En mycket ljus, nästan vit blå */
-    border-radius: 10px; /* Mer rundade kanter för en mjukare känsla */
+    background: var(--hedonic-light-bg);
+    border-radius: 10px;
     border: none;
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.04); /* Subtil inre skugga för djup */
-    height: 8px; /* Lite tjockare för ett mjukare visuellt intryck */
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.04);
+    height: 8px; /* Spårets tjocklek */
 }
 
 /* Den färgade delen som visar det valda intervallet */
 .noUi-connect {
-    background: var(--hedonic-blue); /* Den lugnande himmelsblå färgen */
+    background: var(--hedonic-main-color);
     border-radius: 10px;
 }
 
-/* Cirkulära handtag - designade för att se ut som mjuka moln */
+/* Cirkulära handtag – designade för att vara perfekt centrerade */
 .noUi-handle {
-    border: 3px solid var(--hedonic-white); /* Vit kant som smälter in */
+    border: 3px solid var(--hedonic-white); /* Vit kant för separation */
     border-radius: 50%;
-    background: var(--hedonic-blue);
-    box-shadow: var(--soft-shadow); /* Mjuk skugga för en "flytande" effekt */
-    cursor: grab; /* Ändrad cursor för att indikera att den kan dras */
+    background: var(--hedonic-main-color);
+    box-shadow: var(--soft-shadow);
+    cursor: grab;
 
-    /* Perfekt symmetri och positionering */
-    height: 24px;
-    width: 24px;
-    top: -8px; /* Centrerar vertikalt över spåret */
-    right: -12px; /* Centrerar horisontellt */
+    /* Mått på själva handtaget (utan kantlinje) */
+    height: 22px; 
+    width: 22px;
+    
+    /* 
+       Korrekt positionering för perfekt centrering.
+       Beräkningen tar hänsyn till handtagets totala storlek (inklusive kantlinje)
+       och spårets tjocklek.
+       Total handtags-höjd = 22px + (2 * 3px) = 28px.
+       Top: (spår-höjd - total handtags-höjd) / 2 = (8px - 28px) / 2 = -10px.
+       Right: -(total handtags-bredd / 2) = -14px.
+    */
+    top: -10px;
+    right: -14px;
 }
 
 .noUi-handle:active {
-    cursor: grabbing; /* Feedback till användaren vid interaktion */
+    cursor: grabbing;
 }
 
-/* Tar bort onödiga pseudo-element från biblioteket för en renare look */
+/* Tar bort onödiga pseudo-element */
 .noUi-handle:after,
 .noUi-handle:before {
     display: none;
 }
 
-/* Tar bort standard :focus-ringen och ersätter med en mjuk "glow" */
+/* Ersätter standard :focus-ring med en mjuk "glow" */
 .noUi-handle:focus {
     outline: none;
-    box-shadow: 0px 0px 0px 4px rgba(173, 216, 240, 0.5); /* Ljusblå "aura" vid fokus */
+    box-shadow: 0px 0px 0px 4px var(--hedonic-focus-glow);
 }
 
 /* =================================================================
