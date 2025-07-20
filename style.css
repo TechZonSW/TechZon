@@ -1362,59 +1362,74 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* --- FÖRBÄTTRAD, "HEDONIC" PRIS-SLIDER --- */
+/* Definierar en hedonisk färgpalett med inspiration från himmel och moln */
+:root {
+    --hedonic-blue: #a_d8_f0; /* En mjuk, ljus himmelsblå */
+    --hedonic-white: #f_ff_ff_f; /* En ren, mjuk vit */
+    --hedonic-text: #5_a6_c7_c; /* En något mörkare, dämpad blå för text */
+    --hedonic-background: #f0f8ff; /* En mycket svag blå ton (AliceBlue) */
+    --soft-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05); /* Mjuk, subtil skugga */
+}
 
-#price-slider { 
-    margin: 20px 8px 30px; /* Lite extra marginal för handtagen */
+#price-slider {
+    margin: 25px 15px; /* Ökad marginal för ett luftigare intryck */
     border: none;
     box-shadow: none;
 }
-#price-values { 
-    display: flex; 
-    justify-content: space-between; 
-    font-size: 0.9em; 
-    font-weight: 500; 
+
+#price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+    font-weight: 500;
+    color: var(--hedonic-text); /* Använder den dämpade blå textfärgen */
+    padding: 0 5px; /* Lite extra padding för att linjera med slidern */
 }
 
-/* Anpassar noUiSlider-bibliotekets standardstilar */
-
-/* Huvudspåret */
+/* Huvudspåret - designat för att vara ljust och diskret */
 .noUi-target {
-    background: #e9ecef; /* Mjuk, ljusgrå färg */
-    border-radius: 5px;
+    background: #e_af_0f_6; /* En mycket ljus, nästan vit blå */
+    border-radius: 10px; /* Mer rundade kanter för en mjukare känsla */
     border: none;
-    box-shadow: none;
-    height: 6px; /* Lite tjockare för ett mer substantiellt intryck */
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.04); /* Subtil inre skugga för djup */
+    height: 8px; /* Lite tjockare för ett mjukare visuellt intryck */
 }
 
 /* Den färgade delen som visar det valda intervallet */
 .noUi-connect {
-    background: var(--primary-color);
+    background: var(--hedonic-blue); /* Den lugnande himmelsblå färgen */
+    border-radius: 10px;
 }
 
-/* Cirkulära handtag */
+/* Cirkulära handtag - designade för att se ut som mjuka moln */
 .noUi-handle {
-    border: 3px solid #fff;       /* Din design */
-    border-radius: 50%;          /* Din design */
-    background: var(--primary-color); /* Din design */
-    box-shadow: var(--shadow-soft); /* Din design */
-    cursor: pointer;             /* Din design */
-    height: 20px;                /* Din design */
-    width: 20px;                 /* Din design */
-    top: -7px;                   /* Din design */
+    border: 3px solid var(--hedonic-white); /* Vit kant som smälter in */
+    border-radius: 50%;
+    background: var(--hedonic-blue);
+    box-shadow: var(--soft-shadow); /* Mjuk skugga för en "flytande" effekt */
+    cursor: grab; /* Ändrad cursor för att indikera att den kan dras */
 
-    /* KORRIGERING: Ersätter 'right: -10px' med en robust centreringsmetod */
-    transform: translate(-50%, 0); 
+    /* Perfekt symmetri och positionering */
+    height: 24px;
+    width: 24px;
+    top: -8px; /* Centrerar vertikalt över spåret */
+    right: -12px; /* Centrerar horisontellt */
 }
 
-/* Tar bort onödiga pseudo-element från biblioteket */
-.noUi-handle:after, 
-.noUi-handle:before { 
-    display: none; 
+.noUi-handle:active {
+    cursor: grabbing; /* Feedback till användaren vid interaktion */
 }
 
-/* Ta bort den fula :focus-ringen */
+/* Tar bort onödiga pseudo-element från biblioteket för en renare look */
+.noUi-handle:after,
+.noUi-handle:before {
+    display: none;
+}
+
+/* Tar bort standard :focus-ringen och ersätter med en mjuk "glow" */
 .noUi-handle:focus {
     outline: none;
+    box-shadow: 0px 0px 0px 4px rgba(173, 216, 240, 0.5); /* Ljusblå "aura" vid fokus */
 }
 
 /* =================================================================
