@@ -1,11 +1,12 @@
 [
   {
     "id_base": "iphone-15-pro",
+    "kategori_slug": "nytt",
     "marke": "Apple",
     "typ": "Mobiltelefon",
     "namn": "iPhone 15 Pro",
     "beskrivning_kort": "En design i rymdindustriklassat titan, A17 Pro-chip och det mest avancerade kamerasystemet någonsin.",
-    "beskrivning_lang": "iPhone 15 Pro är den första iPhone-modellen med en design i rymdindustriklassat titan... (fortsätt med lång, säljande text här).",
+    "beskrivning_lang": "iPhone 15 Pro är den första iPhone-modellen med en design i rymdindustriklassat titan, samma legering som används i rymdfarkoster för resor till Mars. Den har det största optiska zoomomfånget någonsin på en iPhone, vilket ger dig otroliga fotomöjligheter från både nära håll och på avstånd.",
     "varianter": [
       {
         "id": "new-001",
@@ -13,34 +14,59 @@
         "pris": 13490,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 562 kr/mån",
-        "bilder": ["bilder/iphone-natural-1.png", "bilder/iphone-natural-2.png"],
+        "media": [
+          { "typ": "bild", "url": "bilder/testbild.png" },
+          { "typ": "bild", "url": "bilder/testbild-2.png" },
+          { "typ": "video", "url": "bilder/test-video.mp4" }
+        ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
-            { "label": "Chip", "value": "A17 Pro-chip" }
+            { "label": "Chip", "value": "A17 Pro-chip" },
+            { "label": "Kamera", "value": "48 MP huvudkamera, ultravidvinkel, tele" }
         ]
       },
       {
         "id": "new-002",
-        "attribut": { "Färg": "Naturligt titan", "Lagring": "256 GB" },
+        "attribut": { "Färg": "Blått titan", "Lagring": "256 GB" },
         "pris": 14990,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 625 kr/mån",
-        "bilder": ["bilder/iphone-natural-1.png", "bilder/iphone-natural-2.png"],
+        "media": [
+          { "typ": "bild", "url": "bilder/testbild-3.png" },
+          { "typ": "bild", "url": "bilder/testbild-2.png" },
+          { "typ": "video", "url": "bilder/test-video.mp4" }
+        ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
-            { "label": "Chip", "value": "A17 Pro-chip" }
+            { "label": "Chip", "value": "A17 Pro-chip" },
+            { "label": "Kamera", "value": "48 MP huvudkamera, ultravidvinkel, tele" }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "id_base": "samsung-s24-ultra",
+    "kategori_slug": "nytt",
+    "marke": "Samsung",
+    "typ": "Mobiltelefon",
+    "namn": "Galaxy S24 Ultra",
+    "beskrivning_kort": "Upplev kraften i Galaxy AI, från otroliga foton till smarta sökningar, allt i en ram av slitstarkt titan.",
+    "beskrivning_lang": "Galaxy S24 Ultra sätter en ny standard för vad en mobil kan göra. Med en ram i titan och en helt platt 6,8-tums skärm är den enastående. Den inbyggda S Pen fortsätter arvet från Note-serien och låter dig skriva, trycka och navigera med precision.",
+    "varianter": [
       {
         "id": "new-003",
-        "attribut": { "Färg": "Blått titan", "Lagring": "128 GB" },
-        "pris": 13490,
+        "attribut": { "Färg": "Titanium Black", "Lagring": "256 GB" },
+        "pris": 15990,
         "delbetalning_mojlig": true,
-        "delbetalning_pris": "från 562 kr/mån",
-        "bilder": ["bilder/iphone-blue-1.png", "bilder/iphone-blue-2.png"],
+        "delbetalning_pris": "från 666 kr/mån",
+        "media": [
+          { "typ": "bild", "url": "bilder/testbild.png" },
+          { "typ": "bild", "url": "bilder/testbild-2.png" }
+        ],
         "specifikationer": [
-            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
-            { "label": "Chip", "value": "A17 Pro-chip" }
+            { "label": "Skärm", "value": "6,8-tums Dynamic AMOLED 2X" },
+            { "label": "Processor", "value": "Snapdragon® 8 Gen 3 for Galaxy" },
+            { "label": "Kamera", "value": "200 MP vidvinkelkamera" }
         ]
       }
     ]
