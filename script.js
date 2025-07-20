@@ -1142,20 +1142,30 @@ document.addEventListener('DOMContentLoaded', function() {
         function renderProducts(products) {
             productGrid.innerHTML = '';
             noResultsMessage.style.display = products.length === 0 ? 'block' : 'none';
-    
+        
             products.forEach(p => {
-                // KORRIGERING: Hämta alltid information från den första varianten för att visa i butiken
-                const displayVariant = p.varianter[0];
-                if (!displayVariant) return; // Hoppa över produkter som saknar varianter
-    
+                const displayVariant = p.varianter ? p.varianter[0] : p;
+                if (!displayVariant) return;
+        
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 
                 const imageUrl = (displayVariant.media && displayVariant.media[0]?.url) || (displayVariant.bilder && displayVariant.bilder[0]) || 'bilder/testbild.png';
-    
+        
+                // ---- NY, VILLKORLIG LOGIK FÖR ETIKETTEN ----
+                let conditionBadgeHTML = '';
+                if (p.kategori_slug === 'andrahand' && p.skick) {
+                    // Skapa en CSS-vänlig klass från skicket (t.ex. "Mycket bra skick" -> "mycket-bra-skick")
+                    const conditionClass = p.skick.toLowerCase().replace(/\s+/g, '-');
+                    conditionBadgeHTML = `<span class="condition-badge ${conditionClass}">${p.skick}</span>`;
+                }
+        
                 card.innerHTML = `
                     <a href="produkt.html?id=${displayVariant.id}" class="product-card-image-link">
-                        <img src="${imageUrl}" alt="${p.namn}">
+                        <div class="product-card-image-wrapper">
+                            <img src="${imageUrl}" alt="${p.namn}">
+                            ${conditionBadgeHTML}
+                        </div>
                     </a>
                     <div class="product-card-content">
                         <h4>${p.marke ? `${p.marke} ${p.namn}` : p.namn}</h4>
