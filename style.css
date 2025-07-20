@@ -1582,27 +1582,52 @@ nav ul.main-nav { display: flex; align-items: center; }
     transform: scale(1.02);
 }
 
-/* --- FÖRBÄTTRAD STIL FÖR SPECIFIKATIONSLISTAN --- */
+/* =================================================================
+   5. DETALJERAD INFORMATION (LÄNGRE NER PÅ SIDAN)
+   ================================================================= */
+
+.pdp-long-info {
+    /* grid-column: 1 / -1; betyder "ta upp hela bredden, från första till sista kolumnen" */
+    grid-column: 1 / -1; 
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+.pdp-long-info h2 {
+    font-size: 2.2em; /* Tydlig men inte överväldigande rubrik */
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* Stil för specifikationslistan */
 .pdp-specs-list {
     list-style: none;
     padding: 0;
-    margin-top: 30px; /* Mer luft ovanför */
+    margin: 0;
+    max-width: 800px; /* Begränsar bredden för optimal läsbarhet */
 }
+
 .pdp-specs-list li {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Centrerar texten vertikalt */
-    padding: 18px 0; /* Mer luft mellan varje rad */
-    border-bottom: 1px solid #f0f0f0; /* Mjukare linje */
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
     font-size: 1em;
 }
+
 .pdp-specs-list li:first-child {
-    border-top: 1px solid #f0f0f0; /* Lägger till en linje även överst */
+    border-top: 1px solid #f0f0f0;
 }
+
 .pdp-specs-list span {
-    color: var(--text-color-secondary); /* Grå text för etiketten */
+    color: var(--text-color-secondary);
+    padding-right: 20px; /* Ger lite extra utrymme */
 }
+
 .pdp-specs-list strong {
-    color: var(--text-color); /* Svart, tydlig text för värdet */
+    color: var(--text-color);
     text-align: right;
+    font-weight: 500; /* Något mindre fet stil för en elegantare look */
 }
