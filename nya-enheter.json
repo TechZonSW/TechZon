@@ -1,44 +1,48 @@
 [
   {
-    "id": "new-001",
-    "kategori": "nytt",
+    "id_base": "iphone-15-pro",
     "marke": "Apple",
     "typ": "Mobiltelefon",
     "namn": "iPhone 15 Pro",
-    "pris": 13490,
-    "delbetalning_mojlig": true,
-    "delbetalning_pris": "från 562 kr/mån",
-    "beskrivning": "iPhone 15 Pro är den första iPhone-modellen med en design i rymdindustriklassat titan, samma legering som används i rymdfarkoster för resor till Mars. Den har det största optiska zoomomfånget någonsin på en iPhone.",
-    "bilder": [
-      "bilder/testbild.png",
-      "bilder/testbild-2.png",
-      "bilder/testbild-3.png"
-    ],
-    "specifikationer": [
-      { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
-      { "label": "Chip", "value": "A17 Pro-chip" },
-      { "label": "Kamera", "value": "48 MP huvudkamera, ultravidvinkel, tele" },
-      { "label": "Anslutning", "value": "USB-C med USB 3-hastigheter" }
-    ]
-  },
-  {
-    "id": "new-002",
-    "kategori": "nytt",
-    "marke": "Samsung",
-    "typ": "Mobiltelefon",
-    "namn": "Galaxy S24 Ultra",
-    "pris": 14990,
-    "delbetalning_mojlig": true,
-    "delbetalning_pris": "från 625 kr/mån",
-    "beskrivning": "Galaxy S24 Ultra sätter en ny standard för vad en mobil kan göra. Med en ram i titan och en helt platt 6,8-tums skärm är den enastående. Upplev kraften i Galaxy AI, från otroliga foton till smarta sökningar.",
-    "bilder": [
-      "bilder/testbild.png"
-    ],
-    "specifikationer": [
-      { "label": "Skärm", "value": "6,8-tums Dynamic AMOLED 2X" },
-      { "label": "Chip", "value": "Snapdragon® 8 Gen 3 for Galaxy" },
-      { "label": "Kamera", "value": "200 MP vidvinkelkamera" },
-      { "label": "Anslutning", "value": "USB-C" }
+    "beskrivning_kort": "En design i rymdindustriklassat titan, A17 Pro-chip och det mest avancerade kamerasystemet någonsin.",
+    "beskrivning_lang": "iPhone 15 Pro är den första iPhone-modellen med en design i rymdindustriklassat titan... (fortsätt med lång, säljande text här).",
+    "varianter": [
+      {
+        "id": "new-001",
+        "attribut": { "Färg": "Naturligt titan", "Lagring": "128 GB" },
+        "pris": 13490,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 562 kr/mån",
+        "bilder": ["bilder/iphone-natural-1.png", "bilder/iphone-natural-2.png"],
+        "specifikationer": [
+            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
+            { "label": "Chip", "value": "A17 Pro-chip" }
+        ]
+      },
+      {
+        "id": "new-002",
+        "attribut": { "Färg": "Naturligt titan", "Lagring": "256 GB" },
+        "pris": 14990,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 625 kr/mån",
+        "bilder": ["bilder/iphone-natural-1.png", "bilder/iphone-natural-2.png"],
+        "specifikationer": [
+            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
+            { "label": "Chip", "value": "A17 Pro-chip" }
+        ]
+      },
+      {
+        "id": "new-003",
+        "attribut": { "Färg": "Blått titan", "Lagring": "128 GB" },
+        "pris": 13490,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 562 kr/mån",
+        "bilder": ["bilder/iphone-blue-1.png", "bilder/iphone-blue-2.png"],
+        "specifikationer": [
+            { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
+            { "label": "Chip", "value": "A17 Pro-chip" }
+        ]
+      }
     ]
   }
 ]
