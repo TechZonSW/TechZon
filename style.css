@@ -40,14 +40,31 @@ body {
     text-align: center;
 }
 
+/* --- NY, FÖRBÄTTRAD "HEDONIC" HEADER --- */
+
 header {
-    background-color: var(--background-color);
-    padding: 20px 0;
-    border-bottom: 1px solid #e5e5e5;
+    /* "Frostat glas"-effekt för en lätt och modern känsla */
+    background-color: rgba(255, 255, 255, 0.8); /* Halvtransparent vit */
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px); /* För Safari */
+    
+    padding: 15px 0; /* Något mindre padding för en mer slimmad look */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* En mjukare, nästan osynlig linje */
+    
     position: sticky;
     width: 100%;
     top: 0;
     z-index: 1000;
+    
+    /* Mjuk övergång för alla ändringar (t.ex. när skuggan dyker upp) */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Lägger till en subtil skugga när användaren scrollar ner */
+header.scrolled {
+    background-color: rgba(255, 255, 255, 0.85); /* Lite mindre transparent */
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03); /* Mjuk skugga för djup */
 }
 
 header .container {
