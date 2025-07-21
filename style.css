@@ -2063,3 +2063,57 @@ nav ul.main-nav { display: flex; align-items: center; }
     margin: 0;
     flex-grow: 0; /* Hindrar denna p-tagg från att växa */
 }
+
+/* ===== HELT NYA, PREMIUM-KNAPPAR (HEDONIC) ===== */
+
+/* Grundläggande stil som alla knappar delar */
+.cta-button {
+    display: inline-block;
+    padding: 16px 32px;
+    border-radius: 50px; /* Mjuk, rundad form */
+    font-weight: 700; /* Lite djärvare text */
+    text-decoration: none;
+    border: 2px solid transparent; /* Alla knappar har en kant, även om den är osynlig från start */
+    transition: all 0.3s ease; /* Mjuk övergång för alla egenskaper */
+    font-size: 1em;
+    cursor: pointer;
+}
+
+/* 1. Primär knapp (Utforska e-Butiken) - Levande & Inbjudande */
+.cta-button {
+    background-image: linear-gradient(45deg, #0071e3, #0077ff); /* Subtil gradient för djup */
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 113, 227, 0.2); /* Mjukt, blått sken */
+}
+
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.03); /* Lyfter och förstoras lite */
+    box-shadow: 0 8px 25px rgba(0, 113, 227, 0.3); /* Skuggan blir starkare */
+}
+
+/* 2. Sekundär knapp (Våra Reparationer) - Professionell & Tydlig */
+.cta-button.secondary {
+    background-color: var(--secondary-color); /* Den mörka grundfärgen */
+    color: #fff;
+    box-shadow: none; /* Ingen skugga från start */
+}
+
+.cta-button.secondary:hover {
+    background-color: #000; /* Blir helt svart vid hover */
+    transform: translateY(-3px); /* Lyfter lite */
+}
+
+/* 3. Tertiär knapp (Gratis Felsökning) - Lätt & Luftig (Behålls som den är) */
+.cta-button.tertiary {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.8); /* "Glas"-kanten */
+    backdrop-filter: blur(5px);
+    box-shadow: none;
+}
+
+.cta-button.tertiary:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Fylls med en svag vit färg */
+    border-color: #fff;
+    transform: translateY(-3px);
+}
