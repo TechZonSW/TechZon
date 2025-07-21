@@ -48,7 +48,7 @@ header {
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px); /* För Safari */
     
-    padding: 15px 0; /* Något mindre padding för en mer slimmad look */
+    padding: 10px 0; /* Något mindre padding för en mer slimmad look */
     border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* En mjukare, nästan osynlig linje */
     
     position: sticky;
@@ -58,6 +58,11 @@ header {
     
     /* Mjuk övergång för alla ändringar (t.ex. när skuggan dyker upp) */
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+    /* NYCKELN: Ge headern en definierad höjd */
+    height: 80px; /* Du kan justera detta värde, t.ex. till 90px om du vill ha mer utrymme */
+    display: flex;
+    align-items: center;
 }
 
 /* Lägger till en subtil skugga när användaren scrollar ner */
