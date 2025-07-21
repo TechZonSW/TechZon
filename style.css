@@ -59,7 +59,7 @@ header {
     /* Mjuk övergång för alla ändringar (t.ex. när skuggan dyker upp) */
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
-    height: 80px; 
+    height: 70px; 
     display: flex;
     align-items: center;
 }
@@ -139,7 +139,7 @@ main {
 #hero {
     position: relative; /* Nödvändigt för att positionera video och innehåll */
     color: #fff; /* Texten ska vara vit för att synas mot den mörka videon/overlayen */
-    height: calc(100vh - 65px);
+    height: calc(100vh - 70px);
     padding: 120px 0 140px;
     /*min-height: 80vh; /* Ger sektionen en bra höjd */
     display: flex;
