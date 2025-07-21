@@ -1951,3 +1951,115 @@ nav ul.main-nav { display: flex; align-items: center; }
 .condition-badge.nyskick { background-color: rgba(29, 185, 84, 0.8); } /* Grön */
 .condition-badge.mycket-bra-skick { background-color: rgba(0, 113, 227, 0.8); } /* Blå */
 .condition-badge.bra-skick { background-color: rgba(142, 68, 173, 0.85); } /* Elegant lila */
+
+/* ===== NYA STILAR FÖR HEDONISK LAYOUT & KNAPPAR på Hem sidan===== */
+
+/* 1. Stil för den nya, tredje "hedoniska" knappen i hero-sektionen */
+.cta-button.tertiary {
+    background-color: transparent;
+    color: #fff;
+    /* Skapar en "ghost button"-effekt med en vit kant */
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px); /* Lätt blur för en frostad känsla */
+}
+
+.cta-button.tertiary:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Fylls med en svag vit färg vid hover */
+    border-color: #fff;
+}
+
+/* 2. Layout för den nya kärnerbjudande-sektionen */
+#core-focus .focus-grid {
+    display: grid;
+    /* Skapar två kolumner på större skärmar, en på mindre */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    align-items: stretch; /* Säkerställer att korten blir lika höga */
+}
+
+/* 3. Stil för de nya, mjuka "fokuskorten" */
+.focus-card {
+    background-color: #fff; /* Vita kort på den ljusgrå bakgrunden */
+    border-radius: var(--border-radius);
+    padding: 30px 40px; /* Mer luft på sidorna */
+    box-shadow: 0 5px 25px rgba(0,0,0,0.05); /* Mjukare, mer spridd skugga */
+    display: flex;
+    flex-direction: column; /* Staplar innehåll och knapp */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.focus-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.08); /* Lite mer lyft vid hover */
+}
+
+.focus-card h2 {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.focus-card p {
+    color: var(--text-color-secondary);
+    font-size: 1.05em;
+    flex-grow: 1; /* Gör att texten tar upp tillgängligt utrymme */
+}
+
+.focus-card-content {
+    flex-grow: 1; /* Ser till att detta block växer */
+    display: flex;
+    flex-direction: column;
+}
+
+.focus-card-footer {
+    margin-top: 30px; /* Skapar utrymme mellan innehåll och knapp */
+}
+
+/* 4. Stil för de interaktiva list-elementen inuti korten */
+.sub-offering-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sub-offering-item a {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.sub-offering-item a:hover {
+    background-color: var(--section-bg-light);
+    border-color: #e0e0e0;
+}
+
+/* Ikonerna får en mjuk, färgad bakgrund för att sticka ut */
+.sub-offering-item i {
+    font-size: 1.8em;
+    color: var(--primary-color);
+    background-color: #e3f2fd; /* Väldigt ljusblå */
+    padding: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sub-offering-text h4 {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+.sub-offering-text p {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+    margin: 0;
+    flex-grow: 0; /* Hindrar denna p-tagg från att växa */
+}
