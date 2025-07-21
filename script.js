@@ -4,39 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // DEL 1: KOD SOM SKA KÖRAS PÅ ALLA SIDOR
     // --------------------------------------------------------------------
 
-    // ===== NYTT: KOD FÖR AKTIV NAVIGERINGSLÄNK =====
-    // Denna kod körs på varje sida för att se vilken länk i menyn som ska vara "active".
-
-    // 1. Definiera sidans URL och dina navigeringslänkar
-    const currentPageUrl = window.location.pathname; // Hämtar sidans sökväg, t.ex. "/e-butik.html"
-    const navLinks = document.querySelectorAll('header nav a'); // Hämtar alla länkar i headern
-
-    // 2. Definiera vilka sidor som hör till "e-Butik"
-    const eButikPages = ['/e-butik.html', '/produkt.html', '/kassa.html'];
-    
-    // 3. Ta bort "active" från alla länkar först för att nollställa
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-    });
-
-    // 4. Hitta och aktivera rätt länk
-    if (eButikPages.some(page => currentPageUrl.includes(page))) {
-        // Om vi är på en e-butikssida, aktivera dropdown-länken
-        document.querySelector('.nav-shop-item > a').classList.add('active');
-    } else {
-        // Annars, hitta den länk som exakt matchar den nuvarande sidan
-        navLinks.forEach(link => {
-            // Jämför länkens href med den nuvarande sidans sökväg
-            if (link.getAttribute('href') === currentPageUrl.substring(1)) {
-                link.classList.add('active');
-            }
-        });
-        // Specialfall för startsidan när sökvägen bara är "/" eller "index.html"
-        if (currentPageUrl === '/' || currentPageUrl.includes('index.html')) {
-            document.querySelector('header nav a[href="index.html"]').classList.add('active');
-        }
-    }
-
     // Uppdaterar årtalet i footern
     const currentYearSpan = document.getElementById('currentYear');
     if (currentYearSpan) {
