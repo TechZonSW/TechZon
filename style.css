@@ -232,7 +232,7 @@ main {
     color: rgba(255, 255, 255, 0.9);
 }
 
-.cta-button {
+/*.cta-button {
     display: inline-block;
     background-color: var(--primary-color);
     color: #fff;
@@ -255,7 +255,7 @@ main {
 }
 .cta-button.secondary:hover {
     background-color: #000;
-}
+}*/
 
 /* Applierar stilar på H2-rubriker inuti .small-container som finns i en .light-bg-section */
 .light-bg-section .small-container h2 {
