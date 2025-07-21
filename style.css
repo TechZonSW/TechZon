@@ -1365,24 +1365,18 @@ nav ul.main-nav { display: flex; align-items: center; }
 /*#price-slider { margin: 20px 5px 30px; }
 #price-values { display: flex; justify-content: space-between; font-size: 0.9em; }*/
 
-/* Pris-slider - Hedonisk design */
+/* Pris-slider - Hedonisk design (Kompakt & Färgmatchad) */
 
 #price-slider {
-  margin: 40px 10px; /* Ökad marginal för en luftigare känsla */
-  -webkit-appearance: none; /* Tar bort standardutseendet i Webkit-läsare */
+  /* Minskad marginal för en mer kompakt känsla */
+  margin: 20px 10px; 
+  -webkit-appearance: none;
   width: 100%;
   height: 15px;
-  background: linear-gradient(90deg, #a8d5e2, #f9e4d4); /* Mjuk gradient från himmelsblått till en varmare ton */
-  border-radius: 10px; /* Rundade kanter för en mjukare form */
+  background: linear-gradient(90deg, #a8d5e2, #f9e4d4); /* Mjuk gradient från himmelsblått till varm ton */
+  border-radius: 10px;
   outline: none;
-  opacity: 0.9;
-  -webkit-transition: .2s; /* Mjuk övergång vid interaktion */
-  transition: opacity .2s;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* En subtil skugga för djup */
-}
-
-#price-slider:hover {
-  opacity: 1; /* Något tydligare vid hovring */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1); /* Subtil skugga för djup */
 }
 
 /* Stil för själva "drag-handtaget" på slidern */
@@ -1391,31 +1385,46 @@ nav ul.main-nav { display: flex; align-items: center; }
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #ffffff; /* Vitt som ett moln */
-  border-radius: 50%; /* Helt rund, som en sol eller ett mjukt moln */
+  /* Bakgrundsfärg som matchar baren */
+  background: #a8d5e2; 
+  /* Vit kant för att handtaget ska framträda tydligt */
+  border: 3px solid #ffffff; 
+  border-radius: 50%; /* Helt rund form */
   cursor: pointer;
-  border: 2px solid #a8d5e2; /* En tunn ram i himmelsblå färg */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Ett lätt sken */
+  /* En mjuk yttre skugga som lyfter handtaget från baren */
+  box-shadow: 0 0 5px rgba(0,0,0,0.2); 
+  -webkit-transition: .2s;
+  transition: transform .2s;
 }
 
 #price-slider::-moz-range-thumb {
   width: 25px;
   height: 25px;
-  background: #ffffff;
+  background: #a8d5e2; 
+  border: 3px solid #ffffff; 
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid #a8d5e2;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
+
+/* Lägg till en liten förstoring när användaren håller i handtaget */
+#price-slider::-webkit-slider-thumb:active {
+    transform: scale(1.1);
+}
+
+#price-slider::-moz-range-thumb:active {
+    transform: scale(1.1);
+}
+
 
 /* Värdena under slidern */
 #price-values {
   display: flex;
   justify-content: space-between;
-  font-size: 1em; /* Något större för bättre läsbarhet */
-  color: #5b7886; /* En mjuk, dämpad färg */
+  font-size: 1em;
+  color: #5b7886;
   margin-top: 15px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Ett mjukare, modernt typsnitt */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* =================================================================
