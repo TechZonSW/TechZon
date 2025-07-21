@@ -1362,70 +1362,8 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* Pris-slider */
-/*#price-slider { margin: 20px 5px 30px; }
-#price-values { display: flex; justify-content: space-between; font-size: 0.9em; }*/
-
-/* Pris-slider - Hedonisk design (Kompakt & Färgmatchad) */
-
-#price-slider {
-  /* Minskad marginal för en mer kompakt känsla */
-  margin: 20px 10px; 
-  -webkit-appearance: none;
-  width: 100%;
-  height: 15px;
-  background: linear-gradient(90deg, #a8d5e2, #f9e4d4); /* Mjuk gradient från himmelsblått till varm ton */
-  border-radius: 10px;
-  outline: none;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1); /* Subtil skugga för djup */
-}
-
-/* Stil för själva "drag-handtaget" på slidern */
-#price-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 25px;
-  height: 25px;
-  /* Bakgrundsfärg som matchar baren */
-  background: #a8d5e2; 
-  /* Vit kant för att handtaget ska framträda tydligt */
-  border: 3px solid #ffffff; 
-  border-radius: 50%; /* Helt rund form */
-  cursor: pointer;
-  /* En mjuk yttre skugga som lyfter handtaget från baren */
-  box-shadow: 0 0 5px rgba(0,0,0,0.2); 
-  -webkit-transition: .2s;
-  transition: transform .2s;
-}
-
-#price-slider::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #a8d5e2; 
-  border: 3px solid #ffffff; 
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-}
-
-/* Lägg till en liten förstoring när användaren håller i handtaget */
-#price-slider::-webkit-slider-thumb:active {
-    transform: scale(1.1);
-}
-
-#price-slider::-moz-range-thumb:active {
-    transform: scale(1.1);
-}
-
-
-/* Värdena under slidern */
-#price-values {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1em;
-  color: #5b7886;
-  margin-top: 15px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+#price-slider { margin: 20px 5px 30px; }
+#price-values { display: flex; justify-content: space-between; font-size: 0.9em; }
 
 /* =================================================================
    3. PRODUKT-GRID & KORT (OPTIMERAD FÖR 3 KOLUMNER)
