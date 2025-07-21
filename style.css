@@ -60,7 +60,7 @@ header {
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
     /* NYCKELN: Ge headern en definierad höjd */
-    height: 80px; /* Du kan justera detta värde, t.ex. till 90px om du vill ha mer utrymme */
+    height: 50px; /* Du kan justera detta värde, t.ex. till 90px om du vill ha mer utrymme */
     display: flex;
     align-items: center;
 }
@@ -76,6 +76,7 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .logo {
