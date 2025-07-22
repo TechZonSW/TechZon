@@ -613,7 +613,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentCaseView = 'active'; // Håller reda på vilken vy vi är i
     
         // --- Funktioner ---
-
         function switchMainView(viewToShow) {
             [casesView, scanView, stockView].forEach(v => v.style.display = 'none');
             [navActiveBtn, navArchivedBtn, navScanBtn, navStockBtn].forEach(b => b.classList.remove('active'));
@@ -629,6 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (currentCaseView === 'active') navActiveBtn.classList.add('active');
                 else navArchivedBtn.classList.add('active');
             }
+        }
     
         function switchDetailView(viewToShow) {
             repairDetailView.style.display = 'none';
