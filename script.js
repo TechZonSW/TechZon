@@ -603,6 +603,8 @@ document.addEventListener('DOMContentLoaded', function() {
             activeCustomerName = document.getElementById('activeCustomerName'),
             activeRepairCode = document.getElementById('activeRepairCode'),
             activeStatusList = document.getElementById('activeStatusList');
+            navStockBtn = document.getElementById('navStockBtn'),
+            stockView = document.getElementById('stockView');
     
         // --- State-variabler (appens minne) ---
         let jwtToken = sessionStorage.getItem('techzon_jwt') || null;
@@ -613,20 +615,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- Funktioner ---
 
         function switchMainView(viewToShow) {
-            casesView.style.display = 'none';
-            scanView.style.display = 'none';
-            [navActiveBtn, navArchivedBtn, navScanBtn].forEach(b => b.classList.remove('active'));
-        
+            [casesView, scanView, stockView].forEach(v => v.style.display = 'none');
+            [navActiveBtn, navArchivedBtn, navScanBtn, navStockBtn].forEach(b => b.classList.remove('active'));
+
             if (viewToShow === 'scan') {
                 scanView.style.display = 'block';
                 navScanBtn.classList.add('active');
+            } else if (viewToShow === 'stock') {
+                stockView.style.display = 'block';
+                navStockBtn.classList.add('active');
             } else { // 'cases'
                 casesView.style.display = 'block';
-                // Markera rätt ärende-knapp baserat på vilken vy vi senast var i
                 if (currentCaseView === 'active') navActiveBtn.classList.add('active');
                 else navArchivedBtn.classList.add('active');
             }
-        }
     
         function switchDetailView(viewToShow) {
             repairDetailView.style.display = 'none';
@@ -773,6 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
         navScanBtn.addEventListener('click', () => switchMainView('scan'));
+        navStockBtn.addEventListener('click', () => switchMainView('stock'));
 
         // NYTT KODBLOCK ATT LÄGGA TILL
         // Lyssna på knappen som finns INUTI skanner-vyn
@@ -954,6 +957,101 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 fetchAndRenderRepairs('active');
             } catch (error) { alert(`Fel: ${error.message}`); }
+        });
+
+        // --- LOGIK FÖR LAGERHANTERING ---
+        const stockSearchInput = document.getElementById('stockSearchInput');
+        const stockFilterBar = document.getElementById('stock-filter-bar');
+        const stockTableBody = document.getElementById('stock-table-body');
+        const showCreateProductBtn = document.getElementById('showCreateProductBtn');
+        const productModal = document.getElementById('productModalAdmin');
+        const closeProductModalBtn = document.getElementById('closeProductModalBtn');
+        const productForm = document.getElementById('productForm');
+        
+        let allStockProducts = [];
+        let currentStockFilter = 'allt';
+        
+        function renderStockList(products) {
+            stockTableBody.innerHTML = '';
+            if (products.length === 0) {
+                stockTableBody.innerHTML = `<tr><td colspan="5">Inga produkter hittades.</td></tr>`;
+                return;
+            }
+            products.forEach(p => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.category}</td>
+                    <td>${p.sku}</td>
+                    <td><span class="stock-in-stock">${p.stock} st</span></td>
+                    <td class="stock-list-actions">
+                        <button data-id="${p.id}" class="edit-stock-btn"><i class="ph ph-pencil-simple"></i></button>
+                    </td>
+                `;
+                stockTableBody.appendChild(row);
+            });
+        }
+        
+        function applyStockFilters() {
+            const searchTerm = stockSearchInput.value.toLowerCase();
+            let filtered = allStockProducts;
+            
+            if (currentStockFilter !== 'allt') {
+                filtered = filtered.filter(p => p.category === currentStockFilter);
+            }
+            if (searchTerm) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm) || p.sku.toLowerCase().includes(searchTerm));
+            }
+            
+            renderStockList(filtered);
+        }
+        
+        // Event listeners för lager-vyn
+        navStockBtn.addEventListener('click', async () => {
+            switchMainView('stock');
+            // Här skulle du normalt anropa en Netlify-funktion för att hämta alla lagerprodukter
+            // Vi simulerar detta för nu:
+            allStockProducts = [
+                { id: 'prod-001', name: 'iPhone 15 Skärm', category: 'reservdel', sku: 'IP15-SKM', stock: 12 },
+                { id: 'prod-002', name: 'Silikonskal iPhone 15', category: 'tillbehor', sku: 'ACC-SKL-01', stock: 35 },
+                { id: 'prod-003', name: 'Begagnad iPhone 13', category: 'andrahand', sku: 'USED-IP13', stock: 1 }
+            ];
+            renderStockList(allStockProducts);
+        
+            stockFilterBar.innerHTML = `
+                <button class="stock-filter-btn active" data-filter="allt">Alla</button>
+                <button class="stock-filter-btn" data-filter="reservdel">Reservdelar</button>
+                <button class="stock-filter-btn" data-filter="tillbehor">Tillbehör</button>
+                <button class="stock-filter-btn" data-filter="andrahand">Enheter</button>
+            `;
+        });
+        
+        stockFilterBar.addEventListener('click', (e) => {
+            if(e.target.classList.contains('stock-filter-btn')) {
+                document.querySelectorAll('.stock-filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                currentStockFilter = e.target.dataset.filter;
+                applyStockFilters();
+            }
+        });
+        
+        stockSearchInput.addEventListener('input', applyStockFilters);
+        
+        // Logik för modal
+        showCreateProductBtn.addEventListener('click', () => {
+            productForm.reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('productModalTitle').textContent = 'Skapa Ny Produkt';
+            productModal.style.display = 'flex';
+        });
+        
+        closeProductModalBtn.addEventListener('click', () => productModal.style.display = 'none');
+        
+        productForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Här skulle du anropa en Netlify-funktion för att spara/uppdatera produkten
+            alert('Produkt sparad! (Simulering)');
+            productModal.style.display = 'none';
         });
     
         // --- Sidladdning ---
