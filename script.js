@@ -602,9 +602,9 @@ document.addEventListener('DOMContentLoaded', function() {
             activeDeviceName = document.getElementById('activeDeviceName'),
             activeCustomerName = document.getElementById('activeCustomerName'),
             activeRepairCode = document.getElementById('activeRepairCode'),
-            activeStatusList = document.getElementById('activeStatusList');
+            activeStatusList = document.getElementById('activeStatusList'),
             navStockBtn = document.getElementById('navStockBtn'),
-            stockView = document.getElementById('stockView');
+            stockView = document.getElementById('stockView'),
             scanShortcutBtn = document.getElementById('scanShortcutBtn');
     
         // --- State-variabler (appens minne) ---
