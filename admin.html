@@ -36,6 +36,7 @@
                 <nav class="admin-nav">
                     <button id="navActiveBtn" class="admin-nav-button active"><i class="ph-bold ph-list-dashes"></i> Pågående</button>
                     <button id="navArchivedBtn" class="admin-nav-button"><i class="ph-bold ph-archive"></i> Avslutade</button>
+                    <button id="navStockBtn" class="admin-nav-button"><i class="ph-bold ph-stack"></i> Lager</button>
                     <button id="navScanBtn" class="admin-nav-button"><i class="ph-bold ph-qr-code"></i> Skanna</button>
                 </nav>
                 <div class="sidebar-footer">
@@ -111,7 +112,62 @@
                         <div id="scanResult"></div>
                     </div>
                 </div>
+                <!-- ===================== -->
+                <!-- NY VY FÖR LAGER       -->
+                <!-- ===================== -->
+                <div id="stockView" class="content-view" style="display: none;">
+                    <div class="view-header">
+                        <h1>Lagerhantering</h1>
+                        <button id="showCreateProductBtn" class="cta-button">Skapa Ny Produkt</button>
+                    </div>
+                    <div class="stock-controls">
+                        <div class="search-bar-container">
+                            <input type="text" id="stockSearchInput" placeholder="Sök efter produktnamn eller artikelnummer...">
+                            <i class="ph ph-magnifying-glass"></i>
+                        </div>
+                        <div id="stock-filter-bar">
+                            <!-- Filterknappar laddas här -->
+                        </div>
+                    </div>
+                    <div class="stock-list-container">
+                        <table id="stock-table">
+                            <thead>
+                                <tr>
+                                    <th>Produktnamn</th>
+                                    <th>Kategori</th>
+                                    <th>Art.nr / ID</th>
+                                    <th>I Lager</th>
+                                    <th>Åtgärder</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stock-table-body">
+                                <!-- Produkter laddas här -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
             </main>
+        </div>
+    </div>
+
+    <!-- MODAL FÖR PRODUKTHANTERING -->
+    <div id="productModalAdmin" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="closeProductModalBtn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
+            <h3 id="productModalTitle">Skapa Ny Produkt</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <input type="text" id="productName" placeholder="Produktnamn" required>
+                <input type="text" id="productIdSKU" placeholder="Artikelnummer / SKU" required>
+                <select id="productCategory" required>
+                    <option value="tillbehor">Tillbehör</option>
+                    <option value="nytt">Ny enhet</option>
+                    <option value="andrahand">Andrahandsenhet</option>
+                </select>
+                <input type="number" id="productStock" placeholder="Antal i lager" required>
+                <button type="submit" class="cta-button">Spara Produkt</button>
+            </form>
         </div>
     </div>
 
