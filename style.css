@@ -2092,7 +2092,7 @@ nav ul.main-nav { display: flex; align-items: center; }
 /* Återanvänder den snygga sökfältsdesignen från e-butiken */
 .stock-controls .search-bar-container {
     flex-grow: 1;
-    min-width: 10px;
+    max-width: 500px;
     margin: 0;
 }
 .stock-controls .search-bar-container input {
