@@ -2072,16 +2072,44 @@ nav ul.main-nav { display: flex; align-items: center; }
 
 /* --- NYA STILAR FÖR LAGERHANTERING --- */
 
+.view-header-actions {
+    display: flex;
+    gap: 15px;
+}
+.view-header-actions .secondary-button i,
+.view-header-actions .cta-button i {
+    margin-right: 5px;
+}
+
 .stock-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
     gap: 20px;
+    flex-wrap: wrap; /* För mobila enheter */
 }
+/* Återanvänder den snygga sökfältsdesignen från e-butiken */
 .stock-controls .search-bar-container {
     flex-grow: 1;
+    min-width: 300px;
     margin: 0;
+}
+.stock-controls .search-bar-container input {
+    width: 100%;
+    padding: 12px 20px 12px 45px;
+    font-size: 1em;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    font-family: var(--font-family);
+}
+.stock-controls .search-bar-container i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: #aaa;
 }
 #stock-filter-bar {
     display: flex;
