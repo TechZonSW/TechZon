@@ -970,7 +970,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const productForm = document.getElementById('productForm');
         const productModalTitle = document.getElementById('productModalTitle');
         const productIdInput = document.getElementById('productId');
-        const scanShortcutBtn = document.getElementById('scanShortcutBtn');
         
         let allStockProducts = [];
         let currentStockFilter = 'allt';
