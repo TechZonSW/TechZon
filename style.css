@@ -2070,3 +2070,90 @@ nav ul.main-nav { display: flex; align-items: center; }
     flex-grow: 0; /* Hindrar denna p-tagg från att växa */
 }
 
+/* --- NYA STILAR FÖR LAGERHANTERING --- */
+
+.stock-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+.stock-controls .search-bar-container {
+    flex-grow: 1;
+    margin: 0;
+}
+#stock-filter-bar {
+    display: flex;
+    gap: 10px;
+}
+/* Återanvänder stilen från e-butikens kategorifilter */
+.stock-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.stock-filter-btn:hover { background-color: #f0f0f0; }
+.stock-filter-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* Stil för produktlistan */
+.stock-list-container {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    padding: 10px;
+    overflow-x: auto; /* För mobila enheter */
+}
+#stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#stock-table th, #stock-table td {
+    padding: 15px;
+    text-align: left;
+}
+#stock-table th {
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    font-size: 0.9em;
+}
+#stock-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+#stock-table tbody tr:last-child {
+    border-bottom: none;
+}
+.stock-list-actions button {
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    cursor: pointer;
+    color: var(--text-color-secondary);
+    transition: color 0.2s ease;
+    padding: 5px;
+}
+.stock-list-actions button:hover {
+    color: var(--primary-color);
+}
+.stock-in-stock {
+    font-weight: 600;
+}
+
+/* Stil för produkt-modalen */
+#productModalAdmin { z-index: 3000; } /* Se till att den ligger överst */
+#productModalAdmin .modal-content { max-width: 500px; }
+#productModalAdmin h3 { font-size: 1.8em; margin-bottom: 25px; }
+#productForm { display: flex; flex-direction: column; gap: 15px; }
+#productForm input, #productForm select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+}
