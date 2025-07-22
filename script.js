@@ -961,140 +961,140 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // --- LOGIK FÖR LAGERHANTERING ---
-const stockSearchInput = document.getElementById('stockSearchInput');
-const stockFilterBar = document.getElementById('stock-filter-bar');
-const stockTableBody = document.getElementById('stock-table-body');
-const showCreateProductBtn = document.getElementById('showCreateProductBtn');
-const productModal = document.getElementById('productModalAdmin');
-const closeProductModalBtn = document.getElementById('closeProductModalBtn');
-const productForm = document.getElementById('productForm');
-const productModalTitle = document.getElementById('productModalTitle');
-const productIdInput = document.getElementById('productId');
-const scanShortcutBtn = document.getElementById('scanShortcutBtn');
-
-let allStockProducts = [];
-let currentStockFilter = 'allt';
-
-function renderStockList(products) {
-    stockTableBody.innerHTML = '';
-    if (products.length === 0) {
-        stockTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Inga produkter hittades.</td></tr>`;
-        return;
-    }
-    products.forEach(p => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${p.name}</strong></td>
-            <td>${p.category}</td>
-            <td>${p.sku}</td>
-            <td><span class="stock-in-stock">${p.stock} st</span></td>
-            <td class="stock-list-actions">
-                <button data-id="${p.id}" class="edit-stock-btn" title="Redigera"><i class="ph ph-pencil-simple"></i></button>
-            </td>
-        `;
-        stockTableBody.appendChild(row);
-    });
-}
-
-function applyStockFilters() {
-    const searchTerm = stockSearchInput.value.toLowerCase();
-    let filtered = allStockProducts;
-    
-    if (currentStockFilter !== 'allt') {
-        filtered = filtered.filter(p => p.category === currentStockFilter);
-    }
-    if (searchTerm) {
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm) || p.sku.toLowerCase().includes(searchTerm));
-    }
-    
-    renderStockList(filtered);
-}
-
-function openProductModalForEdit(productId) {
-    const product = allStockProducts.find(p => p.id === productId);
-    if (!product) return;
-
-    productForm.reset();
-    productModalTitle.textContent = 'Redigera Produkt';
-    productIdInput.value = product.id;
-    document.getElementById('productName').value = product.name;
-    document.getElementById('productIdSKU').value = product.sku;
-    document.getElementById('productCategory').value = product.category;
-    document.getElementById('productStock').value = product.stock;
-    
-    productModal.style.display = 'flex';
-}
-
-// Event listeners för lager-vyn
-navStockBtn.addEventListener('click', async () => {
-    switchMainView('stock');
-    allStockProducts = [
-        { id: 'prod-001', name: 'iPhone 15 Skärm', category: 'reservdel', sku: 'IP15-SKM', stock: 12 },
-        { id: 'prod-002', name: 'Silikonskal iPhone 15', category: 'tillbehor', sku: 'ACC-SKL-01', stock: 35 },
-        { id: 'prod-003', name: 'Begagnad iPhone 13', category: 'andrahand', sku: 'USED-IP13', stock: 1 },
-        { id: 'prod-004', name: 'Ny iPhone 15 Pro', category: 'nytt', sku: 'NEW-IP15P', stock: 5 }
-    ];
-    renderStockList(allStockProducts);
-
-    // KORRIGERING: Korrekt ordning på filter
-    stockFilterBar.innerHTML = `
-        <button class="stock-filter-btn active" data-filter="allt">Alla</button>
-        <button class="stock-filter-btn" data-filter="nytt">Nya</button>
-        <button class="stock-filter-btn" data-filter="andrahand">Andrahand</button>
-        <button class="stock-filter-btn" data-filter="tillbehor">Tillbehör</button>
-        <button class="stock-filter-btn" data-filter="reservdel">Reservdelar</button>
-    `;
-});
-
-stockFilterBar.addEventListener('click', (e) => {
-    if(e.target.classList.contains('stock-filter-btn')) {
-        document.querySelectorAll('.stock-filter-btn').forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
-        currentStockFilter = e.target.dataset.filter;
-        applyStockFilters();
-    }
-});
-
-stockSearchInput.addEventListener('input', applyStockFilters);
-
-// KORRIGERING: Event listener för "Åtgärder"-knappen
-stockTableBody.addEventListener('click', (e) => {
-    const editButton = e.target.closest('.edit-stock-btn');
-    if (editButton) {
-        openProductModalForEdit(editButton.dataset.id);
-    }
-});
-
-// Logik för modal
-showCreateProductBtn.addEventListener('click', () => {
-    productForm.reset();
-    productIdInput.value = '';
-    productModalTitle.textContent = 'Skapa Ny Produkt';
-    productModal.style.display = 'flex';
-});
-
-scanShortcutBtn.addEventListener('click', () => {
-    switchMainView('scan'); // Byt till skannervyn
-});
-
-closeProductModalBtn.addEventListener('click', () => {
-    productModal.style.display = 'none';
-});
-
-productModal.addEventListener('click', (e) => {
-    // Stäng om man klickar utanför innehållet
-    if (e.target === productModal) {
-        productModal.style.display = 'none';
-    }
-});
-
-productForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const id = productIdInput.value;
-    // Om 'id' finns, är det en uppdatering. Annars, en ny produkt.
-    alert(`Produkt ${id ? 'uppdaterad' : 'sparad'}! (Simulering)`);
-    productModal.style.display = 'none';
-});
+        const stockSearchInput = document.getElementById('stockSearchInput');
+        const stockFilterBar = document.getElementById('stock-filter-bar');
+        const stockTableBody = document.getElementById('stock-table-body');
+        const showCreateProductBtn = document.getElementById('showCreateProductBtn');
+        const productModal = document.getElementById('productModalAdmin');
+        const closeProductModalBtn = document.getElementById('closeProductModalBtn');
+        const productForm = document.getElementById('productForm');
+        const productModalTitle = document.getElementById('productModalTitle');
+        const productIdInput = document.getElementById('productId');
+        const scanShortcutBtn = document.getElementById('scanShortcutBtn');
+        
+        let allStockProducts = [];
+        let currentStockFilter = 'allt';
+        
+        function renderStockList(products) {
+            stockTableBody.innerHTML = '';
+            if (products.length === 0) {
+                stockTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Inga produkter hittades.</td></tr>`;
+                return;
+            }
+            products.forEach(p => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.category}</td>
+                    <td>${p.sku}</td>
+                    <td><span class="stock-in-stock">${p.stock} st</span></td>
+                    <td class="stock-list-actions">
+                        <button data-id="${p.id}" class="edit-stock-btn" title="Redigera"><i class="ph ph-pencil-simple"></i></button>
+                    </td>
+                `;
+                stockTableBody.appendChild(row);
+            });
+        }
+        
+        function applyStockFilters() {
+            const searchTerm = stockSearchInput.value.toLowerCase();
+            let filtered = allStockProducts;
+            
+            if (currentStockFilter !== 'allt') {
+                filtered = filtered.filter(p => p.category === currentStockFilter);
+            }
+            if (searchTerm) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm) || p.sku.toLowerCase().includes(searchTerm));
+            }
+            
+            renderStockList(filtered);
+        }
+        
+        function openProductModalForEdit(productId) {
+            const product = allStockProducts.find(p => p.id === productId);
+            if (!product) return;
+        
+            productForm.reset();
+            productModalTitle.textContent = 'Redigera Produkt';
+            productIdInput.value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productIdSKU').value = product.sku;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productStock').value = product.stock;
+            
+            productModal.style.display = 'flex';
+        }
+        
+        // Event listeners för lager-vyn
+        navStockBtn.addEventListener('click', async () => {
+            switchMainView('stock');
+            allStockProducts = [
+                { id: 'prod-001', name: 'iPhone 15 Skärm', category: 'reservdel', sku: 'IP15-SKM', stock: 12 },
+                { id: 'prod-002', name: 'Silikonskal iPhone 15', category: 'tillbehor', sku: 'ACC-SKL-01', stock: 35 },
+                { id: 'prod-003', name: 'Begagnad iPhone 13', category: 'andrahand', sku: 'USED-IP13', stock: 1 },
+                { id: 'prod-004', name: 'Ny iPhone 15 Pro', category: 'nytt', sku: 'NEW-IP15P', stock: 5 }
+            ];
+            renderStockList(allStockProducts);
+        
+            // KORRIGERING: Korrekt ordning på filter
+            stockFilterBar.innerHTML = `
+                <button class="stock-filter-btn active" data-filter="allt">Alla</button>
+                <button class="stock-filter-btn" data-filter="nytt">Nya</button>
+                <button class="stock-filter-btn" data-filter="andrahand">Andrahand</button>
+                <button class="stock-filter-btn" data-filter="tillbehor">Tillbehör</button>
+                <button class="stock-filter-btn" data-filter="reservdel">Reservdelar</button>
+            `;
+        });
+        
+        stockFilterBar.addEventListener('click', (e) => {
+            if(e.target.classList.contains('stock-filter-btn')) {
+                document.querySelectorAll('.stock-filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                currentStockFilter = e.target.dataset.filter;
+                applyStockFilters();
+            }
+        });
+        
+        stockSearchInput.addEventListener('input', applyStockFilters);
+        
+        // KORRIGERING: Event listener för "Åtgärder"-knappen
+        stockTableBody.addEventListener('click', (e) => {
+            const editButton = e.target.closest('.edit-stock-btn');
+            if (editButton) {
+                openProductModalForEdit(editButton.dataset.id);
+            }
+        });
+        
+        // Logik för modal
+        showCreateProductBtn.addEventListener('click', () => {
+            productForm.reset();
+            productIdInput.value = '';
+            productModalTitle.textContent = 'Skapa Ny Produkt';
+            productModal.style.display = 'flex';
+        });
+        
+        scanShortcutBtn.addEventListener('click', () => {
+            switchMainView('scan'); // Byt till skannervyn
+        });
+        
+        closeProductModalBtn.addEventListener('click', () => {
+            productModal.style.display = 'none';
+        });
+        
+        productModal.addEventListener('click', (e) => {
+            // Stäng om man klickar utanför innehållet
+            if (e.target === productModal) {
+                productModal.style.display = 'none';
+            }
+        });
+        
+        productForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = productIdInput.value;
+            // Om 'id' finns, är det en uppdatering. Annars, en ny produkt.
+            alert(`Produkt ${id ? 'uppdaterad' : 'sparad'}! (Simulering)`);
+            productModal.style.display = 'none';
+        });
     
         // --- Sidladdning ---
         if (jwtToken) {
