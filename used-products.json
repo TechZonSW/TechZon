@@ -1,6 +1,6 @@
 [
   {
-    "id": "used-001",
+    "id": "USE001",
     "kategori_slug": "andrahand",
     "marke": "Apple",
     "typ": "Mobiltelefon",
@@ -24,7 +24,7 @@
     ]
   },
   {
-    "id": "used-002",
+    "id": "USE002",
     "kategori_slug": "andrahand",
     "marke": "Apple",
     "typ": "Mobiltelefon",
@@ -48,7 +48,7 @@
     ]
   },
   {
-    "id": "used-003",
+    "id": "USE003",
     "kategori_slug": "andrahand",
     "marke": "Samsung",
     "typ": "Mobiltelefon",

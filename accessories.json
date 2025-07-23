@@ -1,6 +1,6 @@
 [
   {
-    "id": "acc-001",
+    "id": "ACC001",
     "kategori_slug": "tillbehor",
     "marke": "Arctico",
     "typ": "Skal",
@@ -22,7 +22,7 @@
     ]
   },
   {
-    "id": "acc-002",
+    "id": "ACC002",
     "kategori_slug": "tillbehor",
     "marke": "SiGN",
     "typ": "Laddare",
@@ -44,7 +44,7 @@
     ]
   },
   {
-    "id": "acc-003",
+    "id": "ACC003",
     "kategori_slug": "tillbehor",
     "marke": "Defender Series",
     "typ": "Skal",
