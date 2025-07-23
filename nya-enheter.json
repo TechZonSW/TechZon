@@ -94,9 +94,9 @@
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 666 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (1).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (2).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (3).png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW005/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW005/Bild (2).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW005/Bild (3).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,8-tums Dynamic AMOLED 2X" },
@@ -122,9 +122,9 @@
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 564 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (1).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (2).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (3).png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW006/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW006/Bild (2).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW006/Bild (3).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "13,6-tums Liquid Retina-skärm" },
