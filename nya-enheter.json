@@ -10,13 +10,13 @@
     "varianter": [
       {
         "id": "new-001",
-        "attribut": { "Färg": "Naturligt titan", "Lagring": "128 GB" },
+        "attribut": { "Färg": "Svart titan", "Lagring": "128 GB" },
         "pris": 13490,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 562 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/testbild.png" },
-          { "typ": "bild", "url": "bilder/testbild-2.png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
           { "typ": "video", "url": "bilder/test-video.mp4" }
         ],
         "specifikationer": [
@@ -27,13 +27,13 @@
       },
       {
         "id": "new-002",
-        "attribut": { "Färg": "Naturligt titan", "Lagring": "256 GB" },
+        "attribut": { "Färg": "Svart titan", "Lagring": "256 GB" },
         "pris": 14990,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 625 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/testbild.png" },
-          { "typ": "bild", "url": "bilder/testbild-2.png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
@@ -43,12 +43,13 @@
       },
       {
         "id": "new-003",
-        "attribut": { "Färg": "Blått titan", "Lagring": "256 GB" },
+        "attribut": { "Färg": "Vitt titan", "Lagring": "256 GB" },
         "pris": 14990,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 625 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/testbild-3.png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/02 - vitt/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/02 - vitt/Bild (2).png" },
           { "typ": "video", "url": "bilder/test-video.mp4" }
         ],
         "specifikationer": [
@@ -59,12 +60,13 @@
       },
       {
         "id": "new-004",
-        "attribut": { "Färg": "Vitt titan", "Lagring": "512 GB" },
+        "attribut": { "Färg": "Guld titan", "Lagring": "512 GB" },
         "pris": 17990,
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 750 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/testbild.png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/03 - guld/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/03 - guld/Bild (2).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },
@@ -90,13 +92,43 @@
         "delbetalning_mojlig": true,
         "delbetalning_pris": "från 666 kr/mån",
         "media": [
-          { "typ": "bild", "url": "bilder/testbild.png" },
-          { "typ": "bild", "url": "bilder/testbild-2.png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (2).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW002/Bild (3).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,8-tums Dynamic AMOLED 2X" },
             { "label": "Processor", "value": "Snapdragon® 8 Gen 3 for Galaxy" },
             { "label": "Kamera", "value": "200 MP vidvinkelkamera" }
+        ]
+      }
+    ]
+  },
+  {
+    "id_base": "macbook-air-13-m3",
+    "kategori_slug": "nytt",
+    "marke": "Apple",
+    "typ": "Dator",
+    "namn": "MacBook Air 13 tum (M3)",
+    "beskrivning_kort": "Supertunn och superlätt laptop, nu överladdad med kraften i M3-chippet.",
+    "beskrivning_lang": "Nya MacBook Air är superlätt och bara drygt en centimeter tunn, så den är enkel att ta med sig överallt. Med det kraftfulla M3-chippet får du både prestanda och funktioner för att klara allt du vill göra, från jobb till spel. Och med upp till 18 timmars batteritid kan du lämna laddaren hemma.",
+    "varianter": [
+      {
+        "id": "new-006",
+        "attribut": { "Färg": "Rymdgrå", "Lagring": "256 GB" },
+        "pris": 13533,
+        "delbetalning_mojlig": true,
+        "delbetalning_pris": "från 564 kr/mån",
+        "media": [
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (2).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW003/Bild (3).png" }
+        ],
+        "specifikationer": [
+            { "label": "Skärm", "value": "13,6-tums Liquid Retina-skärm" },
+            { "label": "Chip", "value": "Apple M3-chip med 8-kärnig processor" },
+            { "label": "Minne", "value": "8 GB RAM" },
+            { "label": "Lagringskapacitet", "value": "256 GB SSD" }
         ]
       }
     ]
