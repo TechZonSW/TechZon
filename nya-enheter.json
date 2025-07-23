@@ -16,7 +16,7 @@
         "delbetalning_pris": "från 562 kr/mån",
         "media": [
           { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (2).png" },
           { "typ": "video", "url": "bilder/test-video.mp4" }
         ],
         "specifikationer": [
@@ -33,7 +33,7 @@
         "delbetalning_pris": "från 625 kr/mån",
         "media": [
           { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" },
-          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (1).png" }
+          { "typ": "bild", "url": "bilder/01 - Nya enheter/NEW001/01 - svart/Bild (2).png" }
         ],
         "specifikationer": [
             { "label": "Skärm", "value": "6,1-tums Super Retina XDR-skärm" },

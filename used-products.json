@@ -4,20 +4,22 @@
     "kategori_slug": "andrahand",
     "marke": "Apple",
     "typ": "Mobiltelefon",
-    "namn": "iPhone 14 Pro",
-    "pris": 9500,
+    "namn": "iPhone 12",
+    "pris": 3500,
     "skick": "Nyskick",
     "delbetalning_mojlig": true,
-    "delbetalning_pris": "från 396 kr/mån",
-    "beskrivning_kort": "Denna enhet är i nyskick utan repor och har 100% batterihälsa.",
-    "beskrivning_lang": "Enheten är fullt testad av våra certifierade tekniker, olåst och fungerar som ny. Den levereras med 12 månaders garanti för din trygghet. Originalkartong medföljer.",
+    "delbetalning_pris": "från 146 kr/mån",
+    "beskrivning_kort": "Denna enhet är i nyskick utan repor och har utmärkt batterihälsa.",
+    "beskrivning_lang": "Enheten är fullt testad av våra certifierade tekniker, olåst och fungerar som ny. Den har en 6,1-tums Super Retina XDR-skärm och det kraftfulla A14 Bionic-chippet. Levereras med 12 månaders garanti för din trygghet.",
     "media": [
-        { "typ": "bild", "url": "bilder/testbild.png" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (1).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (2).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (3).jpg" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Nyskick" },
-      { "label": "Färg", "value": "Rymdsvart" },
-      { "label": "Lagring", "value": "128 GB" },
+      { "label": "Färg", "value": "Svart" },
+      { "label": "Lagring", "value": "64 GB" },
       { "label": "Garanti", "value": "12 månader" }
     ]
   },
@@ -25,22 +27,23 @@
     "id": "used-002",
     "kategori_slug": "andrahand",
     "marke": "Apple",
-    "typ": "Dator",
-    "namn": "MacBook Air M1",
-    "pris": 8500,
+    "typ": "Mobiltelefon",
+    "namn": "iPhone X",
+    "pris": 2500,
     "skick": "Mycket bra skick",
     "delbetalning_mojlig": true,
-    "delbetalning_pris": "från 354 kr/mån",
-    "beskrivning_kort": "En kraftfull och lätt laptop i mycket bra skick, perfekt för studier eller arbete.",
-    "beskrivning_lang": "Denna MacBook Air har genomgått en fullständig funktionstest och är garanterad att fungera felfritt. Den har endast mindre kosmetiska spår av användning. Levereras med laddare och 12 månaders garanti.",
+    "delbetalning_pris": "från 104 kr/mån",
+    "beskrivning_kort": "En ikonisk mobil i mycket bra skick, med Face ID och en vacker Super Retina-skärm.",
+    "beskrivning_lang": "Denna iPhone X har genomgått en fullständig funktionstest och är garanterad att fungera felfritt. Den har endast mindre kosmetiska spår av användning. Upplev den första iPhone-modellen med en heltäckande skärm. Levereras med laddare och 12 månaders garanti.",
     "media": [
-        { "typ": "bild", "url": "bilder/testbild-2.png" },
-        { "typ": "bild", "url": "bilder/testbild-3.png" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (1).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (2).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (3).jpg" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Mycket bra skick" },
-      { "label": "Färg", "value": "Silver" },
-      { "label": "Lagring", "value": "256 GB SSD" },
+      { "label": "Färg", "value": "Rymdgrå" },
+      { "label": "Lagring", "value": "64 GB" },
       { "label": "Garanti", "value": "12 månader" }
     ]
   },
@@ -49,19 +52,21 @@
     "kategori_slug": "andrahand",
     "marke": "Samsung",
     "typ": "Mobiltelefon",
-    "namn": "Galaxy S22",
-    "pris": 5500,
+    "namn": "Galaxy S20",
+    "pris": 2800,
     "skick": "Bra skick",
     "delbetalning_mojlig": true,
-    "delbetalning_pris": "från 229 kr/mån",
-    "beskrivning_kort": "En fullt funktionell enhet i bra skick, med några mindre spår av användning.",
-    "beskrivning_lang": "Denna Galaxy S22 är ett utmärkt budgetval. Den har genomgått alla våra tester och fungerar perfekt. Notera att det kan finnas mindre, ytliga repor på ramen som inte påverkar funktionen. 12 månaders garanti ingår.",
+    "delbetalning_pris": "från 117 kr/mån",
+    "beskrivning_kort": "En fullt funktionell enhet i bra skick, med en fantastisk 120Hz AMOLED-skärm.",
+    "beskrivning_lang": "Denna Galaxy S20 är ett utmärkt budgetval. Den har genomgått alla våra tester och fungerar perfekt. Notera att det kan finnas mindre, ytliga repor som inte påverkar funktionen. Den kraftfulla kameran och snabba skärmen gör den perfekt för foto och media. 12 månaders garanti ingår.",
     "media": [
-        { "typ": "bild", "url": "bilder/testbild.png" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (1).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (2).jpg" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (3).jpg" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Bra skick" },
-      { "label": "Färg", "value": "Svart" },
+      { "label": "Färg", "value": "Cosmic Gray" },
       { "label": "Lagring", "value": "128 GB" },
       { "label": "Garanti", "value": "12 månader" }
     ]

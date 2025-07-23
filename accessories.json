@@ -2,41 +2,68 @@
   {
     "id": "acc-001",
     "kategori_slug": "tillbehor",
-    "marke": "TechZon Basics",
+    "marke": "Arctico",
     "typ": "Skal",
-    "namn": "Silikonskal för iPhone 15",
-    "pris": 299,
+    "namn": "Arctico Silikonskal för iPhone 16",
+    "pris": 349,
     "delbetalning_mojlig": false,
     "delbetalning_pris": null,
-    "beskrivning_kort": "Ett mjukt och greppvänligt skal som skyddar din iPhone mot vardagliga stötar.",
-    "beskrivning_lang": "Tillverkat av högkvalitativt silikon som ger ett utmärkt grepp och skyddar din enhet utan att addera onödig bulk. De upphöjda kanterna skyddar både skärmen och kameran.",
+    "beskrivning_kort": "Ett elegant och skyddande skal från Arctico, designat för att perfekt passa din iPhone 16.",
+    "beskrivning_lang": "Detta skal från Arctico är tillverkat i premiummaterial som ger ett utmärkt skydd mot stötar och repor samtidigt som det behåller telefonens tunna profil. Den matta ytan ger ett säkert grepp.",
     "media": [
-        { "typ": "bild", "url": "bilder/testbild.png" }
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (1).jpg" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (2).jpg" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (3).jpg" }
     ],
     "specifikationer": [
-      { "label": "Material", "value": "Flexibelt silikon" },
-      { "label": "Kompatibilitet", "value": "iPhone 15, iPhone 15 Pro" },
+      { "label": "Material", "value": "Premium Silikon" },
+      { "label": "Kompatibilitet", "value": "iPhone 16" },
       { "label": "Färg", "value": "Svart" }
     ]
   },
   {
     "id": "acc-002",
     "kategori_slug": "tillbehor",
-    "marke": "Apple",
+    "marke": "SiGN",
     "typ": "Laddare",
-    "namn": "USB-C 20W Strömadapter",
-    "pris": 249,
+    "namn": "Extrem Snabbladdare för iPhone 16, 20W",
+    "pris": 399,
     "delbetalning_mojlig": false,
     "delbetalning_pris": null,
-    "beskrivning_kort": "Apples originaladapter för snabb och effektiv laddning av dina enheter.",
-    "beskrivning_lang": "Denna strömadapter ger snabb och effektiv laddning hemma, på kontoret eller på resan. Den är kompatibel med alla enheter som har en USB-C-port och rekommenderas för optimal laddning av iPhone och iPad Pro.",
+    "beskrivning_kort": "SiGN komplett snabbladdarkit med 20W USB-C strömadapter och en extra lång 2 meters kabel.",
+    "beskrivning_lang": "Ladda din iPhone 16 extremt snabbt med detta kraftfulla paket från SiGN. Innehåller en 20W strömadapter och en slitstark, 2 meter lång USB-C-kabel (60W) för maximal flexibilitet och laddningshastighet.",
     "media": [
-        { "typ": "bild", "url": "bilder/testbild-2.png" }
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (1).jpg" },
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (2).jpg" },
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (3).jpg" }
     ],
     "specifikationer": [
       { "label": "Effekt", "value": "20 Watt" },
       { "label": "Anslutning", "value": "USB-C" },
-      { "label": "Certifiering", "value": "Original Apple" }
+      { "label": "Kabellängd", "value": "2 meter" }
+    ]
+  },
+  {
+    "id": "acc-003",
+    "kategori_slug": "tillbehor",
+    "marke": "Defender Series",
+    "typ": "Skal",
+    "namn": "Galaxy S24 Ultra Skal Defender Series XT",
+    "pris": 599,
+    "delbetalning_mojlig": false,
+    "delbetalning_pris": null,
+    "beskrivning_kort": "Det ultimata skyddet för din Galaxy S24 Ultra. Ett robust skal för extrema förhållanden.",
+    "beskrivning_lang": "Defender Series XT är konstruerat för maximalt skydd. Med flera lager av skyddsmaterial absorberar det effektivt stötar och fall. Trots sin robusta design ger skalet full åtkomst till portar och funktioner.",
+    "media": [
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (1).jpg" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (2).jpg" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (3).jpg" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (4).jpg" }
+    ],
+    "specifikationer": [
+      { "label": "Material", "value": "Polykarbonat, gummi" },
+      { "label": "Kompatibilitet", "value": "Samsung Galaxy S24 Ultra" },
+      { "label": "Färg", "value": "Svart" }
     ]
   }
 ]
