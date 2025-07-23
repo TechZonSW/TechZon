@@ -960,6 +960,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) { alert(`Fel: ${error.message}`); }
         });
 
+
         // --- LOGIK FÖR LAGERHANTERING ---
         const stockSearchInput = document.getElementById('stockSearchInput');
         const stockFilterBar = document.getElementById('stock-filter-bar');
@@ -973,7 +974,80 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let allStockProducts = [];
         let currentStockFilter = 'allt';
-        
+
+        // NY HJÄLPFUNKTION: Plattar ut din komplexa JSON-data
+        function flattenProducts(productBases) {
+            const flattened = [];
+            productBases.forEach(base => {
+                if (base.varianter && base.varianter.length > 0) {
+                    base.varianter.forEach(variant => {
+                        flattened.push({
+                            id: variant.id, // Detta är det unika SKU:t
+                            name: `${base.namn} (${Object.values(variant.attribut).join(', ')})`,
+                            category: base.kategori_slug,
+                            stock: 0 // Defaultvärde, uppdateras från Firebase
+                        });
+                    });
+                } else {
+                    // För enklare produkter som reservdelar
+                    flattened.push({
+                        id: base.id,
+                        name: base.namn,
+                        category: base.kategori,
+                        stock: 0
+                    });
+                }
+            });
+            return flattened;
+        }
+
+
+        // NY HUVUDFUNKTION: Laddar all data när man går till lager-vyn
+        async function initializeStockView() {
+            stockTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Laddar produkter...</td></tr>`;
+
+            try {
+                // 1. Hämta all statisk produktdata från JSON-filer
+                const [newRes, usedRes, accRes, spaRes] = await Promise.all([
+                    fetch('./nya-enheter.json').then(res => res.json()),
+                    fetch('./andrahands-enheter.json').then(res => res.json()),
+                    fetch('./tillbehor.json').then(res => res.json()),
+                    fetch('./reservdelar.json').then(res => res.json())
+                ]);
+
+                const newProducts = flattenProducts(newRes);
+                const usedProducts = flattenProducts(usedRes);
+                const accProducts = flattenProducts(accRes);
+                const spaProducts = flattenProducts(spaRes);
+                
+                const staticProducts = [...newProducts, ...usedProducts, ...accProducts, ...spaProducts];
+
+                // 2. Hämta all dynamisk lagerdata från Firebase
+                const stockResponse = await fetch('/.netlify/functions/getStockLevels', {
+                    headers: { 'Authorization': `Bearer ${jwtToken}` }
+                });
+                if (!stockResponse.ok) throw new Error('Kunde inte hämta lagerdata från servern.');
+                const stockLevels = await stockResponse.json();
+
+                // 3. Kombinera datan
+                allStockProducts = staticProducts.map(product => {
+                    return {
+                        ...product,
+                        stock: stockLevels[product.id] || 0 // Hämta saldot från Firebase, annars 0
+                    };
+                });
+
+                // 4. Rita upp listan och filter
+                renderStockList(allStockProducts);
+                setupStockFilters();
+
+            } catch (error) {
+                console.error("Fel vid initiering av lagervyn:", error);
+                stockTableBody.innerHTML = `<tr><td colspan="5" class="error-message">${error.message}</td></tr>`;
+            }
+        }
+
+
         function renderStockList(products) {
             stockTableBody.innerHTML = '';
             if (products.length === 0) {
@@ -982,11 +1056,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             products.forEach(p => {
                 const row = document.createElement('tr');
+                // Lägg till en klass om lagret är lågt
+                const stockClass = p.stock <= (p.min_saldo || 0) ? 'stock-low' : 'stock-in-stock';
+                
                 row.innerHTML = `
                     <td><strong>${p.name}</strong></td>
-                    <td>${p.category}</td>
-                    <td>${p.sku}</td>
-                    <td><span class="stock-in-stock">${p.stock} st</span></td>
+                    <td><span class="category-tag category-${p.category}">${p.category}</span></td>
+                    <td>${p.id}</td>
+                    <td><span class="${stockClass}">${p.stock} st</span></td>
                     <td class="stock-list-actions">
                         <button data-id="${p.id}" class="edit-stock-btn" title="Redigera"><i class="ph ph-pencil-simple"></i></button>
                     </td>
@@ -994,7 +1071,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 stockTableBody.appendChild(row);
             });
         }
-        
+
+        // NY FUNKTION: Skapar filterknapparna
+        function setupStockFilters() {
+            stockFilterBar.innerHTML = `
+                <button class="stock-filter-btn active" data-filter="allt">Alla</button>
+                <button class="stock-filter-btn" data-filter="nytt">Nya</button>
+                <button class="stock-filter-btn" data-filter="andrahand">Andrahand</button>
+                <button class="stock-filter-btn" data-filter="tillbehor">Tillbehör</button>
+                <button class="stock-filter-btn" data-filter="reservdel">Reservdelar</button>
+            `;
+        }
+
         function applyStockFilters() {
             const searchTerm = stockSearchInput.value.toLowerCase();
             let filtered = allStockProducts;
@@ -1023,26 +1111,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             productModal.style.display = 'flex';
         }
-        
-        // Event listeners för lager-vyn
-        navStockBtn.addEventListener('click', async () => {
+
+        // --- Event listeners för lager-vyn ---
+
+        // KORRIGERING: Byt ut din gamla navStockBtn-lyssnare mot denna
+        navStockBtn.addEventListener('click', () => {
             switchMainView('stock');
-            allStockProducts = [
-                { id: 'prod-001', name: 'iPhone 15 Skärm', category: 'reservdel', sku: 'IP15-SKM', stock: 12 },
-                { id: 'prod-002', name: 'Silikonskal iPhone 15', category: 'tillbehor', sku: 'ACC-SKL-01', stock: 35 },
-                { id: 'prod-003', name: 'Begagnad iPhone 13', category: 'andrahand', sku: 'USED-IP13', stock: 1 },
-                { id: 'prod-004', name: 'Ny iPhone 15 Pro', category: 'nytt', sku: 'NEW-IP15P', stock: 5 }
-            ];
-            renderStockList(allStockProducts);
-        
-            // KORRIGERING: Korrekt ordning på filter
-            stockFilterBar.innerHTML = `
-                <button class="stock-filter-btn active" data-filter="allt">Alla</button>
-                <button class="stock-filter-btn" data-filter="nytt">Nya</button>
-                <button class="stock-filter-btn" data-filter="andrahand">Andrahand</button>
-                <button class="stock-filter-btn" data-filter="tillbehor">Tillbehör</button>
-                <button class="stock-filter-btn" data-filter="reservdel">Reservdelar</button>
-            `;
+            initializeStockView(); // Anropa den nya huvudfunktionen
         });
         
         stockFilterBar.addEventListener('click', (e) => {
