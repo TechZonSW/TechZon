@@ -11,9 +11,9 @@
     "beskrivning_kort": "Ett elegant och skyddande skal från Arctico, designat för att perfekt passa din iPhone 16.",
     "beskrivning_lang": "Detta skal från Arctico är tillverkat i premiummaterial som ger ett utmärkt skydd mot stötar och repor samtidigt som det behåller telefonens tunna profil. Den matta ytan ger ett säkert grepp.",
     "media": [
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (1).jpg" },
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (2).jpg" },
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (3).jpg" }
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (1).png" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (2).png" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC001/Bild (3).png" }
     ],
     "specifikationer": [
       { "label": "Material", "value": "Premium Silikon" },
@@ -33,9 +33,9 @@
     "beskrivning_kort": "SiGN komplett snabbladdarkit med 20W USB-C strömadapter och en extra lång 2 meters kabel.",
     "beskrivning_lang": "Ladda din iPhone 16 extremt snabbt med detta kraftfulla paket från SiGN. Innehåller en 20W strömadapter och en slitstark, 2 meter lång USB-C-kabel (60W) för maximal flexibilitet och laddningshastighet.",
     "media": [
-        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (1).jpg" },
-        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (2).jpg" },
-        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (3).jpg" }
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (1).png" },
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (2).png" },
+        { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC002/Bild (3).png" }
     ],
     "specifikationer": [
       { "label": "Effekt", "value": "20 Watt" },
@@ -55,10 +55,10 @@
     "beskrivning_kort": "Det ultimata skyddet för din Galaxy S24 Ultra. Ett robust skal för extrema förhållanden.",
     "beskrivning_lang": "Defender Series XT är konstruerat för maximalt skydd. Med flera lager av skyddsmaterial absorberar det effektivt stötar och fall. Trots sin robusta design ger skalet full åtkomst till portar och funktioner.",
     "media": [
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (1).jpg" },
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (2).jpg" },
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (3).jpg" },
-      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (4).jpg" }
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (1).png" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (2).png" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (3).png" },
+      { "typ": "bild", "url": "bilder/03 - Tillbehör/ACC003/Bild (4).png" }
     ],
     "specifikationer": [
       { "label": "Material", "value": "Polykarbonat, gummi" },

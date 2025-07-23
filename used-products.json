@@ -12,9 +12,9 @@
     "beskrivning_kort": "Denna enhet är i nyskick utan repor och har utmärkt batterihälsa.",
     "beskrivning_lang": "Enheten är fullt testad av våra certifierade tekniker, olåst och fungerar som ny. Den har en 6,1-tums Super Retina XDR-skärm och det kraftfulla A14 Bionic-chippet. Levereras med 12 månaders garanti för din trygghet.",
     "media": [
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (1).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (2).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (3).jpg" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (1).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (2).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE001/Bild (3).png" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Nyskick" },
@@ -36,9 +36,9 @@
     "beskrivning_kort": "En ikonisk mobil i mycket bra skick, med Face ID och en vacker Super Retina-skärm.",
     "beskrivning_lang": "Denna iPhone X har genomgått en fullständig funktionstest och är garanterad att fungera felfritt. Den har endast mindre kosmetiska spår av användning. Upplev den första iPhone-modellen med en heltäckande skärm. Levereras med laddare och 12 månaders garanti.",
     "media": [
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (1).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (2).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (3).jpg" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (1).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (2).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE002/Bild (3).png" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Mycket bra skick" },
@@ -60,9 +60,9 @@
     "beskrivning_kort": "En fullt funktionell enhet i bra skick, med en fantastisk 120Hz AMOLED-skärm.",
     "beskrivning_lang": "Denna Galaxy S20 är ett utmärkt budgetval. Den har genomgått alla våra tester och fungerar perfekt. Notera att det kan finnas mindre, ytliga repor som inte påverkar funktionen. Den kraftfulla kameran och snabba skärmen gör den perfekt för foto och media. 12 månaders garanti ingår.",
     "media": [
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (1).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (2).jpg" },
-      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (3).jpg" }
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (1).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (2).png" },
+      { "typ": "bild", "url": "bilder/02 - Andrahands enheter/USE003/Bild (3).png" }
     ],
     "specifikationer": [
       { "label": "Skick", "value": "Bra skick" },
