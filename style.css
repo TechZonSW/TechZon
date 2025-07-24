@@ -2242,3 +2242,185 @@ nav ul.main-nav { display: flex; align-items: center; }
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
 }
+
+/* ==================================================================== */
+/* NYA STILAR FÖR FÖRBÄTTRAD SKANNER-VY I ADMIN                        */
+/* ==================================================================== */
+
+.scan-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Två lika stora kolumner */
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.scan-action-panel,
+.scan-log-panel {
+    background-color: #f5f5f7; /* Ljusgrå bakgrund för sektionerna */
+    padding: 30px;
+    border-radius: var(--border-radius);
+}
+
+/* --- Vänsterkolumn: Skanner & Aktioner --- */
+
+#start-scan-prompt {
+    text-align: center;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #dcdcdc;
+    border-radius: var(--border-radius);
+    color: var(--text-color-secondary);
+}
+
+#start-scan-prompt p {
+    margin-bottom: 20px;
+    max-width: 300px;
+}
+
+#startScannerBtn i {
+    margin-right: 8px; /* Lite utrymme mellan ikon och text */
+}
+
+#scanner-container {
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+#scan-result-view h3 {
+    margin-bottom: 10px;
+}
+
+.scan-product-name {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.scan-product-id {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+    background-color: #e9e9eb;
+    padding: 3px 8px;
+    border-radius: 5px;
+    display: inline-block; /* För att padding ska fungera */
+    margin-top: 5px;
+}
+
+.scan-stock-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin: 20px 0;
+}
+
+.scan-stock-info p {
+    font-size: 1.1em;
+    color: var(--text-color-secondary);
+}
+
+.scan-stock-level {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.scan-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.scan-actions .cta-button {
+    width: 100%;
+    padding: 15px;
+}
+
+/* --- Högerkolumn: Logg --- */
+
+.scan-log-panel h4 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 15px;
+}
+
+#stock-log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 300px; /* Ge loggen en max-höjd */
+    overflow-y: auto; /* Lägg till scroll om listan blir lång */
+    display: flex;
+    flex-direction: column-reverse; /* Nyaste händelsen visas överst */
+}
+
+#stock-log-list li {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.log-item-placeholder {
+    color: var(--text-color-secondary);
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Färger för olika loggtyper */
+.log-item-add {
+    background-color: #d1e7dd; /* Ljusgrön för tillägg */
+    border-left: 4px solid #0f5132;
+}
+.log-item-remove {
+    background-color: #f8d7da; /* Ljusgrön för borttagning */
+    border-left: 4px solid #721c24;
+}
+.log-item-manual {
+    background-color: #cfe2ff; /* Ljusblå för manuell justering */
+    border-left: 4px solid #0a58ca;
+}
+.log-item-time {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+/* --- Modal för Manuell Justering --- */
+
+#manualStockForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#manualStockForm input {
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: var(--border-radius);
+    border: 1px solid #ccc;
+}
+
+#manualStockProductName {
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    margin-top: 10px;
+}
+
+/* --- Responsivitet --- */
+
+@media (max-width: 900px) {
+    .scan-layout {
+        grid-template-columns: 1fr; /* Stapla kolumnerna på mindre skärmar */
+    }
+}
