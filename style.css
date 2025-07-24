@@ -2337,6 +2337,32 @@ nav ul.main-nav { display: flex; align-items: center; }
     font-weight: 500;
 }
 
+/* ==================================================================== */
+/* TILLAGD KOD FÖR ATT FIXA KAMERAVYN                                 */
+/* ==================================================================== */
+
+#scanner-container {
+    background-color: #2c2c2e; /* Mörk bakgrund för att se att rutan finns */
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px; /* Sätter en maxbredd för stora skärmar */
+    margin-bottom: 20px;
+
+    /* Tvingar en 4:3-aspekt, vilket garanterar att rutan har en höjd */
+    aspect-ratio: 4 / 3; 
+
+    /* Dold från start, redo att visas av JS */
+    display: none; 
+}
+
+/* Säkerställer att video-elementet fyller sin container */
+#scanner-container video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+}
+
 #scanAgainBtn {
     /* Gör "Skanna Nästa" mindre framträdande än de primära åtgärderna */
     background-color: transparent;
