@@ -2242,3 +2242,166 @@ nav ul.main-nav { display: flex; align-items: center; }
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
 }
+
+/* ==================================================================== */
+/* NYA STILAR FÖR FÖRBÄTTRAD SKANNER-VY                                */
+/* ==================================================================== */
+
+.scan-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Två jämna kolumner */
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.scan-action-panel {
+    background-color: #f5f5f7; /* Ljusgrå bakgrund för att separera */
+    border-radius: var(--border-radius);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+/* Stil för prompten att starta kameran */
+#start-scan-prompt {
+    text-align: center;
+    color: var(--text-color-secondary);
+}
+
+#start-scan-prompt p {
+    margin-bottom: 25px;
+    max-width: 300px;
+}
+
+#startScannerBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+}
+
+/* Stil för vyn EFTER skanning */
+#scan-result-view {
+    width: 100%;
+    text-align: center;
+}
+
+.scan-product-name {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.scan-product-id {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+    font-family: monospace; /* Ger en teknisk känsla för ID */
+}
+
+#scan-result-view hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.scan-stock-info {
+    margin: 20px 0;
+}
+
+.scan-stock-info p {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.scan-stock-level {
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Förbättrade knappar i skannervyn */
+.scan-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.scan-actions .secondary-button, #scanAgainBtn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+#scanAgainBtn {
+    /* Gör "Skanna Nästa" mindre framträdande än de primära åtgärderna */
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: var(--text-color);
+}
+#scanAgainBtn:hover {
+    background-color: #f0f0f0;
+}
+
+
+/* Stil för logg-panelen */
+.scan-log-panel {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    overflow-y: auto; /* Scrollbar om listan blir lång */
+    max-height: 460px; /* Samma höjd som action-panelen */
+}
+
+#stock-log-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.log-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9em;
+}
+.log-item:first-child {
+    border-top: 1px solid #f0f0f0;
+}
+
+.log-timestamp {
+    color: var(--text-color-secondary);
+}
+
+.log-item.error span:first-child {
+    color: #bf0f2b; /* Röd färg för felloggar */
+    font-weight: 500;
+}
+
+.log-item-placeholder {
+    text-align: center;
+    color: var(--text-color-secondary);
+    padding: 20px;
+}
+
+/* Stil för manuell justerings-modal */
+#manualStockForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#manualStockForm input {
+    padding: 15px;
+    font-size: 1.2em;
+    text-align: center;
+    border-radius: var(--border-radius);
+    border: 1px solid #ccc;
+}
