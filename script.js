@@ -827,12 +827,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Stoppa kameran och dölj kameravyn
                     html5QrCode.stop().then(() => {
                         scannerContainer.style.display = 'none';
-                        
-                        // --- NY LOGIK HÄR ---
-                        // Se till att start-prompten FÖRBLIR dold
-                        startScanPrompt.style.display = 'none'; 
-                        // --- SLUT PÅ NY LOGIK ---
-
                     }).catch(err => {
                         console.error("Fel vid stopp av skanner, ignorerar:", err);
                         scannerContainer.style.display = 'none';
@@ -853,7 +847,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         startScanPrompt.style.display = 'block'; // Visa startprompten vid fel
                     }
                 };
-
 
 
                 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
