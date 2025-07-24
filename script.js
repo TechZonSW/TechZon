@@ -1010,8 +1010,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 1. Hämta all statisk produktdata från JSON-filer
                 const [newRes, usedRes, accRes, spaRes] = await Promise.all([
                     fetch('./nya-enheter.json').then(res => res.json()),
-                    fetch('./andrahands-enheter.json').then(res => res.json()),
-                    fetch('./tillbehor.json').then(res => res.json()),
+                    fetch('./used-products.json').then(res => res.json()),
+                    fetch('./accessories.json').then(res => res.json()),
                     fetch('./reservdelar.json').then(res => res.json())
                 ]);
 
