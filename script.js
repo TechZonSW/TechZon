@@ -822,27 +822,40 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (typeof Html5Qrcode !== 'undefined') {
                 const html5QrCode = new Html5Qrcode("scanner-container");
+                // Ersätt den befintliga qrCodeSuccessCallback-funktionen
                 const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-                    html5QrCode.stop();
-                    scannerContainer.style.display = 'none';
-                    try {
-                        // Parsa JSON-datan från QR-koden
-                        scannedProduct = JSON.parse(decodedText);
+                    // Stoppa kameran och dölj kameravyn
+                    html5QrCode.stop().then(() => {
+                        scannerContainer.style.display = 'none';
                         
-                        // Hämta nuvarande saldo från vår lokala data
+                        // --- NY LOGIK HÄR ---
+                        // Se till att start-prompten FÖRBLIR dold
+                        startScanPrompt.style.display = 'none'; 
+                        // --- SLUT PÅ NY LOGIK ---
+
+                    }).catch(err => {
+                        console.error("Fel vid stopp av skanner, ignorerar:", err);
+                        scannerContainer.style.display = 'none';
+                    });
+
+                    // Hantera den skannade datan (oförändrad)
+                    try {
+                        scannedProduct = JSON.parse(decodedText);
                         const productInData = allStockProducts.find(p => p.id === scannedProduct.id);
                         const currentStock = productInData ? productInData.stock : 'Okänt';
 
-                        // Visa resultatvyn
                         document.getElementById('scannedProductName').textContent = scannedProduct.name;
                         document.getElementById('scannedProductId').textContent = `ID: ${scannedProduct.id}`;
                         document.getElementById('scannedProductStock').textContent = `${currentStock} st`;
-                        scanResultView.style.display = 'block';
+                        scanResultView.style.display = 'block'; // Visa resultatvyn
                     } catch (error) {
                         alert("QR-koden innehåller ogiltig data.");
-                        startScanPrompt.style.display = 'block';
+                        startScanPrompt.style.display = 'block'; // Visa startprompten vid fel
                     }
                 };
+
+
+
                 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
                 html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
                     .catch(err => {
