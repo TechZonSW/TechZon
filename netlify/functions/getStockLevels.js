@@ -1,6 +1,6 @@
 // netlify/functions/getStockLevels.js
 const admin = require('firebase-admin');
-const jwt = 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
 // =================================================================
 // START PÅ KORREKT FIREBASE-INITIERING
