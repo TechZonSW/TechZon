@@ -1,6 +1,6 @@
 // netlify/functions/getStockLevels.js
 const admin = require('firebase-admin');
-const jwt = require('jsonwebtoken');
+const jwt = 'jsonwebtoken';
 
 // =================================================================
 // START PÅ KORREKT FIREBASE-INITIERING
@@ -25,18 +25,31 @@ const db = admin.firestore();
 // SLUT PÅ FIREBASE-INITIERING
 // =================================================================
 
-
 exports.handler = async (event) => {
     // JWT-säkerhetskontroll...
-    if (event.httpMethod !== 'GET') return { statusCode: 405 };
+    if (event.httpMethod !== 'GET') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
     const authHeader = event.headers.authorization;
-    if (!authHeader) return { statusCode: 401 };
+    if (!authHeader) {
+        return { statusCode: 401, body: 'Åtkomst nekad: Token saknas.' };
+    }
     const token = authHeader.split(' ')[1];
-    try { jwt.verify(token, process.env.JWT_SECRET); }
-    catch (error) { return { statusCode: 403 };}
+    try {
+        jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+        return { statusCode: 403, body: 'Åtkomst nekad: Ogiltig token.' };
+    }
 
     try {
         const snapshot = await db.collection('Lager').get();
+
+        // =================================================================
+        // TILLAGD FELSÖKNINGSLOGG
+        // Denna rad hjälper oss att se exakt hur många dokument funktionen hittar.
+        // =================================================================
+        console.log(`[getStockLevels] Found ${snapshot.size} documents in 'Lager' collection.`);
+        
         if (snapshot.empty) {
             return { statusCode: 200, body: JSON.stringify({}) };
         }
@@ -49,7 +62,7 @@ exports.handler = async (event) => {
 
         return { statusCode: 200, body: JSON.stringify(stockLevels) };
     } catch (error) {
-        console.error("Error fetching stock levels:", error);
-        return { statusCode: 500, body: 'Kunde inte hämta lagerdata.' };
+        console.error("[getStockLevels] CRITICAL ERROR:", error);
+        return { statusCode: 500, body: JSON.stringify({ message: 'Kunde inte hämta lagerdata från databasen.' }) };
     }
 };
