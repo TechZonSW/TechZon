@@ -1262,6 +1262,95 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
+    // =================================================================
+    // DEL (8.2): KOD FÖR INKÖPSLISTA-SIDAN (inkopslista.html)
+    // =================================================================
+    const shoppingListPage = document.getElementById('shopping-list-page');
+    if (shoppingListPage) {
+        const shoppingListBody = document.getElementById('shopping-list-body');
+        const jwtToken = sessionStorage.getItem('techzon_jwt');
+
+        // Funktion för att platta ut produktdata (kan återanvändas eller kopieras)
+        function flattenProducts(productBases, defaultCategory) {
+            const flattened = [];
+            if (!productBases) return flattened;
+            productBases.forEach(base => {
+                const category = base.kategori_slug || defaultCategory;
+                if (base.varianter && base.varianter.length > 0) {
+                    base.varianter.forEach(variant => {
+                        flattened.push({ id: variant.id, name: `${base.namn} (${Object.values(variant.attribut).join(', ')})` });
+                    });
+                } else {
+                    flattened.push({ id: base.id, name: base.namn });
+                }
+            });
+            return flattened;
+        }
+
+        async function initializeShoppingList() {
+            shoppingListBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">Genererar inköpslista...</td></tr>`;
+
+            // Säkerhetskontroll: Om ingen är inloggad, gör ingenting.
+            if (!jwtToken) {
+                shoppingListBody.innerHTML = `<tr><td colspan="4" class="error-message">Åtkomst nekad. Vänligen logga in via admin-panelen.</td></tr>`;
+                return;
+            }
+
+            try {
+                // Hämta BÅDE listan som ska beställas OCH all produktinfo samtidigt
+                const [toOrderRes, newRes, usedRes, accRes, spaRes] = await Promise.all([
+                    fetch('/.netlify/functions/getShoppingList', { headers: { 'Authorization': `Bearer ${jwtToken}` } }),
+                    fetch('./nya-enheter.json').then(res => res.json()),
+                    fetch('./used-products.json').then(res => res.json()),
+                    fetch('./accessories.json').then(res => res.json()),
+                    fetch('./reservdelar.json').then(res => res.json())
+                ]);
+
+                if (!toOrderRes.ok) throw new Error('Kunde inte hämta inköpslistan från servern.');
+                const productsToOrder = await toOrderRes.json();
+
+                if (productsToOrder.length === 0) {
+                    shoppingListBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">Bra jobbat! Inga produkter behöver beställas just nu.</td></tr>`;
+                    return;
+                }
+                
+                // Slå ihop all statisk produktinfo till en sökbar lista
+                const allStaticProducts = [
+                    ...flattenProducts(newRes, 'nytt'),
+                    ...flattenProducts(usedRes, 'andrahand'),
+                    ...flattenProducts(accRes, 'tillbehor'),
+                    ...flattenProducts(spaRes, 'reservdel')
+                ];
+                
+                // Kombinera datan: Lägg till produktnamn till listan som ska beställas
+                const fullShoppingList = productsToOrder.map(item => {
+                    const productInfo = allStaticProducts.find(p => p.id === item.id);
+                    return {
+                        ...item,
+                        name: productInfo ? productInfo.name : 'Okänd Produkt'
+                    };
+                });
+                
+                // Rita ut den slutgiltiga listan
+                shoppingListBody.innerHTML = fullShoppingList.map(p => `
+                    <tr>
+                        <td><strong>${p.name}</strong></td>
+                        <td>${p.id}</td>
+                        <td><span class="stock-low">${p.saldo} st</span></td>
+                        <td>${p.min_saldo} st</td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error("Fel vid generering av inköpslista:", error);
+                shoppingListBody.innerHTML = `<tr><td colspan="4" class="error-message">${error.message}</td></tr>`;
+            }
+        }
+
+        initializeShoppingList();
+    }
+
     // --------------------------------------------------------------------
     // DEL 9: KOD FÖR E-BUTIKSSIDAN (/e-butik.html) - KORRIGERAD VERSION 4
     // --------------------------------------------------------------------

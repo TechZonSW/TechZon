@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inköpslista - TechZon Admin</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="admin-body">
+    
+    <!-- Din vanliga admin-header kan placeras här om du vill, eller en enklare -->
+    <header class="admin-header">
+        <div class="container">
+            <h2>Inköpslista</h2>
+            <a href="admin.html" class="secondary-button">Tillbaka till Admin</a>
+        </div>
+    </header>
+
+    <main id="shopping-list-page" class="admin-main">
+        <div class="container">
+            <div class="admin-section">
+                <p class="page-intro">Detta är en lista över alla produkter vars nuvarande lagersaldo är lika med eller lägre än den angivna miniminivån.</p>
+                <div class="stock-list-container">
+                    <table id="shopping-list-table">
+                        <thead>
+                            <tr>
+                                <th>Produktnamn</th>
+                                <th>Art.nr / ID</th>
+                                <th>Nuvarande Saldo</th>
+                                <th>Minimi-nivå</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shopping-list-body">
+                            <!-- Listan genereras här av JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>
