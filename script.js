@@ -1193,13 +1193,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const searchTerm = stockSearchInput.value.toLowerCase();
             let filtered = allStockProducts;
             
+            // Filtrera baserat på den valda kategoriknappen
             if (currentStockFilter !== 'allt') {
                 filtered = filtered.filter(p => p.category === currentStockFilter);
             }
+
+            // Filtrera baserat på söktermen
             if (searchTerm) {
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm) || p.sku.toLowerCase().includes(searchTerm));
+                filtered = filtered.filter(p => 
+                    // Leta i produktens namn
+                    (p.name && p.name.toLowerCase().includes(searchTerm)) || 
+                    (p.id && p.id.toLowerCase().includes(searchTerm))
+                );
             }
             
+            // Rita upp den slutgiltiga, filtrerade listan
             renderStockList(filtered);
         }
         
