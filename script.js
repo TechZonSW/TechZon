@@ -976,24 +976,27 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentStockFilter = 'allt';
 
         // NY HJÄLPFUNKTION: Plattar ut din komplexa JSON-data
-        function flattenProducts(productBases) {
+        function flattenProducts(productBases, defaultCategory) {
             const flattened = [];
             productBases.forEach(base => {
+                // Bestäm kategorin: antingen från bas-objektet eller från default-värdet
+                const category = base.kategori_slug || defaultCategory;
+
                 if (base.varianter && base.varianter.length > 0) {
                     base.varianter.forEach(variant => {
                         flattened.push({
-                            id: variant.id, // Detta är det unika SKU:t
+                            id: variant.id,
                             name: `${base.namn} (${Object.values(variant.attribut).join(', ')})`,
-                            category: base.kategori_slug,
-                            stock: 0 // Defaultvärde, uppdateras från Firebase
+                            category: category,
+                            stock: 0
                         });
                     });
                 } else {
-                    // För enklare produkter som reservdelar
+                    // Detta hanterar enklare produkter som reservdelar och tillbehör
                     flattened.push({
                         id: base.id,
                         name: base.namn,
-                        category: base.kategori,
+                        category: category,
                         stock: 0
                     });
                 }
@@ -1011,14 +1014,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 const [newRes, usedRes, accRes, spaRes] = await Promise.all([
                     fetch('./nya-enheter.json').then(res => res.json()),
                     fetch('./used-products.json').then(res => res.json()),
-                    fetch('./accessories.json').then(res => res.json()),
+                    fetch('./accessories.json').then(res => res.json()), 
                     fetch('./reservdelar.json').then(res => res.json())
                 ]);
 
-                const newProducts = flattenProducts(newRes);
-                const usedProducts = flattenProducts(usedRes);
-                const accProducts = flattenProducts(accRes);
-                const spaProducts = flattenProducts(spaRes);
+                // KORRIGERING: Skicka med en default-kategori för varje filtyp
+                const newProducts = flattenProducts(newRes, 'nytt');
+                const usedProducts = flattenProducts(usedRes, 'andrahand');
+                const accProducts = flattenProducts(accRes, 'tillbehor');
+                const spaProducts = flattenProducts(spaRes, 'reservdel');
                 
                 const staticProducts = [...newProducts, ...usedProducts, ...accProducts, ...spaProducts];
 
@@ -1033,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 allStockProducts = staticProducts.map(product => {
                     return {
                         ...product,
-                        stock: stockLevels[product.id] || 0 // Hämta saldot från Firebase, annars 0
+                        stock: stockLevels[product.id] || 0
                     };
                 });
 
