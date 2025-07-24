@@ -2338,30 +2338,49 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* ==================================================================== */
-/* TILLAGD KOD FÖR ATT FIXA KAMERAVYN                                 */
+/* NY KOD FÖR FULLSKÄRMS-SKANNER                                      */
 /* ==================================================================== */
 
 #scanner-container {
-    background-color: #2c2c2e; /* Mörk bakgrund för att se att rutan finns */
-    border-radius: var(--border-radius);
-    overflow: hidden;
+    /* Lägger sig som ett lager ovanpå allt annat i sin förälder */
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 500px; /* Sätter en maxbredd för stora skärmar */
-    margin-bottom: 20px;
+    height: 100%;
+    
+    background-color: #000; /* Svart bakgrund */
+    z-index: 10; /* Se till att den ligger överst */
+    
+    /* Centrera video-elementet inuti */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    /* Tvingar en 4:3-aspekt, vilket garanterar att rutan har en höjd */
-    aspect-ratio: 4 / 3; 
-
-    /* Dold från start, redo att visas av JS */
+    /* Dold från start */
     display: none; 
 }
 
-/* Säkerställer att video-elementet fyller sin container */
+/* Nu när #scanner-container tar upp hela ytan, behöver vi se till att dess
+   förälder (.scan-action-panel) kan innehålla den korrekt. */
+.scan-action-panel {
+    position: relative; /* Detta är avgörande! */
+    overflow: hidden; /* Döljer allt som sticker utanför panelen */
+}
+
+
+/* Säkerställer att video-elementet och dess inre delar fyller ytan */
 #scanner-container video {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover;
 }
+
+/* Du kan även behöva styla den inre boxen som biblioteket skapar */
+#qr-shaded-region {
+    border-width: 60px !important; /* Exempel för att göra ramen tunnare */
+}
+
 
 #scanAgainBtn {
     /* Gör "Skanna Nästa" mindre framträdande än de primära åtgärderna */
