@@ -2420,3 +2420,40 @@ nav ul.main-nav { display: flex; align-items: center; }
         grid-template-columns: 1fr; /* Stapla kolumnerna på mindre skärmar */
     }
 }
+
+/* ==================================================================== */
+/* MINIMALA JUSTERINGAR FÖR INKÖPSLISTA-SIDAN                        */
+/* ==================================================================== */
+
+/* Gör så att containern på just denna sida kan bli bredare */
+#shopping-list-page .container {
+    max-width: 1200px; /* Öka maxbredden från standard, justera vid behov */
+}
+
+/* Grundläggande styling för tabellen för bättre läsbarhet */
+#shopping-list-table {
+    width: 100%; /* Tabellen ska ta upp hela sin containers bredd */
+    border-collapse: collapse; /* Tar bort dubbla linjer mellan celler */
+    margin-top: 20px;
+}
+
+#shopping-list-table th,
+#shopping-list-table td {
+    padding: 12px 15px; /* Mer luft inuti varje cell */
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5; /* Subtil linje mellan varje rad */
+}
+
+#shopping-list-table th {
+    background-color: #f8f8f9; /* Ljus bakgrund för rubrikerna */
+    font-weight: 600;
+    color: var(--text-color-secondary);
+}
+
+/* Specifik bredd för kolumner med siffror så de inte tar onödig plats */
+#shopping-list-table th:nth-child(3),
+#shopping-list-table td:nth-child(3),
+#shopping-list-table th:nth-child(4),
+#shopping-list-table td:nth-child(4) {
+    width: 15%; /* Ge "Saldo" och "Min-nivå" en fast, mindre bredd */
+}
