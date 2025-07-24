@@ -1004,44 +1004,38 @@ document.addEventListener('DOMContentLoaded', function() {
             return flattened;
         }
 
-
-        // NY HUVUDFUNKTION: Laddar all data när man går till lager-vyn
+        // HUVUDFUNKTION: Laddar all data när man går till lager-vyn
         async function initializeStockView() {
-            stockTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Laddar produkter...</td></tr>`;
+            stockTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">Laddar produkter och lagerstatus...</td></tr>`;
 
             try {
-                // 1. Hämta all statisk produktdata från JSON-filer
-                const [newRes, usedRes, accRes, spaRes] = await Promise.all([
+                const [newRes, usedRes, accRes, spaRes, stockResponse] = await Promise.all([
                     fetch('./nya-enheter.json').then(res => res.json()),
                     fetch('./used-products.json').then(res => res.json()),
-                    fetch('./accessories.json').then(res => res.json()), 
-                    fetch('./reservdelar.json').then(res => res.json())
+                    fetch('./accessories.json').then(res => res.json()),
+                    fetch('./reservdelar.json').then(res => res.json()),
+                    fetch('/.netlify/functions/getStockLevels', {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    })
                 ]);
 
-                // KORRIGERING: Skicka med en default-kategori för varje filtyp
+                if (!stockResponse.ok) {
+                    const errorBody = await stockResponse.text();
+                    throw new Error(`Kunde inte hämta lagerdata. Servern svarade: ${errorBody}`);
+                }
+                const stockLevels = await stockResponse.json();
+
                 const newProducts = flattenProducts(newRes, 'nytt');
                 const usedProducts = flattenProducts(usedRes, 'andrahand');
                 const accProducts = flattenProducts(accRes, 'tillbehor');
                 const spaProducts = flattenProducts(spaRes, 'reservdel');
-                
                 const staticProducts = [...newProducts, ...usedProducts, ...accProducts, ...spaProducts];
 
-                // 2. Hämta all dynamisk lagerdata från Firebase
-                const stockResponse = await fetch('/.netlify/functions/getStockLevels', {
-                    headers: { 'Authorization': `Bearer ${jwtToken}` }
-                });
-                if (!stockResponse.ok) throw new Error('Kunde inte hämta lagerdata från servern.');
-                const stockLevels = await stockResponse.json();
+                allStockProducts = staticProducts.map(product => ({
+                    ...product,
+                    stock: stockLevels[product.id] || 0
+                }));
 
-                // 3. Kombinera datan
-                allStockProducts = staticProducts.map(product => {
-                    return {
-                        ...product,
-                        stock: stockLevels[product.id] || 0
-                    };
-                });
-
-                // 4. Rita upp listan och filter
                 renderStockList(allStockProducts);
                 setupStockFilters();
 
@@ -1118,10 +1112,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- Event listeners för lager-vyn ---
 
-        // KORRIGERING: Byt ut din gamla navStockBtn-lyssnare mot denna
         navStockBtn.addEventListener('click', () => {
             switchMainView('stock');
-            initializeStockView(); // Anropa den nya huvudfunktionen
+            initializeStockView(); 
         });
         
         stockFilterBar.addEventListener('click', (e) => {
