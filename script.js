@@ -605,7 +605,8 @@ document.addEventListener('DOMContentLoaded', function() {
             activeStatusList = document.getElementById('activeStatusList'),
             navStockBtn = document.getElementById('navStockBtn'),
             stockView = document.getElementById('stockView'),
-            scanShortcutBtn = document.getElementById('scanShortcutBtn');
+            scanShortcutBtn = document.getElementById('scanShortcutBtn'),
+            confirmStockAdjustBtn = document.getElementById('confirmStockAdjustBtn');
     
         // --- State-variabler (appens minne) ---
         let jwtToken = sessionStorage.getItem('techzon_jwt') || null;
@@ -911,8 +912,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             if (!productToAdjust) return;
 
-            // Använd document.activeElement för att säkert identifiera knappen
-            const submitButton = document.activeElement;
+            // Vi använder nu vår direkta, 100% säkra referens till knappen
+            const submitButton = confirmStockAdjustBtn; 
             const originalButtonText = submitButton.textContent;
             const newValue = document.getElementById('newStockValueInput').value;
             
