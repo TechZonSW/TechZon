@@ -2459,28 +2459,31 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* ==================================================================== */
-/* MINIMAL JUSTERING FÖR SCROLLBAR LAGERLISTA                          */
+/* KORREKT LÖSNING FÖR SCROLLBAR LAGERLISTA (samma som ärendevyn)      */
 /* ==================================================================== */
 
-/* Steg 1: Gör hela stock-vyn till en flex-container som fyller sin yta */
+/* Steg 1: Sätt en fast höjd på hela vyn, minus utrymme för header etc. */
 #stockView {
+    /* calc(100vh - [höjden på din admin-header + padding]) */
+    /* Justera 120px upp eller ner tills det passar perfekt */
+    height: calc(100vh - 120px); 
+    
     display: flex;
-    flex-direction: column; /* Stapla elementen vertikalt */
-    height: 100%; /* Fyll hela den tillgängliga höjden i main-content */
+    flex-direction: column; /* Stapla elementen (filter, tabell) vertikalt */
 }
 
-/* Steg 2: Låt produktlistan ta upp allt återstående utrymme och hantera sin egen scroll */
+/* Steg 2: Låt list-containern ta allt återstående utrymme och bli scrollbar */
 .stock-list-container {
-    flex-grow: 1; /* Detta är nyckeln: Låt denna div växa och fylla utrymmet */
-    overflow-y: auto; /* Lägg till en scrollbar ENDAST vid behov */
+    flex-grow: 1; /* Väx och fyll utrymmet som blir över */
+    overflow-y: auto; /* Aktivera scroll vid behov */
     border: 1px solid #e5e5e5;
     border-radius: var(--border-radius);
 }
 
-/* Steg 3 (Bonus för premiumkänsla): Gör tabellrubrikerna "sticky" */
+/* Steg 3 (Bonus): Fäst tabellrubrikerna vid toppen när man scrollar */
 #stock-table th {
     position: sticky;
-    top: 0; /* Fäst rubrikerna högst upp i den scrollbara containern */
-    background-color: #f8f8f9; /* Bakgrundsfärg så att innehållet inte syns igenom */
-    z-index: 10; /* Se till att rubrikerna ligger överst */
+    top: 0;
+    background-color: #f8f8f9;
+    z-index: 10;
 }
