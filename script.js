@@ -612,6 +612,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let allRepairs = [];
         let activeRepair = null;
         let currentCaseView = 'active'; // Håller reda på vilken vy vi är i
+        let productToAdjust = null;
     
         // --- Funktioner ---
         function switchMainView(viewToShow) {
@@ -1190,19 +1191,23 @@ document.addEventListener('DOMContentLoaded', function() {
             renderStockList(filtered);
         }
         
-        function openProductModalForEdit(productId) {
+        function openStockAdjustModal(productId) {
             const product = allStockProducts.find(p => p.id === productId);
-            if (!product) return;
-        
-            productForm.reset();
-            productModalTitle.textContent = 'Redigera Produkt';
-            productIdInput.value = product.id;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productIdSKU').value = product.sku;
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productStock').value = product.stock;
-            
-            productModal.style.display = 'flex';
+            if (!product) {
+                alert("Kunde inte hitta produkten i listan.");
+                return;
+            }
+
+            // Sätt en global variabel så att formuläret vet vilken produkt som justeras
+            productToAdjust = product; 
+
+            // Fyll i informationen i den manuella justerings-modalen
+            document.getElementById('manualStockProductName').textContent = product.name;
+            document.getElementById('manualStockForm').reset(); // Rensa gamla värden
+            document.getElementById('newStockValueInput').placeholder = `Nuvarande saldo: ${product.stock}`;
+
+            // Visa modalen
+            manualStockModal.style.display = 'flex';
         }
 
         // --- Event listeners för lager-vyn ---
@@ -1223,11 +1228,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         stockSearchInput.addEventListener('input', applyStockFilters);
         
-        // KORRIGERING: Event listener för "Åtgärder"-knappen
+        // KORRIGERING: Event listener för "Åtgärder"-knappen    
         stockTableBody.addEventListener('click', (e) => {
             const editButton = e.target.closest('.edit-stock-btn');
             if (editButton) {
-                openProductModalForEdit(editButton.dataset.id);
+                openStockAdjustModal(editButton.dataset.id);
             }
         });
         
