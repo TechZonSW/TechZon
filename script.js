@@ -893,9 +893,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Knapp: Öppna modal för manuell justering
         document.getElementById('manualAdjustBtn').addEventListener('click', () => {
             if (!scannedProduct) return;
-            document.getElementById('manualStockProductName').textContent = scannedProduct.name;
-            manualStockForm.reset();
-            manualStockModal.style.display = 'flex';
+            // Hitta hela produktobjektet från den skannade datan
+            const product = allStockProducts.find(p => p.id === scannedProduct.id);
+            if (product) {
+                // Anropa den generella funktionen
+                openStockAdjustModal(product.id);
+            } else {
+                alert("Kunde inte hitta den skannade produkten i den lokala lagerlistan.");
+            }
         });
 
         // Stäng modal
@@ -904,22 +909,34 @@ document.addEventListener('DOMContentLoaded', function() {
         // Skicka in formuläret för manuell justering
         manualStockForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!scannedProduct) return;
+            if (!productToAdjust) return;
+
+            // Använd document.activeElement för att säkert identifiera knappen
+            const submitButton = document.activeElement;
+            const originalButtonText = submitButton.textContent;
             const newValue = document.getElementById('newStockValueInput').value;
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sparar...';
+
             try {
                 const response = await fetch('/.netlify/functions/updateStockLevel', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
-                    body: JSON.stringify({ productId: scannedProduct.id, action: 'set', value: newValue })
+                    body: JSON.stringify({ productId: productToAdjust.id, action: 'set', value: newValue })
                 });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message);
                 
-                addStockLog(`Manuell justering för ${scannedProduct.name}. Nytt saldo: ${result.newSaldo}`);
-                updateStockUI(scannedProduct.id, result.newSaldo);
+                addStockLog(`Manuell justering för ${productToAdjust.name}. Nytt saldo: ${result.newSaldo}`, 'manual');
+                updateStockUI(productToAdjust.id, result.newSaldo);
                 manualStockModal.style.display = 'none';
             } catch (error) {
-                addStockLog(`Fel vid manuell justering för ${scannedProduct.name}: ${error.message}`, true);
+                alert(`Fel: ${error.message}`);
+                addStockLog(`Fel vid manuell justering för ${productToAdjust.name}: ${error.message}`, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
             }
         });
     
@@ -1061,12 +1078,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const stockSearchInput = document.getElementById('stockSearchInput');
         const stockFilterBar = document.getElementById('stock-filter-bar');
         const stockTableBody = document.getElementById('stock-table-body');
-        const showCreateProductBtn = document.getElementById('showCreateProductBtn');
-        const productModal = document.getElementById('productModalAdmin');
-        const closeProductModalBtn = document.getElementById('closeProductModalBtn');
-        const productForm = document.getElementById('productForm');
-        const productModalTitle = document.getElementById('productModalTitle');
-        const productIdInput = document.getElementById('productId');
         
         let allStockProducts = [];
         let currentStockFilter = 'allt';
@@ -1198,15 +1209,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Sätt en global variabel så att formuläret vet vilken produkt som justeras
+            // Sätt den globala variabeln så formuläret vet vilken produkt som ska justeras
             productToAdjust = product; 
 
-            // Fyll i informationen i den manuella justerings-modalen
+            // Fyll i informationen i den *korrekta* manuella justerings-modalen
             document.getElementById('manualStockProductName').textContent = product.name;
-            document.getElementById('manualStockForm').reset(); // Rensa gamla värden
+            document.getElementById('manualStockForm').reset();
             document.getElementById('newStockValueInput').placeholder = `Nuvarande saldo: ${product.stock}`;
 
-            // Visa modalen
+            // Visa den korrekta modalen
             manualStockModal.style.display = 'flex';
         }
 
@@ -1232,39 +1243,13 @@ document.addEventListener('DOMContentLoaded', function() {
         stockTableBody.addEventListener('click', (e) => {
             const editButton = e.target.closest('.edit-stock-btn');
             if (editButton) {
+                // Den anropar nu den nya, korrekta funktionen
                 openStockAdjustModal(editButton.dataset.id);
             }
         });
-        
-        // Logik för modal
-        showCreateProductBtn.addEventListener('click', () => {
-            productForm.reset();
-            productIdInput.value = '';
-            productModalTitle.textContent = 'Skapa Ny Produkt';
-            productModal.style.display = 'flex';
-        });
-        
+                
         scanShortcutBtn.addEventListener('click', () => {
             switchMainView('scan'); // Byt till skannervyn
-        });
-        
-        closeProductModalBtn.addEventListener('click', () => {
-            productModal.style.display = 'none';
-        });
-        
-        productModal.addEventListener('click', (e) => {
-            // Stäng om man klickar utanför innehållet
-            if (e.target === productModal) {
-                productModal.style.display = 'none';
-            }
-        });
-        
-        productForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = productIdInput.value;
-            // Om 'id' finns, är det en uppdatering. Annars, en ny produkt.
-            alert(`Produkt ${id ? 'uppdaterad' : 'sparad'}! (Simulering)`);
-            productModal.style.display = 'none';
         });
     
         // --- Sidladdning ---

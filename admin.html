@@ -166,7 +166,6 @@
                         <h1>Lagerhantering</h1>
                         <div class="view-header-actions">
                             <button id="scanShortcutBtn" class="cta-button secondary"><i class="ph-bold ph-qr-code"></i> Skanna</button>
-                            <button id="showCreateProductBtn" class="cta-button">Skapa Ny Produkt</button>
                         </div>
                     </div>
                     <div class="stock-controls">
@@ -201,26 +200,5 @@
     </div>
 
     <script src="./script.js"></script>
-
-    <!-- MODAL FÖR PRODUKTHANTERING -->
-    <div id="productModalAdmin" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <button id="closeProductModalBtn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
-            <h3 id="productModalTitle">Skapa Ny Produkt</h3>
-            <form id="productForm">
-                <input type="hidden" id="productId">
-                <input type="text" id="productName" placeholder="Produktnamn" required>
-                <input type="text" id="productIdSKU" placeholder="Artikelnummer / SKU" required>
-                <select id="productCategory" required>
-                    <option value="nytt">Ny enhet</option>
-                    <option value="andrahand">Andrahandsenhet</option>
-                    <option value="tillbehor">Tillbehör</option>
-                    <option value="tillbehor">Reservdel</option>
-                </select>
-                <input type="number" id="productStock" placeholder="Antal i lager" required>
-                <button type="submit" class="cta-button">Spara Produkt</button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>
