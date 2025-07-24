@@ -98,20 +98,66 @@
                     </div>
                 </div>
 
-                <!-- VY FÖR SKANNING -->
+                <!-- scanView-diven i -->
                 <div id="scanView" class="content-view" style="display: none;">
                     <div class="view-header">
-                        <h1>Lager & Skanning</h1>
+                        <h1>Skanna & Justera Lager</h1>
                     </div>
-                    <div class="admin-section">
-                        <p>Skanna en QR- eller streckkod för att hämta produktinfo eller uppdatera lager.</p>
-                        <button id="startScannerBtn" class="cta-button secondary">
-                            <i class="ph-bold ph-qr-code"></i> Starta Skanner
-                        </button>
-                        <div id="scanner-container"></div>
-                        <div id="scanResult"></div>
+                    <div class="scan-layout">
+                        <!-- Vänsterkolumn: Skanner och resultat -->
+                        <div class="scan-action-panel">
+                            <div id="scanner-container" style="display: none;"></div>
+                            
+                            <!-- Visas när ingen kod har skannats -->
+                            <div id="start-scan-prompt">
+                                <p>Rikta kameran mot en QR-kod för att hämta produktinformation och justera lagersaldo.</p>
+                                <button id="startScannerBtn" class="cta-button">
+                                    <i class="ph-bold ph-qr-code"></i> Starta Kameran
+                                </button>
+                            </div>
+
+                            <!-- Visas EFTER att en kod har skannats -->
+                            <div id="scan-result-view" style="display: none;">
+                                <h3>Skannad Produkt</h3>
+                                <p class="scan-product-name" id="scannedProductName"></p>
+                                <p class="scan-product-id" id="scannedProductId"></p>
+                                <hr>
+                                <div class="scan-stock-info">
+                                    <p>Nuvarande saldo:</p>
+                                    <p class="scan-stock-level" id="scannedProductStock">-- st</p>
+                                </div>
+                                <div class="scan-actions">
+                                    <button id="decrementStockBtn" class="secondary-button">-1 (Använd/Sälj)</button>
+                                    <button id="manualAdjustBtn" class="secondary-button">Manuell Justering</button>
+                                </div>
+                                <button id="scanAgainBtn" class="cta-button secondary">Skanna Nästa</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Högerkolumn: Logg över senaste händelser -->
+                        <div class="scan-log-panel">
+                            <h4>Senaste Lagerhändelser</h4>
+                            <ul id="stock-log-list">
+                                <!-- Loggmeddelanden läggs till här med JS -->
+                                <li class="log-item-placeholder">Inga händelser än...</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Modal för manuell justering (läggs till bredvid din andra admin-modal) -->
+                <div id="manualStockModal" class="modal-overlay" style="display: none;">
+                    <div class="modal-content" style="max-width: 400px;">
+                        <button id="closeStockModalBtn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
+                        <h3>Manuell Justering</h3>
+                        <p id="manualStockProductName"></p>
+                        <form id="manualStockForm">
+                            <input type="number" id="newStockValueInput" placeholder="Ange nytt totalt saldo" required>
+                            <button type="submit" class="cta-button">Sätt Nytt Saldo</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- ===================== -->
                 <!-- NY VY FÖR LAGER       -->
                 <!-- ===================== -->

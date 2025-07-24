@@ -778,54 +778,143 @@ document.addEventListener('DOMContentLoaded', function() {
         navScanBtn.addEventListener('click', () => switchMainView('scan'));
         navStockBtn.addEventListener('click', () => switchMainView('stock'));
 
-        // NYTT KODBLOCK ATT LÄGGA TILL
-        // Lyssna på knappen som finns INUTI skanner-vyn
+        // --- LOGIK FÖR SKANNER-VYN  ---
         const startScannerBtn = document.getElementById('startScannerBtn');
-        if (startScannerBtn) {
-            startScannerBtn.addEventListener('click', () => {
-                const scannerContainer = document.getElementById('scanner-container');
-                const scanResult = document.getElementById('scanResult');
-                
-                // Kontrollera att elementen finns
-                if (!scannerContainer || !scanResult) {
-                    console.error("Skanner-element saknas i HTML.");
-                    return;
-                }
-        
-                scannerContainer.style.display = 'block';
-                scanResult.innerHTML = '';
-                
-                // Kontrollera att biblioteket har laddats
-                if (typeof Html5Qrcode === 'undefined') {
-                    alert("Fel: Skanner-biblioteket (html5-qrcode.min.js) kunde inte laddas.");
-                    return;
-                }
-        
-                try {
-                    const html5QrCode = new Html5Qrcode("scanner-container");
-                    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-                        // Stoppa skannern när en kod har hittats
-                        html5QrCode.stop().then(() => {
-                            scannerContainer.style.display = 'none';
-                            scanResult.innerHTML = `<h4>Kod skannad!</h4><p>Kod: ${decodedText}</p><p>Här kommer info från backend att visas.</p>`;
-                        }).catch(err => console.error("Fel vid stopp av skanner:", err));
-                    };
-        
-                    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-                    
-                    // Starta skannern
-                    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
-                        .catch(err => {
-                            console.error("Kunde inte starta skanner:", err);
-                            scanResult.innerHTML = `<p class="error-message">Kunde inte starta kameran. Kontrollera webbläsarens behörigheter.</p>`;
-                            scannerContainer.style.display = 'none';
-                        });
-                } catch (error) {
-                    console.error("Ett oväntat fel inträffade vid start av skanner:", error);
-                    alert("Ett oväntat fel inträffade. Se konsolen för mer info.");
-                }
-            });
+        const scannerContainer = document.getElementById('scanner-container');
+        const startScanPrompt = document.getElementById('start-scan-prompt');
+        const scanResultView = document.getElementById('scan-result-view');
+        const stockLogList = document.getElementById('stock-log-list');
+
+        let scannedProduct = null; // Håller den senast skannade produkten
+
+        // Funktion för att lägga till ett meddelande i loggen
+        function addStockLog(message, isError = false) {
+            const placeholder = stockLogList.querySelector('.log-item-placeholder');
+            if (placeholder) placeholder.remove();
+
+            const li = document.createElement('li');
+            li.className = isError ? 'log-item error' : 'log-item';
+            li.innerHTML = `<span>${message}</span><span class="log-timestamp">${new Date().toLocaleTimeString('sv-SE')}</span>`;
+            stockLogList.prepend(li);
         }
+
+        // Funktion för att uppdatera UI efter en lyckad saldoändring
+        function updateStockUI(productId, newSaldo) {
+            // Uppdatera siffran i skannervyn
+            if (scannedProduct && scannedProduct.id === productId) {
+                document.getElementById('scannedProductStock').textContent = `${newSaldo} st`;
+            }
+            // Uppdatera siffran i den stora lagertabellen (om den är laddad)
+            const productInTable = allStockProducts.find(p => p.id === productId);
+            if (productInTable) {
+                productInTable.stock = newSaldo;
+                // Om lagervyn är synlig, rita om den för att reflektera ändringen
+                if (stockView.style.display === 'block') {
+                    applyStockFilters();
+                }
+            }
+        }
+
+        // Starta kameran
+        startScannerBtn.addEventListener('click', () => {
+            scannerContainer.style.display = 'block';
+            startScanPrompt.style.display = 'none';
+            
+            if (typeof Html5Qrcode !== 'undefined') {
+                const html5QrCode = new Html5Qrcode("scanner-container");
+                const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                    html5QrCode.stop();
+                    scannerContainer.style.display = 'none';
+                    try {
+                        // Parsa JSON-datan från QR-koden
+                        scannedProduct = JSON.parse(decodedText);
+                        
+                        // Hämta nuvarande saldo från vår lokala data
+                        const productInData = allStockProducts.find(p => p.id === scannedProduct.id);
+                        const currentStock = productInData ? productInData.stock : 'Okänt';
+
+                        // Visa resultatvyn
+                        document.getElementById('scannedProductName').textContent = scannedProduct.name;
+                        document.getElementById('scannedProductId').textContent = `ID: ${scannedProduct.id}`;
+                        document.getElementById('scannedProductStock').textContent = `${currentStock} st`;
+                        scanResultView.style.display = 'block';
+                    } catch (error) {
+                        alert("QR-koden innehåller ogiltig data.");
+                        startScanPrompt.style.display = 'block';
+                    }
+                };
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                    .catch(err => {
+                        alert("Kunde inte starta kameran. Kontrollera behörigheter.");
+                        startScanPrompt.style.display = 'block';
+                        scannerContainer.style.display = 'none';
+                    });
+            }
+        });
+
+        // Knapp: Minska med 1
+        document.getElementById('decrementStockBtn').addEventListener('click', async () => {
+            if (!scannedProduct) return;
+            try {
+                const response = await fetch('/.netlify/functions/updateStockLevel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
+                    body: JSON.stringify({ productId: scannedProduct.id, action: 'decrement' })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message);
+                
+                addStockLog(`-1 för ${scannedProduct.name}. Nytt saldo: ${result.newSaldo}`);
+                updateStockUI(scannedProduct.id, result.newSaldo);
+            } catch (error) {
+                addStockLog(`Fel vid minskning för ${scannedProduct.name}: ${error.message}`, true);
+            }
+        });
+
+        // Knapp: Skanna nästa
+        document.getElementById('scanAgainBtn').addEventListener('click', () => {
+            scanResultView.style.display = 'none';
+            startScanPrompt.style.display = 'block';
+            scannedProduct = null;
+        });
+
+        // --- Logik för manuell justerings-modal ---
+        const manualStockModal = document.getElementById('manualStockModal');
+        const manualStockForm = document.getElementById('manualStockForm');
+
+        // Knapp: Öppna modal för manuell justering
+        document.getElementById('manualAdjustBtn').addEventListener('click', () => {
+            if (!scannedProduct) return;
+            document.getElementById('manualStockProductName').textContent = scannedProduct.name;
+            manualStockForm.reset();
+            manualStockModal.style.display = 'flex';
+        });
+
+        // Stäng modal
+        document.getElementById('closeStockModalBtn').addEventListener('click', () => manualStockModal.style.display = 'none');
+
+        // Skicka in formuläret för manuell justering
+        manualStockForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!scannedProduct) return;
+            const newValue = document.getElementById('newStockValueInput').value;
+            try {
+                const response = await fetch('/.netlify/functions/updateStockLevel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}`},
+                    body: JSON.stringify({ productId: scannedProduct.id, action: 'set', value: newValue })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message);
+                
+                addStockLog(`Manuell justering för ${scannedProduct.name}. Nytt saldo: ${result.newSaldo}`);
+                updateStockUI(scannedProduct.id, result.newSaldo);
+                manualStockModal.style.display = 'none';
+            } catch (error) {
+                addStockLog(`Fel vid manuell justering för ${scannedProduct.name}: ${error.message}`, true);
+            }
+        });
     
         showCreateViewBtn.addEventListener('click', () => {
             document.querySelectorAll('.repair-list-item').forEach(li => li.classList.remove('active'));
