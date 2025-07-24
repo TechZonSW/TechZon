@@ -609,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmStockAdjustBtn = document.getElementById('confirmStockAdjustBtn');
     
         // --- State-variabler (appens minne) ---
-        let jwtToken = sessionStorage.getItem('techzon_jwt') || null;
+        let jwtToken = localStorage.getItem('techzon_jwt') || null;
         let allRepairs = [];
         let activeRepair = null;
         let currentCaseView = 'active'; // Håller reda på vilken vy vi är i
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!response.ok) throw new Error('Fel användarnamn eller lösenord.');
                 const data = await response.json();
                 jwtToken = data.token;
-                sessionStorage.setItem('techzon_jwt', jwtToken);
+                localStorage.setItem('techzon_jwt', jwtToken);
                 dashboardView.style.display = 'block';
                 loginView.style.display = 'none';
                 await fetchAndRenderRepairs('active');
@@ -755,7 +755,7 @@ document.addEventListener('DOMContentLoaded', function() {
             jwtToken = null;
             activeRepair = null;
             allRepairs = [];
-            sessionStorage.removeItem('techzon_jwt');
+            localStorage.removeItem('techzon_jwt');
             loginForm.reset();
             createRepairForm.reset();
             updateStatusForm.reset();
@@ -1269,7 +1269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const shoppingListPage = document.getElementById('shopping-list-page');
     if (shoppingListPage) {
         const shoppingListBody = document.getElementById('shopping-list-body');
-        const jwtToken = sessionStorage.getItem('techzon_jwt');
+        const jwtToken = localStorage.getItem('techzon_jwt');
 
         // Funktion för att platta ut produktdata (kan återanvändas eller kopieras)
         function flattenProducts(productBases, defaultCategory) {
