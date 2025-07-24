@@ -2457,3 +2457,30 @@ nav ul.main-nav { display: flex; align-items: center; }
 #shopping-list-table td:nth-child(4) {
     width: 15%; /* Ge "Saldo" och "Min-nivå" en fast, mindre bredd */
 }
+
+/* ==================================================================== */
+/* MINIMAL JUSTERING FÖR SCROLLBAR LAGERLISTA                          */
+/* ==================================================================== */
+
+/* Steg 1: Gör hela stock-vyn till en flex-container som fyller sin yta */
+#stockView {
+    display: flex;
+    flex-direction: column; /* Stapla elementen vertikalt */
+    height: 100%; /* Fyll hela den tillgängliga höjden i main-content */
+}
+
+/* Steg 2: Låt produktlistan ta upp allt återstående utrymme och hantera sin egen scroll */
+.stock-list-container {
+    flex-grow: 1; /* Detta är nyckeln: Låt denna div växa och fylla utrymmet */
+    overflow-y: auto; /* Lägg till en scrollbar ENDAST vid behov */
+    border: 1px solid #e5e5e5;
+    border-radius: var(--border-radius);
+}
+
+/* Steg 3 (Bonus för premiumkänsla): Gör tabellrubrikerna "sticky" */
+#stock-table th {
+    position: sticky;
+    top: 0; /* Fäst rubrikerna högst upp i den scrollbara containern */
+    background-color: #f8f8f9; /* Bakgrundsfärg så att innehållet inte syns igenom */
+    z-index: 10; /* Se till att rubrikerna ligger överst */
+}
