@@ -374,10 +374,10 @@ main {
 }
 
 .feature-card.right-align .feature-text {
-    order: 2;
+    order: 1;
 }
 .feature-card.right-align .feature-image {
-    order: 1;
+    order: 2;
 }
 
 .feature-text h2 {
