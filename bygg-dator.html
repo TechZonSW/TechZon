@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bygg Din Dator - TechZon Kalmar</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="bilder/logo.png" alt="TechZon Logotyp" class="logo-img">
+                <span>TechZon</span>
+            </a>
+            <div class="header-right">
+                <nav>
+                    <ul class="desktop-nav">
+                        <li><a href="index.html">Hem</a></li>
+                        <li class="dropdown">
+                            <a href="e-butik.html">e-Butik <i class="ph ph-caret-down"></i></a>
+                            <div class="dropdown-content">
+                                <a href="e-butik.html?kategori=nytt&marke=apple&typ=mobil">iPhone</a>
+                                <a href="e-butik.html?kategori=nytt&marke=apple&typ=laptop">MacBook</a>
+                                <a href="e-butik.html?kategori=nytt&marke=samsung">Samsung</a>
+                                <hr>
+                                <a href="e-butik.html?kategori=tillbehor">Tillbehör</a>
+                                <hr>
+                                <a href="e-butik.html?kategori=andrahand">Andrahands Enheter</a>
+                            </div>
+                        </li>
+                        <li><a href="reparation.html">Reparation</a></li>
+                        <li><a href="priser.html">Priser</a></li>
+                        <li><a href="vardering.html">Sälj/Byt In</a></li>
+                        <li><a href="kontakt.html">Om Oss</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div id="cart-icon-container" class="cart-icon-container">
+                        <a href="kassa.html">
+                            <i class="ph ph-shopping-cart-simple"></i>
+                            <span id="cart-count" class="cart-count" style="display: none;">0</span>
+                        </a>
+                        <div id="cart-hover-view" class="cart-hover-view">
+                            <h4>Din Varukorg</h4>
+                            <div id="cart-hover-items"></div>
+                            <a href="kassa.html" class="cta-button">Till Kassan</a>
+                        </div>
+                    </div>
+                    
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                        <i class="ph-bold ph-list"></i>
+                    </button> 
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO-SEKTION: Fokus på känsla och dröm -->
+        <section class="page-title-section">
+            <div class="container small-container">
+                <h1>Bygg din drömdator</h1>
+                <p class="page-intro">Från gaming i världsklass till kreativt skapande – vi hjälper dig att förverkliga din vision. Välj din prestandanivå och anpassa utseendet, så bygger och testar våra experter din perfekta dator.</p>
+            </div>
+        </section>
+
+        <!-- PROCESS-SEKTION: Enkla, guidade steg -->
+        <section class="content-section">
+            <div class="container small-container">
+                <h2>Börja här, i tre enkla steg</h2>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="process-step-number">1</div>
+                        <div class="process-step-text">
+                            <h4>Välj ditt fokus</h4>
+                            <p>Berätta för oss vad du ska använda datorn till, så rekommenderar vi en prestandanivå som passar perfekt för dina behov.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-number">2</div>
+                        <div class="process-step-text">
+                            <h4>Anpassa ditt utseende</h4>
+                            <p>Välj chassi, belysning och andra detaljer som gör datorn unik och personlig för dig.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-number">3</div>
+                        <div class="process-step-text">
+                            <h4>Få en personlig offert</h4>
+                            <p>Vi sätter ihop ett komplett paket och ger dig ett prisförslag. När du är nöjd, börjar vi bygga!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAKET-SEKTION: Tydliga utgångspunkter -->
+        <section class="content-section light-bg-section">
+            <div class="container">
+                <h2 style="margin-bottom: 20px;">Våra rekommenderade startpaket</h2>
+                <p class="page-intro" style="max-width: 800px;">Dessa paket är utformade för att ge dig bästa möjliga prestanda för pengarna. Allt kan anpassas efter dina önskemål.</p>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>För Hem & Studier</h3>
+                        <p class="card-description">Perfekt för surf, streaming, och skolarbete. Snabb, tyst och pålitlig.</p>
+                        <img src="bilder/testbild.png" alt="Dator för hem och studier" class="card-image">
+                        <p class="price-from">Pris från</p>
+                        <p class="price-main">9 990 kr</p>
+                    </div>
+                    <div class="pricing-card popular">
+                         <span class="popular-badge">Mest Populära</span>
+                        <h3>För Gaming</h3>
+                        <p class="card-description">Byggd för att hantera de senaste spelen med hög prestanda och snygg RGB-belysning.</p>
+                         <img src="bilder/testbild-2.png" alt="Gamingdator" class="card-image">
+                        <p class="price-from">Pris från</p>
+                        <p class="price-main">17 990 kr</p>
+                    </div>
+                    <div class="pricing-card">
+                        <h3>För Kreatörer</h3>
+                        <p class="card-description">Maximal prestanda för videoredigering, grafisk design och andra krävande kreativa uppgifter.</p>
+                        <img src="bilder/testbild-3.png" alt="Dator för kreatörer" class="card-image">
+                        <p class="price-from">Pris från</p>
+                        <p class="price-main">24 990 kr</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRYGGHETS-SEKTION: Bygger förtroende -->
+        <section id="why-us" class="content-section dark-section">
+             <div class="container">
+                <h2>Vi tar hand om tekniken, du fokuserar på det roliga.</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="ph-duotone ph-seal-check"></i>
+                        <h3>Kvalitetskomponenter</h3>
+                        <p>Vi använder bara beprövade delar från ledande tillverkare för att garantera stabilitet och prestanda.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="ph-duotone ph-wrench"></i>
+                        <h3>Professionell Montering</h3>
+                        <p>Våra experter bygger din dator med precision, optimerar luftflödet och ser till att allt är perfekt installerat.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="ph-duotone ph-gear-fine"></i>
+                        <h3>Fullständig Testning & Garanti</h3>
+                        <p>Varje dator genomgår rigorösa stresstester innan leverans och kommer med full garanti på både delar och arbete.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <!-- SISTA CTA-SEKTION -->
+        <section class="content-section light-bg-section">
+            <div class="container small-container">
+                <h2>Redo att skapa din drömdator?</h2>
+                <p>Kontakta oss idag för en personlig konsultation eller besök butiken för att diskutera dina idéer. Vi hjälper dig att förverkliga dem.</p>
+                <a href="kontakt.html" class="cta-button">Starta din konsultation</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <!-- Din vanliga, uppdaterade footer här -->
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
