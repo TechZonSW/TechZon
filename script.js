@@ -2081,15 +2081,17 @@ document.addEventListener('DOMContentLoaded', function() {
     new CartManager();
 
     // ===============================================
-    // LOGIK FÖR MOBIL HAMBURGERMENY (GLOBAL)
+    // LOGIK FÖR MOBIL HAMBURGERMENY (ROBUST VERSION)
     // ===============================================
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mainNav = document.querySelector('header nav'); // Hitta nav-elementet
+    // Vi letar nu efter nav INUTI .header-right
+    const mainNav = document.querySelector('header .header-right nav'); 
 
     if (mobileMenuToggle && mainNav) {
         mobileMenuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active'); // Lägg till/ta bort klassen 'active'
+            // Vi lägger till/tar bort en klass som CSS använder för att visa/dölja
+            mainNav.classList.toggle('mobile-nav-active'); 
         });
     }
-    
+        
 });

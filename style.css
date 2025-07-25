@@ -101,10 +101,9 @@ header .container {
 nav ul {
     list-style: none;
     display: flex;
-}
-
-nav ul li {
-    margin-left: 30px;
+    gap: 25px; /* Nytt */
+    margin: 0; /* Nytt */
+    padding: 0; /* Nytt */
 }
 
 /* --- MER "HEDONIC" STIL FÖR NAV-LÄNKAR --- */
@@ -2489,177 +2488,80 @@ nav ul.main-nav { display: flex; align-items: center; }
 }
 
 /* ==================================================================== */
-/* RESPONSIV DESIGN / MOBILANPASSNING (UPPDATERAD OCH KOMPLETT)        */
+/* RESPONSIV DESIGN / MOBILANPASSNING (KOMPLETT OCH KORRIGERAD)         */
 /* ==================================================================== */
 
 /* --- 1. Globala Justeringar --- */
+img, video { max-width: 100%; height: auto; }
+.container { padding-left: 20px; padding-right: 20px; }
 
-/* Grundregel för att förhindra att bilder/videos blir för breda */
-img, video {
-    max-width: 100%;
-    height: auto;
-}
-/* Se till att containrar har lagom med luft på sidorna */
-.container {
-    padding-left: 20px;
-    padding-right: 20px;
-}
+/* --- 2. Header & Navigation (Robust och Responsiv Version) --- */
+.header-right { display: flex; align-items: center; gap: 30px; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.mobile-menu-toggle { display: none; }
 
-/* --- 2. Header & Hamburgermeny --- */
-
-/* Behåll containern som en flexbox för att kunna justera innehållet */
-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Skapa en behållare för höger-ikonerna */
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Luft mellan varukorg och hamburgare */
-}
-
-.mobile-menu-toggle {
-    display: none; 
-    background: none;
-    border: none;
-    font-size: 2em;
-    cursor: pointer;
-    color: var(--text-color);
-    z-index: 1001;
-    order: 2; /* Se till att den hamnar sist i .header-actions */
-}
-
-/* Media Query för skärmar 900px eller smalare */
-@media (max-width: 900px) {
-    /* Visa hamburgermenyn */
-    .mobile-menu-toggle {
-        display: block;
-    }
-
-    /* Göm den vanliga menyn... */
-    header nav {
-        position: fixed; top: 0; right: 0;
-        width: 80%; max-width: 300px; height: 100vh;
-        background-color: #fff;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
-        padding-top: 80px;
-        z-index: 1000;
-    }
-
-    /* ...MEN visa den när den har klassen 'active' */
-    header nav.active {
-        transform: translateX(0);
-    }
-
-    /* Gör om menylänkarna till en vertikal lista */
-    header nav ul {
-        flex-direction: column; align-items: flex-start;
-        padding: 0 30px;
-    }
-    header nav ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
-    header nav ul li a { padding: 20px 0; width: 100%; display: block; }
-}
-
-/* --- 3. Fix för Intro-sektion med Video --- */
-
-/* Applicera denna klass på din .hero-section på index.html och felsokning.html */
+/* --- 3. Fix för Intro-sektion med Video (Behållen från din gamla kod) --- */
 .video-hero {
-    position: relative;
-    height: 70vh; /* Sätt en fast höjd, t.ex. 70% av skärmens höjd */
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Dölj delar av videon som är utanför */
-    color: #fff; /* Se till att texten är vit */
+    position: relative; height: 70vh; min-height: 400px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; color: #fff;
 }
 .video-hero .background-video {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: auto; height: auto;
-    min-width: 100%; min-height: 100%;
-    transform: translate(-50%, -50%);
-    z-index: -2;
+    position: absolute; top: 50%; left: 50%;
+    width: auto; height: auto; min-width: 100%; min-height: 100%;
+    transform: translate(-50%, -50%); z-index: -2;
 }
-.video-hero::after { /* Lägg till en mörk overlay för läsbarhet */
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    z-index: -1;
+.video-hero::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: -1;
 }
-.video-hero .container {
-    text-align: center;
-}
+.video-hero .container { text-align: center; }
 
-/* --- 4. Mobilanpassning av E-butik (/kop.html) --- */
 
+/* --- Media Query: Allt som gäller för skärmar 900px eller smalare --- */
 @media (max-width: 900px) {
-    .shop-layout {
-        display: block; /* Ta bort grid-layouten */
-    }
 
-    .product-listing {
-        width: 100%;
+    /* HEADER & HAMBURGERMENY */
+    .header-right nav { display: none; }
+    .mobile-menu-toggle {
+        display: flex; align-items: center; justify-content: center;
+        background: none; border: none; font-size: 2em;
+        cursor: pointer; color: var(--text-color);
     }
-
-    /* Dölj filterpanelen som standard på mobilen */
-    .filter-panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 85%;
-        max-width: 320px;
-        height: 100vh;
-        background-color: #fff;
-        z-index: 2000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        padding: 20px;
-        overflow-y: auto;
-        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    nav.mobile-nav-active {
+        display: block; position: fixed; top: 0; right: 0;
+        width: 80%; max-width: 300px; height: 100vh;
+        background-color: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000; padding-top: 80px;
     }
-
-    /* Visa panelen när den har klassen 'active' */
-    .filter-panel.active {
-        transform: translateX(0);
+    nav.mobile-nav-active ul {
+        flex-direction: column; align-items: flex-start;
+        padding: 0 30px; gap: 0;
     }
+    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
+    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
     
-    /* Produkt-gridden blir en kolumn */
-    #product-grid {
-        grid-template-columns: 1fr; /* Stapla produkter */
-        gap: 20px;
+    /* E-BUTIK */
+    .shop-layout { display: block; }
+    .product-listing { width: 100%; }
+    .filter-panel {
+        position: fixed; top: 0; left: 0; width: 85%; max-width: 320px;
+        height: 100vh; background-color: #fff; z-index: 2000;
+        transform: translateX(-100%); transition: transform 0.3s ease;
+        padding: 20px; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.1);
     }
-}
-
-/* --- 5. Generella Layout-justeringar (Stapla kolumner) --- */
-
-@media (max-width: 900px) {
-    /* Stapla admin-panelens huvudkolumner */
-    .admin-grid, .scan-layout {
+    .filter-panel.active { transform: translateX(0); }
+    #product-grid { grid-template-columns: 1fr; gap: 20px; }
+    
+    /* GENERELLA LAYOUT-JUSTERINGAR (STAPLA KOLUMNER) */
+    .admin-grid, .scan-layout, .product-detail-layout, .footer-grid {
         grid-template-columns: 1fr;
     }
-    /* Stapla ärende-vyns kolumner */
     .cases-layout {
         grid-template-columns: 1fr;
         height: auto;
     }
     .cases-list-container {
         height: 300px;
-    }
-    /* Stapla produkt-sidans galleri och info */
-    .product-detail-layout {
-        grid-template-columns: 1fr;
-    }
-    /* Stapla footer-kolumnerna */
-    .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
     }
 }
