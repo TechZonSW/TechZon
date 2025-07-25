@@ -43,130 +43,74 @@ body {
 
 
 /* ==================================================================== */
-/* HEADER & NAVIGATION (KOMPLETT OCH SLUTGILTIG VERSION)                */
+/* FELSÖKNINGS-CSS FÖR HEADER-LAYOUT                                  */
 /* ==================================================================== */
 
-/* --- Huvud-header-styling --- */
+/* --- Grundläggande Header-Box --- */
 header {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
     padding: 15px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    height: 70px;
-    display: flex;
-    align-items: center;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f8f8; /* Tillfällig bakgrund för att se den tydligt */
 }
 
-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-}
-
-/* --- Huvud-layouten inuti headern --- */
+/* --- Nyckeln till allt: Flexbox-layouten --- */
 .header-container {
     display: flex;
-    justify-content: space-between; /* <-- TRYCKER ISÄR VÄNSTER OCH HÖGER */
-    align-items: center;
-    width: 100%;
+    justify-content: space-between; /* Vänster och höger så långt ifrån varandra som möjligt */
+    align-items: center; /* Centrera vertikalt */
 }
 
+/* --- Styling för Vänster och Höger Grupper --- */
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    /* Denna behöver ingen speciell layout-styling */
     text-decoration: none;
-    color: var(--secondary-color);
+    color: black;
 }
-.logo-img { height: 35px; } /* Justerad för lite mer synlighet */
-.logo span { font-size: 1.4em; font-weight: 600; }
+.logo-img { height: 35px; }
 
-/* --- Höger sida av headern --- */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 30px; /* Luft mellan nav och ikoner */
+    gap: 30px;
 }
-
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 20px; /* Luft mellan varukorg och hamburgare */
+    gap: 20px;
 }
 
-/* --- Desktop-meny (textlänkar) --- */
-nav ul {
+/* --- Styling för Dator vs. Mobil --- */
+
+/* DATOR (skärmar bredare än 900px) */
+.desktop-nav {
+    display: flex; /* Visa som horisontell lista */
     list-style: none;
-    display: flex;
-    gap: 25px; /* Modern metod för avstånd */
     margin: 0;
     padding: 0;
+    gap: 25px;
 }
-nav ul li a {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-nav ul li a:hover, nav ul li a.active {
-    color: var(--primary-color);
-}
-
 .mobile-menu-toggle {
-    display: none; /* Dold på desktop som standard */
+    display: none; /* Dölj hamburgaren */
 }
-
-/* --- Varukorgs-ikon --- */
 .cart-icon-container {
-    font-size: 1.8em;
+    font-size: 1.8em; /* Normal storlek för varukorg */
 }
 
-
-/* --- Media Query: Allt som gäller för skärmar 900px eller smalare --- */
+/* MOBIL (skärmar smalare än 900px) */
 @media (max-width: 900px) {
-    /* Dölj den vanliga text-menyn på mobilen */
-    .header-right nav {
-        display: none;
+    .desktop-nav {
+        display: none; /* Dölj textmenyn helt */
     }
-
-    /* Visa hamburgarknappen */
     .mobile-menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: none; border: none;
-        font-size: 2.2em; /* Stor och klickvänlig */
+        display: flex; /* Visa hamburgaren */
+        background: none;
+        border: none;
+        font-size: 2.2em;
         cursor: pointer;
-        color: var(--text-color);
     }
-    
-    /* Den utfällbara sidomenyn (styrs av JS-klassen 'mobile-nav-active') */
-    nav.mobile-nav-active {
-        display: block;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        background-color: #fff;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        z-index: 1000;
-        padding-top: 80px;
+    .cart-icon-container {
+        font-size: 1.8em; /* Behåll samma storlek */
     }
-    /* Vertikal lista i mobilmenyn */
-    nav.mobile-nav-active ul {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0 30px;
-        gap: 0;
-    }
-    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
-    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
 }
 
 
