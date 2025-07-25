@@ -2084,12 +2084,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // LOGIK FÖR MOBIL HAMBURGERMENY (ROBUST VERSION)
     // ===============================================
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    // Vi letar nu efter nav INUTI .header-right
-    const mainNav = document.querySelector('header .header-right nav'); 
+    const mainNav = document.querySelector('header .header-right nav');
 
     if (mobileMenuToggle && mainNav) {
         mobileMenuToggle.addEventListener('click', () => {
-            // Vi lägger till/tar bort en klass som CSS använder för att visa/dölja
             mainNav.classList.toggle('mobile-nav-active'); 
         });
     }

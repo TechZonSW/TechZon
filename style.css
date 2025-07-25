@@ -40,94 +40,150 @@ body {
     text-align: center;
 }
 
-/* --- NY, FÖRBÄTTRAD "HEDONIC" HEADER --- */
+
+
+/* ==================================================================== */
+/* HEADER & NAVIGATION (KOMPLETT, KORRIGERAD OCH SLUTGILTIG VERSION)    */
+/* ==================================================================== */
 
 header {
-    /* "Frostat glas"-effekt för en lätt och modern känsla */
-    background-color: rgba(255, 255, 255, 0.8); /* Halvtransparent vit */
+    /* Din "Frostat glas"-effekt */
+    background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px); /* För Safari */
-    
-    padding: 15px 0; /* Något mindre padding för en mer slimmad look */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* En mjukare, nästan osynlig linje */
-    
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
     width: 100%;
     top: 0;
     z-index: 1000;
-    
-    /* Mjuk övergång för alla ändringar (t.ex. när skuggan dyker upp) */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-
-    height: 70px; 
-    display: flex;
-    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    height: 70px;
+    display: flex; /* Viktigt för vertikal centrering */
+    align-items: center; /* Viktigt för vertikal centrering */
 }
 
-/* Lägger till en subtil skugga när användaren scrollar ner */
+/* Lägger till skugga vid scroll */
 header.scrolled {
-    background-color: rgba(255, 255, 255, 0.85); /* Lite mindre transparent */
-    border-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03); /* Mjuk skugga för djup */
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
 }
 
-header .container {
+/* Huvud-containern inuti headern */
+.header-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Trycker isär vänster och höger sida */
     align-items: center;
     width: 100%;
 }
 
+/* Vänster sida: Logotyp */
 .logo {
-    color: var(--secondary-color);
-    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+.logo-img { height: 35px; }
+.logo span { font-size: 1.4em; font-weight: 600; }
+
+/* Höger sida: En container för nav + actions */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Luft mellan menyn och ikonerna */
 }
 
-.logo-img {
-    height: 28px;
-    width: auto;
+/* Gruppen med ikoner */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Luft mellan varukorg och hamburgare */
 }
 
-/* --- MER RAFFINERAD LOGOTYP-TEXT --- */
-.logo span {
-    font-size: 1.4em; /* Något mindre för en mer elegant look */
-    font-weight: 600; /* Lite lättare än den tyngsta vikten */
-    line-height: 1;
-}
-
+/* Dator-meny: Textlänkar */
 nav ul {
     list-style: none;
     display: flex;
-    gap: 25px; /* Nytt */
-    margin: 0; /* Nytt */
-    padding: 0; /* Nytt */
+    gap: 25px; /* Ersätter margin-left på li */
+    margin: 0;
+    padding: 0;
 }
-
-/* --- MER "HEDONIC" STIL FÖR NAV-LÄNKAR --- */
 nav ul li a {
     text-decoration: none;
-    color: var(--text-color); /* Använder huvudtextfärgen för bättre kontrast */
-    font-weight: 500; /* Något djärvare än normalt, men inte tungt */
-    font-size: 1em; /* Något mindre för en mer delikat känsla */
-    padding: 8px 4px; /* Lite mer klickyta */
-    border-radius: 6px; /* Mjuk rundning för hover-effekten */
-    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
-
 nav ul li a:hover {
     color: var(--primary-color);
-    background-color: rgba(0, 0, 0, 0.04); /* Subtil grå bakgrund vid hover */
-    transform: translateY(-2px); /* Liten "lyft"-effekt */
 }
-
-/* Behåll den aktiva stilen som den är, men se till att den har en starkare färg */
 nav ul li a.active {
     color: var(--primary-color);
-    font-weight: 600; /* Gör den aktiva länken lite djärvare */
+    font-weight: 600;
 }
+
+/* Hamburgarknappen är dold på datorn */
+.mobile-menu-toggle {
+    display: none;
+}
+
+/* Varukorgs-ikon */
+.cart-icon-container a {
+    color: var(--text-color);
+    font-size: 1.8em;
+    position: relative;
+    display: block;
+}
+
+/* Media Query: Allt som gäller för mobila skärmar (900px eller smalare) */
+@media (max-width: 900px) {
+    /* Dölj den vanliga text-menyn på mobilen */
+    .header-right nav {
+        display: none;
+    }
+
+    /* Visa hamburgarknappen */
+    .mobile-menu-toggle {
+        display: flex; /* Använd flex för att centrera ikonen */
+        align-items: center;
+        justify-content: center;
+        background: none; border: none;
+        font-size: 2.2em; /* Något större för att vara lättare att trycka på */
+        cursor: pointer;
+        color: var(--text-color);
+    }
+    
+    /* Den utfällbara sidomenyn (styrs av JS-klassen 'mobile-nav-active') */
+    nav.mobile-nav-active {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: #fff;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+        padding-top: 80px;
+    }
+    /* Vertikal lista i mobilmenyn */
+    nav.mobile-nav-active ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 30px;
+        gap: 0;
+    }
+    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
+    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
+}
+
+
+
+
+
 
 main {
     width: 100%;
