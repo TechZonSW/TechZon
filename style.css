@@ -43,41 +43,38 @@ body {
 
 
 /* ==================================================================== */
-/* HEADER & NAVIGATION (KOMPLETT, KORRIGERAD OCH SLUTGILTIG VERSION)    */
+/* HEADER & NAVIGATION (KOMPLETT OCH SLUTGILTIG VERSION)                */
 /* ==================================================================== */
 
+/* --- Huvud-header-styling --- */
 header {
-    /* Din "Frostat glas"-effekt */
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     padding: 15px 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
-    width: 100%;
     top: 0;
     z-index: 1000;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     height: 70px;
-    display: flex; /* Viktigt för vertikal centrering */
-    align-items: center; /* Viktigt för vertikal centrering */
+    display: flex;
+    align-items: center;
 }
 
-/* Lägger till skugga vid scroll */
 header.scrolled {
     background-color: rgba(255, 255, 255, 0.85);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
 }
 
-/* Huvud-containern inuti headern */
+/* --- Huvud-layouten inuti headern --- */
 .header-container {
     display: flex;
-    justify-content: space-between; /* Trycker isär vänster och höger sida */
+    justify-content: space-between; /* <-- TRYCKER ISÄR VÄNSTER OCH HÖGER */
     align-items: center;
     width: 100%;
 }
 
-/* Vänster sida: Logotyp */
 .logo {
     display: flex;
     align-items: center;
@@ -85,28 +82,27 @@ header.scrolled {
     text-decoration: none;
     color: var(--secondary-color);
 }
-.logo-img { height: 35px; }
+.logo-img { height: 35px; } /* Justerad för lite mer synlighet */
 .logo span { font-size: 1.4em; font-weight: 600; }
 
-/* Höger sida: En container för nav + actions */
+/* --- Höger sida av headern --- */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 30px; /* Luft mellan menyn och ikonerna */
+    gap: 30px; /* Luft mellan nav och ikoner */
 }
 
-/* Gruppen med ikoner */
 .header-actions {
     display: flex;
     align-items: center;
     gap: 20px; /* Luft mellan varukorg och hamburgare */
 }
 
-/* Dator-meny: Textlänkar */
+/* --- Desktop-meny (textlänkar) --- */
 nav ul {
     list-style: none;
     display: flex;
-    gap: 25px; /* Ersätter margin-left på li */
+    gap: 25px; /* Modern metod för avstånd */
     margin: 0;
     padding: 0;
 }
@@ -116,28 +112,21 @@ nav ul li a {
     font-weight: 500;
     transition: color 0.3s ease;
 }
-nav ul li a:hover {
+nav ul li a:hover, nav ul li a.active {
     color: var(--primary-color);
-}
-nav ul li a.active {
-    color: var(--primary-color);
-    font-weight: 600;
 }
 
-/* Hamburgarknappen är dold på datorn */
 .mobile-menu-toggle {
-    display: none;
+    display: none; /* Dold på desktop som standard */
 }
 
-/* Varukorgs-ikon */
-.cart-icon-container a {
-    color: var(--text-color);
+/* --- Varukorgs-ikon --- */
+.cart-icon-container {
     font-size: 1.8em;
-    position: relative;
-    display: block;
 }
 
-/* Media Query: Allt som gäller för mobila skärmar (900px eller smalare) */
+
+/* --- Media Query: Allt som gäller för skärmar 900px eller smalare --- */
 @media (max-width: 900px) {
     /* Dölj den vanliga text-menyn på mobilen */
     .header-right nav {
@@ -146,11 +135,11 @@ nav ul li a.active {
 
     /* Visa hamburgarknappen */
     .mobile-menu-toggle {
-        display: flex; /* Använd flex för att centrera ikonen */
+        display: flex;
         align-items: center;
         justify-content: center;
         background: none; border: none;
-        font-size: 2.2em; /* Något större för att vara lättare att trycka på */
+        font-size: 2.2em; /* Stor och klickvänlig */
         cursor: pointer;
         color: var(--text-color);
     }
@@ -2543,81 +2532,3 @@ nav ul.main-nav { display: flex; align-items: center; }
     z-index: 10;
 }
 
-/* ==================================================================== */
-/* RESPONSIV DESIGN / MOBILANPASSNING (KOMPLETT OCH KORRIGERAD)         */
-/* ==================================================================== */
-
-/* --- 1. Globala Justeringar --- */
-img, video { max-width: 100%; height: auto; }
-.container { padding-left: 20px; padding-right: 20px; }
-
-/* --- 2. Header & Navigation (Robust och Responsiv Version) --- */
-.header-right { display: flex; align-items: center; gap: 30px; }
-.header-actions { display: flex; align-items: center; gap: 20px; }
-.mobile-menu-toggle { display: none; }
-
-/* --- 3. Fix för Intro-sektion med Video (Behållen från din gamla kod) --- */
-.video-hero {
-    position: relative; height: 70vh; min-height: 400px;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden; color: #fff;
-}
-.video-hero .background-video {
-    position: absolute; top: 50%; left: 50%;
-    width: auto; height: auto; min-width: 100%; min-height: 100%;
-    transform: translate(-50%, -50%); z-index: -2;
-}
-.video-hero::after {
-    content: ''; position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: -1;
-}
-.video-hero .container { text-align: center; }
-
-
-/* --- Media Query: Allt som gäller för skärmar 900px eller smalare --- */
-@media (max-width: 900px) {
-
-    /* HEADER & HAMBURGERMENY */
-    .header-right nav { display: none; }
-    .mobile-menu-toggle {
-        display: flex; align-items: center; justify-content: center;
-        background: none; border: none; font-size: 2em;
-        cursor: pointer; color: var(--text-color);
-    }
-    nav.mobile-nav-active {
-        display: block; position: fixed; top: 0; right: 0;
-        width: 80%; max-width: 300px; height: 100vh;
-        background-color: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        z-index: 1000; padding-top: 80px;
-    }
-    nav.mobile-nav-active ul {
-        flex-direction: column; align-items: flex-start;
-        padding: 0 30px; gap: 0;
-    }
-    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
-    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
-    
-    /* E-BUTIK */
-    .shop-layout { display: block; }
-    .product-listing { width: 100%; }
-    .filter-panel {
-        position: fixed; top: 0; left: 0; width: 85%; max-width: 320px;
-        height: 100vh; background-color: #fff; z-index: 2000;
-        transform: translateX(-100%); transition: transform 0.3s ease;
-        padding: 20px; overflow-y: auto; box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-    }
-    .filter-panel.active { transform: translateX(0); }
-    #product-grid { grid-template-columns: 1fr; gap: 20px; }
-    
-    /* GENERELLA LAYOUT-JUSTERINGAR (STAPLA KOLUMNER) */
-    .admin-grid, .scan-layout, .product-detail-layout, .footer-grid {
-        grid-template-columns: 1fr;
-    }
-    .cases-layout {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-    .cases-list-container {
-        height: 300px;
-    }
-}
