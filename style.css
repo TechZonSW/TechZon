@@ -2589,11 +2589,19 @@ nav ul.main-nav { display: flex; align-items: center; }
 /* Knappen för att visa filter, dold på datorn */
 .product-listing-header { display: none; }
 /* Overlay, dold som standard */
+
 .overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.5);
-    z-index: 1999; 
+    z-index: 2999; /* Högt z-index */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 @media (max-width: 900px) {
@@ -2608,19 +2616,23 @@ nav ul.main-nav { display: flex; align-items: center; }
 
     /* Dölj filterpanelen som standard på mobilen */
     .filter-panel {
-    position: fixed; top: 0; left: 0;
-    width: 85%; max-width: 320px; height: 100vh;
-    background-color: #fff; 
-    z-index: 2000; 
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    padding: 20px; overflow-y: auto;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-}
-
-    /* Visa panelen när den har klassen 'active' */
+        position: fixed; top: 0; left: 0;
+        width: 85%; max-width: 320px; height: 100vh;
+        background-color: #fff;
+        z-index: 3000; /* Viktigt: HÖGRE ÄN OVERLAY */
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding: 20px; overflow-y: auto;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
     .filter-panel.active {
         transform: translateX(0);
+    }
+    .filter-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
     }
     
     /* Produkt-gridden blir en kolumn */

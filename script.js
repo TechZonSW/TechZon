@@ -1384,20 +1384,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
         const filterPanel = document.getElementById('filter-panel');
         const overlay = document.getElementById('overlay');
+        const closeFilterBtn = document.getElementById('close-filter-btn');
 
-        if (mobileFilterToggle && filterPanel && overlay) {
+        function closeMobileFilters() {
+            filterPanel.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        if (mobileFilterToggle && filterPanel && overlay && closeFilterBtn) {
             mobileFilterToggle.addEventListener('click', () => {
                 filterPanel.classList.add('active');
-                overlay.style.display = 'block';
+                overlay.classList.add('active');
             });
 
-            // Stäng filtren om man klickar på overlayen
-            overlay.addEventListener('click', () => {
-                filterPanel.classList.remove('active');
-                overlay.style.display = 'none';
-            });
+            closeFilterBtn.addEventListener('click', closeMobileFilters);
+            overlay.addEventListener('click', closeMobileFilters);
         }
-    
+
         // --- 1. INITIALISERING (UPPDATERAD LOGIK) ---
         async function initializeShop() {
             try {

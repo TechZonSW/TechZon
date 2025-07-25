@@ -77,13 +77,16 @@
             <div class="container shop-layout">
                 <!-- Vänsterkolumn: Filter -->
                 <aside class="filter-panel" id="filter-panel">
-                    <h3>Filter</h3>
+                    <div class="filter-panel-header"> <!-- Ny container -->
+                        <h3>Filter</h3>
+                        <button id="close-filter-btn" class="modal-close-btn"><i class="ph-bold ph-x"></i></button>
+                    </div>
                     <button id="clearFiltersBtn" class="clear-filters-btn" style="display: none;">Rensa alla filter</button>
                     <div id="filters-container">
                         <!-- Filter fylls på här av JS -->
                     </div>
                 </aside>
-
+                
                 <!-- Högerkolumn: Produkter -->
                 <div class="product-listing">
                     <div class="product-listing-header">
