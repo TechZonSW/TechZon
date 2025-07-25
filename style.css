@@ -122,8 +122,11 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 /* --- Varukorg & Hamburgare --- */
-.cart-icon-container {
-    font-size: 1.8em; /* Normal storlek */
+.cart-icon-container a {
+    font-size: 1.5em; 
+    color: var(--text-color);
+    position: relative; 
+    display: block;
 }
 .mobile-menu-toggle {
     display: none; /* Dold på datorn */
