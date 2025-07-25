@@ -2531,3 +2531,134 @@ nav ul.main-nav { display: flex; align-items: center; }
     z-index: 10;
 }
 
+/* ==================================================================== */
+/* RESPONSIV DESIGN / MOBILANPASSNING (KOMPLETT VERSION 3.0)            */
+/* ==================================================================== */
+
+/* --- 1. Header & Globala Justeringar --- */
+@media (max-width: 900px) {
+    .container { padding-left: 20px; padding-right: 20px; }
+
+    /* Header & Hamburgermeny */
+    .header-right nav { display: none; }
+    .mobile-menu-toggle {
+        display: flex; align-items: center; justify-content: center;
+        background: none; border: none; font-size: 2.2em;
+        cursor: pointer; color: var(--text-color);
+    }
+    nav.mobile-nav-active {
+        display: block; position: fixed; top: 0; right: 0;
+        width: 80%; max-width: 300px; height: 100vh;
+        background-color: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000; padding-top: 80px;
+    }
+    nav.mobile-nav-active ul {
+        flex-direction: column; align-items: flex-start;
+        padding: 0 30px; gap: 0;
+    }
+    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
+    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
+}
+
+/* --- 2. Fix för Intro-sektion med Video --- */
+.video-hero {
+    position: relative;
+    /* Använd min-height för att låta sektionen växa vid behov */
+    min-height: 70vh; 
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; color: #fff; padding: 40px 0;
+}
+.video-hero .background-video {
+    position: absolute; top: 50%; left: 50%;
+    width: auto; height: auto; min-width: 100%; min-height: 100%;
+    transform: translate(-50%, -50%); z-index: -2;
+}
+.video-hero::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: -1;
+}
+.video-hero .container { text-align: center; }
+
+@media (max-width: 768px) {
+    #hero h1, .subpage-hero h1 { font-size: 2.5em; }
+    #hero p, .page-intro { font-size: 1.05em; }
+}
+
+/* --- 3. Mobilanpassning av E-butik (/e-butik.html) --- */
+
+/* Knappen för att visa filter, dold på datorn */
+.product-listing-header { display: none; }
+/* Overlay, dold som standard */
+.overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1999; /* Under filterpanelen */
+}
+
+@media (max-width: 900px) {
+    .shop-layout {
+        display: block; /* Ta bort grid-layouten */
+    }
+    /* Visa filter-knappen */
+    .product-listing-header {
+        display: block;
+        margin-bottom: 30px;
+    }
+
+    /* Dölj filterpanelen som standard på mobilen */
+    .filter-panel {
+        position: fixed; top: 0; left: 0;
+        width: 85%; max-width: 320px; height: 100vh;
+        background-color: #fff; z-index: 2000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding: 20px; overflow-y: auto;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
+
+    /* Visa panelen när den har klassen 'active' */
+    .filter-panel.active {
+        transform: translateX(0);
+    }
+    
+    /* Produkt-gridden blir en kolumn */
+    #product-grid {
+        grid-template-columns: 1fr; /* Stapla produkter */
+        gap: 20px;
+    }
+}
+
+/* --- 4. Mobilanpassning av Produktsida (/produkt.html) --- */
+@media (max-width: 900px) {
+    .product-page-layout {
+        grid-template-columns: 1fr; /* Stapla galleri och info */
+        gap: 30px;
+    }
+    /* Stäng av "sticky" på mobilen */
+    .pdp-gallery {
+        position: static;
+        top: auto;
+    }
+}
+
+/* --- 5. Generella Layout-justeringar (Stapla kolumner) --- */
+@media (max-width: 900px) {
+    /* Stapla admin-panelens huvudkolumner */
+    .admin-grid, .scan-layout {
+        grid-template-columns: 1fr;
+    }
+    /* Stapla ärende-vyns kolumner */
+    .cases-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .cases-list-container {
+        height: 300px;
+    }
+    /* Stapla footer-kolumnerna */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}

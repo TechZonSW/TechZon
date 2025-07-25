@@ -76,7 +76,7 @@
         <section id="shop-page" class="content-section">
             <div class="container shop-layout">
                 <!-- Vänsterkolumn: Filter -->
-                <aside class="filter-panel">
+                <aside class="filter-panel" id="filter-panel">
                     <h3>Filter</h3>
                     <button id="clearFiltersBtn" class="clear-filters-btn" style="display: none;">Rensa alla filter</button>
                     <div id="filters-container">
@@ -86,6 +86,11 @@
 
                 <!-- Högerkolumn: Produkter -->
                 <div class="product-listing">
+                    <div class="product-listing-header">
+                        <button id="mobile-filter-toggle" class="cta-button secondary">
+                            <i class="ph ph-funnel"></i> Visa Filter
+                        </button>
+                    </div>
                     <div id="product-grid" class="product-grid">
                         <!-- Produkter renderas här av JS -->
                     </div>
@@ -99,6 +104,8 @@
     <footer>
         <!-- Den vanliga sidfoten här -->
     </footer>
+
+    <div class="overlay" id="overlay" style="display: none;"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>

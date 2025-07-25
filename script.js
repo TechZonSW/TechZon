@@ -1379,6 +1379,24 @@ document.addEventListener('DOMContentLoaded', function() {
             typ: [],
             price: { min: 0, max: 20000 }
         };
+
+        // --- LOGIK FÖR MOBILT FILTER ---
+        const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+        const filterPanel = document.getElementById('filter-panel');
+        const overlay = document.getElementById('overlay');
+
+        if (mobileFilterToggle && filterPanel && overlay) {
+            mobileFilterToggle.addEventListener('click', () => {
+                filterPanel.classList.add('active');
+                overlay.style.display = 'block';
+            });
+
+            // Stäng filtren om man klickar på overlayen
+            overlay.addEventListener('click', () => {
+                filterPanel.classList.remove('active');
+                overlay.style.display = 'none';
+            });
+        }
     
         // --- 1. INITIALISERING (UPPDATERAD LOGIK) ---
         async function initializeShop() {
