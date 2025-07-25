@@ -190,7 +190,11 @@ main {
 #hero {
     position: relative; /* Nödvändigt för att positionera video och innehåll */
     color: #fff; /* Texten ska vara vit för att synas mot den mörka videon/overlayen */
-    height: calc(100vh - 70px);
+    
+    min-height: calc(100vh - 70px); /* NYCKELN: Sätt en MINIMIhöjd */
+    padding: 80px 0;
+
+    /*height: calc(100vh - 70px);
     padding: 120px 0 140px;
     /*min-height: 80vh; /* Ger sektionen en bra höjd */
     display: flex;
