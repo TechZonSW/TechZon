@@ -43,74 +43,134 @@ body {
 
 
 /* ==================================================================== */
-/* FELSÖKNINGS-CSS FÖR HEADER-LAYOUT                                  */
+/* HEADER & NAVIGATION (SLUTGILTIG OCH KOMPLETT VERSION)                */
 /* ==================================================================== */
 
-/* --- Grundläggande Header-Box --- */
+/* --- Grundläggande Header Styling (Din "frostat glas"-effekt) --- */
 header {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
     padding: 15px 0;
-    border-bottom: 1px solid #eee;
-    background-color: #f8f8f8; /* Tillfällig bakgrund för att se den tydligt */
-}
-
-/* --- Nyckeln till allt: Flexbox-layouten --- */
-.header-container {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 70px;
     display: flex;
-    justify-content: space-between; /* Vänster och höger så långt ifrån varandra som möjligt */
-    align-items: center; /* Centrera vertikalt */
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* --- Styling för Vänster och Höger Grupper --- */
+header.scrolled {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+}
+
+/* --- Huvud-layouten inuti headern (Detta är nyckeln!) --- */
+header .container {
+    display: flex;
+    justify-content: space-between; /* Trycker isär vänster och höger sida */
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Vänster och Höger Sida --- */
 .logo {
-    /* Denna behöver ingen speciell layout-styling */
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
-    color: black;
+    color: var(--secondary-color);
+    flex-shrink: 0; /* Förhindrar att loggan krymper */
 }
 .logo-img { height: 35px; }
+.logo span { font-size: 1.4em; font-weight: 600; }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 30px;
 }
+
 .header-actions {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-/* --- Styling för Dator vs. Mobil --- */
-
-/* DATOR (skärmar bredare än 900px) */
-.desktop-nav {
-    display: flex; /* Visa som horisontell lista */
+/* --- Desktop-meny (textlänkar) --- */
+nav ul {
     list-style: none;
+    display: flex;
+    gap: 25px;
     margin: 0;
     padding: 0;
-    gap: 25px;
 }
-.mobile-menu-toggle {
-    display: none; /* Dölj hamburgaren */
+nav ul li {
+    margin-left: 0; /* Radera gammal margin */
 }
-.cart-icon-container {
-    font-size: 1.8em; /* Normal storlek för varukorg */
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+nav ul li a:hover, nav ul li a.active {
+    color: var(--primary-color);
 }
 
-/* MOBIL (skärmar smalare än 900px) */
+/* --- Varukorg & Hamburgare --- */
+.cart-icon-container {
+    font-size: 1.8em; /* Normal storlek */
+}
+.mobile-menu-toggle {
+    display: none; /* Dold på datorn */
+}
+
+
+/* --- Media Query: Allt som gäller för mobila skärmar (900px eller smalare) --- */
 @media (max-width: 900px) {
-    .desktop-nav {
-        display: none; /* Dölj textmenyn helt */
+    /* Dölj den vanliga text-menyn */
+    .header-right nav {
+        display: none;
     }
+
+    /* Visa hamburgarknappen */
     .mobile-menu-toggle {
-        display: flex; /* Visa hamburgaren */
-        background: none;
-        border: none;
-        font-size: 2.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none; border: none;
+        font-size: 2.2em; /* Stor och klickvänlig */
         cursor: pointer;
+        color: var(--text-color);
     }
-    .cart-icon-container {
-        font-size: 1.8em; /* Behåll samma storlek */
+    
+    /* Den utfällbara sidomenyn (styrs av JS-klassen 'mobile-nav-active') */
+    nav.mobile-nav-active {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: #fff;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+        padding-top: 80px;
     }
+    /* Vertikal lista i mobilmenyn */
+    nav.mobile-nav-active ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 30px;
+        gap: 0;
+    }
+    nav.mobile-nav-active ul li { width: 100%; border-bottom: 1px solid #f0f0f0; }
+    nav.mobile-nav-active ul li a { padding: 20px 0; width: 100%; display: block; }
 }
 
 
@@ -851,17 +911,6 @@ footer {
     .contact-grid {
         grid-template-columns: 1fr;
     }
-}
-
-@media (max-width: 768px) {
-    header .container {
-        flex-direction: column;
-        gap: 15px;
-    }
-    #hero h1 { font-size: 2.8em; }
-    #hero p { font-size: 1.1em; }
-    .content-section h2 { font-size: 2.4em; }
-    .feature-text h2 { font-size: 2.2em; }
 }
 
 /* --- NYA STILAR FÖR FELSÖKNINGS-SIDAN OCH HERO-KNAPPAR --- */
