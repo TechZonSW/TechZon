@@ -2593,7 +2593,7 @@ nav ul.main-nav { display: flex; align-items: center; }
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.5);
-    z-index: 1999; /* Under filterpanelen */
+    z-index: 1999; 
 }
 
 @media (max-width: 900px) {
@@ -2608,14 +2608,15 @@ nav ul.main-nav { display: flex; align-items: center; }
 
     /* Dölj filterpanelen som standard på mobilen */
     .filter-panel {
-        position: fixed; top: 0; left: 0;
-        width: 85%; max-width: 320px; height: 100vh;
-        background-color: #fff; z-index: 2000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        padding: 20px; overflow-y: auto;
-        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-    }
+    position: fixed; top: 0; left: 0;
+    width: 85%; max-width: 320px; height: 100vh;
+    background-color: #fff; 
+    z-index: 2000; 
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 20px; overflow-y: auto;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+}
 
     /* Visa panelen när den har klassen 'active' */
     .filter-panel.active {
