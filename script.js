@@ -2079,5 +2079,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Starta varukorgshanteraren på varje sida
     new CartManager();
+
+    // ===============================================
+    // LOGIK FÖR MOBIL HAMBURGERMENY (GLOBAL)
+    // ===============================================
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mainNav = document.querySelector('header nav'); // Hitta nav-elementet
+
+    if (mobileMenuToggle && mainNav) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active'); // Lägg till/ta bort klassen 'active'
+        });
+    }
     
 });

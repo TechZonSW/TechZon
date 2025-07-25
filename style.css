@@ -2487,3 +2487,106 @@ nav ul.main-nav { display: flex; align-items: center; }
     background-color: #f8f8f9;
     z-index: 10;
 }
+
+/* ==================================================================== */
+/* RESPONSIV DESIGN / MOBILANPASSNING                                   */
+/* ==================================================================== */
+
+/* --- 1. Hamburgermeny --- */
+
+.mobile-menu-toggle {
+    display: none; /* Göm knappen på stora skärmar */
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    color: var(--text-color);
+    z-index: 1001; /* Se till att den ligger överst */
+}
+
+/* Allt inom denna @media-regel gäller ENDAST för skärmar som är 900px eller smalare */
+@media (max-width: 900px) {
+    /* Visa hamburgermenyn */
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Göm den vanliga menyn... */
+    header nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: #fff;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transform: translateX(100%); /* ...genom att flytta den utanför skärmen */
+        transition: transform 0.3s ease-in-out;
+        padding-top: 80px; /* Utrymme för stäng-knapp etc. */
+    }
+
+    /* ...MEN visa den när den har klassen 'active' */
+    header nav.active {
+        transform: translateX(0);
+    }
+
+    /* Gör om menylänkarna till en vertikal lista */
+    header nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 30px;
+    }
+    header nav ul li {
+        width: 100%;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    header nav ul li a {
+        padding: 20px 0;
+        width: 100%;
+        display: block;
+    }
+}
+
+/* --- 2. Generella Layout-fixar (Förhindra horisontell scroll) --- */
+
+/* Grundläggande regel för att förhindra att bilder blir för breda */
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Se till att containrar inte har en fast, stor bredd på små skärmar */
+.container {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* --- 3. Specifika Layout-justeringar (Stapla kolumner) --- */
+
+@media (max-width: 900px) {
+    /* Stapla admin-panelens huvudkolumner */
+    .admin-grid, .scan-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Stapla ärende-vyns kolumner */
+    .cases-layout {
+        grid-template-columns: 1fr;
+        height: auto; /* Låt höjden vara flexibel */
+    }
+    .cases-list-container {
+        height: 300px; /* Ge listan en fast höjd så den inte blir oändligt lång */
+    }
+
+    /* Stapla produkt-sidans galleri och info */
+    .product-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Stapla footer-kolumnerna */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
