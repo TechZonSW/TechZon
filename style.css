@@ -85,7 +85,11 @@ header .container {
     color: var(--secondary-color);
     flex-shrink: 0; /* Förhindrar att loggan krymper */
 }
-.logo-img { height: 35px; }
+.logo-img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
 .logo span { font-size: 1.4em; font-weight: 600; }
 
 .header-right {
