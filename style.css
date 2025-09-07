@@ -56,7 +56,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    height: 100px;
+    height: 60px;
     display: flex;
     align-items: center;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -91,12 +91,12 @@ header .container {
   height: auto;
   width: auto;
 }
-.logo span { font-size: 1.4em; font-weight: 600; }
+/*.logo span { font-size: 1.4em; font-weight: 600; }*/
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
 }
 
 .header-actions {
