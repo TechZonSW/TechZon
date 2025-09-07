@@ -74,7 +74,7 @@ header .container {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0 100px 0 0px;
+    padding: 0 0px 0 0px;
 }
 
 /* --- Vänster och Höger Sida --- */
@@ -87,7 +87,7 @@ header .container {
     flex-shrink: 0; /* Förhindrar att loggan krymper */
 }
 .logo-img {
-  max-height: 110px;
+  max-height: 90px;
   height: auto;
   width: auto;
 }
