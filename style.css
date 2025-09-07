@@ -87,7 +87,7 @@ header .container {
     flex-shrink: 0; /* Förhindrar att loggan krymper */
 }
 .logo-img {
-  max-height: 110px;
+  max-height: 130px;
   height: auto;
   width: auto;
 }
