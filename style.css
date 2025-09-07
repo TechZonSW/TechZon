@@ -70,17 +70,18 @@ header.scrolled {
 /* --- Huvud-layouten inuti headern (Detta är nyckeln!) --- */
 header .container {
     display: flex;
-    justify-content: center; /* Trycker isär vänster och höger sida */
+    justify-content: space-between; /* Trycker isär vänster och höger sida */
     align-items: center;
     width: 100%;
     height: 100%;
+    padding: 0 20px 0 10px;
 }
 
 /* --- Vänster och Höger Sida --- */
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    /*gap: 10px;*/
     text-decoration: none;
     color: var(--secondary-color);
     flex-shrink: 0; /* Förhindrar att loggan krymper */
